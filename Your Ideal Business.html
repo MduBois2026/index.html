@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Ideal Business</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --cream3:#E0D8C8;
+  --gold:#C9A84C;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+  --ink:#1A1208;
+  --mid:#5C5040;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',sans-serif;
+  --scale-col:#C9A84C;
+  --freedom-col:#2D6A4F;
+  --income-col:#5C5040;
+}
+html,body{
+  font-family:var(--sans);
+  background:var(--cream);
+  color:var(--ink);
+  padding:0;margin:0;
+}
+body{padding:1.75rem 1.5rem 2.5rem}
+
+/* ── INTRO ── */
+.intro{margin-bottom:1.75rem}
+.intro-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:.625rem;display:flex;align-items:center;gap:10px;
+}
+.intro-eyebrow::before{content:'';width:18px;height:1px;background:var(--gold)}
+.intro-heading{
+  font-family:var(--serif);font-size:clamp(24px,4vw,38px);
+  font-weight:300;color:var(--ink);line-height:1.12;margin-bottom:.625rem;
+}
+.intro-heading em{font-style:italic;color:var(--forest-light)}
+.intro-desc{
+  font-size:13px;font-weight:300;color:var(--soft);
+  line-height:1.85;max-width:600px;
+}
+
+/* ── PROGRESS ── */
+.progress-bar-wrap{
+  margin-bottom:1.5rem;
+}
+.progress-top{
+  display:flex;justify-content:space-between;margin-bottom:.5rem;
+}
+.prog-label{font-size:11px;font-weight:300;color:var(--soft)}
+.prog-count{font-size:11px;font-weight:500;color:var(--forest)}
+.prog-track{
+  height:3px;background:var(--cream3);border-radius:100px;overflow:hidden;
+}
+.prog-fill{
+  height:100%;border-radius:100px;
+  background:linear-gradient(to right,var(--forest-light),var(--gold));
+  transition:width 0.4s ease;
+}
+
+/* ── TRIFECTA GRID ── */
+.trifecta{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:1.5rem;
+}
+@media(max-width:720px){
+  .trifecta{grid-template-columns:1fr}
+}
+
+/* ── COLUMN ── */
+.col{
+  background:var(--cream);
+  padding:1.75rem 1.5rem 2rem;
+  display:flex;flex-direction:column;
+  gap:0;
+  transition:background 0.25s;
+}
+.col.filled{background:#FAFBF8}
+
+/* Column header */
+.col-header{
+  margin-bottom:1.375rem;
+  padding-bottom:.875rem;
+  border-bottom:2px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.col-kicker{
+  font-size:11px;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;
+}
+.kicker-scale{color:var(--scale-col)}
+.kicker-freedom{color:var(--freedom-col)}
+.kicker-income{color:var(--income-col)}
+.col-badge{
+  font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  padding:2px 9px;border-radius:100px;
+  opacity:0;transition:opacity 0.3s;
+}
+.col-badge.visible{opacity:1}
+.badge-scale{background:#FBF3E4;color:var(--scale-col);border:1px solid var(--gold-light)}
+.badge-freedom{background:#EAF5F0;color:var(--freedom-col);border:1px solid #97C8B4}
+.badge-income{background:var(--cream2);color:var(--income-col);border:1px solid var(--border)}
+
+/* Context questions */
+.context-qs{
+  display:flex;flex-direction:column;gap:0;
+  margin-bottom:1.5rem;
+}
+.cq{
+  font-size:13px;font-weight:300;color:var(--mid);
+  line-height:1.65;
+  padding:.625rem 0;
+  border-bottom:1px dashed var(--cream3);
+}
+.cq:last-child{border-bottom:none}
+
+/* Entry group */
+.entry-group{
+  display:flex;flex-direction:column;
+  gap:1.25rem;
+  flex:1;
+}
+.entry-item{display:flex;flex-direction:column;gap:.375rem}
+.entry-prompt{
+  font-family:var(--serif);font-size:16px;font-weight:300;
+  font-style:italic;line-height:1.4;
+}
+.prompt-scale{color:var(--scale-col)}
+.prompt-freedom{color:var(--freedom-col)}
+.prompt-income{color:var(--income-col)}
+
+/* Textarea */
+.entry-area{
+  width:100%;font-family:var(--sans);
+  font-size:13px;font-weight:300;line-height:1.7;
+  color:var(--ink);
+  border:1.5px solid var(--cream3);
+  border-radius:6px;
+  padding:10px 12px;
+  background:#fff;
+  resize:vertical;min-height:88px;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.entry-area:focus{
+  outline:none;border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,168,76,0.1);
+}
+.entry-area::placeholder{
+  color:var(--cream3);font-style:italic;font-size:12px;
+}
+.entry-area.has-content{
+  border-color:rgba(45,106,79,0.25);
+  background:#FAFDF9;
+}
+
+/* ── SUMMARY ── */
+.summary-section{
+  display:none;margin-bottom:1.5rem;
+  animation:fadeIn 0.4s ease;
+}
+.summary-section.visible{display:block}
+.summary-title{
+  font-family:var(--serif);font-size:clamp(20px,3vw,28px);
+  font-weight:300;color:var(--ink);margin-bottom:1rem;
+}
+.summary-title em{font-style:italic;color:var(--forest-light)}
+.summary-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;
+}
+@media(max-width:600px){.summary-grid{grid-template-columns:1fr}}
+.sc{
+  background:#fff;border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;
+}
+.sc-head{
+  padding:.625rem 1rem;border-bottom:1px solid var(--border);
+}
+.sc-kicker{
+  font-size:9px;font-weight:500;letter-spacing:0.16em;
+  text-transform:uppercase;
+}
+.sc-body{padding:.875rem 1rem;display:flex;flex-direction:column;gap:.625rem}
+.sc-entry{
+  font-size:12px;font-weight:300;color:var(--mid);
+  line-height:1.6;
+  padding-bottom:.625rem;border-bottom:1px solid var(--cream3);
+}
+.sc-entry:last-child{border-bottom:none;padding-bottom:0}
+.sc-entry-label{
+  font-size:9px;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--soft);margin-bottom:2px;
+}
+.sc-empty{font-size:12px;font-style:italic;color:var(--border)}
+
+/* ── INSIGHT STRIP ── */
+.insight-strip{
+  border-radius:8px;padding:1.125rem 1.5rem;
+  margin-bottom:1.5rem;display:none;
+  animation:fadeIn 0.35s ease;
+}
+.insight-strip.visible{display:flex;gap:12px;align-items:flex-start}
+.insight-strip.partial{background:var(--gold-pale);border:1.5px solid var(--gold-light)}
+.insight-strip.complete{background:#EAF5F0;border:1.5px solid #97C8B4}
+.is-dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;
+}
+.insight-strip.partial .is-dot{background:var(--gold)}
+.insight-strip.complete .is-dot{background:var(--forest-light)}
+.is-body{}
+.is-tag{
+  font-size:9px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;margin-bottom:4px;display:block;
+}
+.insight-strip.partial .is-tag{color:var(--gold)}
+.insight-strip.complete .is-tag{color:var(--forest-light)}
+.is-text{font-size:13px;font-weight:300;color:var(--ink);line-height:1.8}
+
+/* ── CTA ── */
+.cta-wrap{display:none;animation:fadeIn 0.4s ease}
+.cta-wrap.visible{display:block}
+.cta-inner{
+  background:var(--forest);border-radius:8px;
+  padding:1.625rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+}
+.cta-inner::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:170px;height:170px;border-radius:50%;
+  background:rgba(201,168,76,0.07);pointer-events:none;
+}
+.cta-text{flex:1;min-width:180px}
+.cta-heading{
+  font-family:var(--serif);font-size:clamp(18px,3vw,24px);
+  font-weight:300;color:#fff;line-height:1.25;margin-bottom:.4rem;
+}
+.cta-heading em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:12px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.7;max-width:360px}
+.cta-btn{
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:13px 26px;border-radius:5px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;
+  position:relative;z-index:1;
+}
+.cta-btn:hover{background:#DFB84A;transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,168,76,0.28)}
+
+/* ── FOOTER ── */
+.form-footer{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:11px;font-weight:300;color:var(--soft);
+  text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="intro">
+  <div class="intro-eyebrow">Business Framework</div>
+  <h1 class="intro-heading">Your <em>Ideal Business</em></h1>
+  <p class="intro-desc">To qualify as ideal, a business needs to deliver Scale, Freedom, and Income. Most businesses deliver one or two — rarely all three. Map what each looks like for you before we begin.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar-wrap">
+  <div class="progress-top">
+    <span class="prog-label">Framework completion</span>
+    <span class="prog-count" id="prog-count">0 of 7 answered</span>
+  </div>
+  <div class="prog-track">
+    <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- TRIFECTA -->
+<div class="trifecta">
+
+  <!-- ── SCALE ── -->
+  <div class="col" id="col-scale">
+    <div class="col-header">
+      <span class="col-kicker kicker-scale">Scale</span>
+      <span class="col-badge badge-scale" id="badge-scale">✓ Complete</span>
+    </div>
+    <div class="context-qs">
+      <div class="cq">What scale of business do you want to have (12 months, 3 years, eventually)?</div>
+      <div class="cq">What role do you want for you in your business (manager, technician, salesman, chairman, semi-retired etc)?</div>
+      <div class="cq">If you were free from operational running, what projects would you like to work on?</div>
+    </div>
+    <div class="entry-group">
+      <div class="entry-item">
+        <div class="entry-prompt prompt-scale">I'd like to work more on . . .</div>
+        <textarea class="entry-area" id="scale-more"
+          placeholder="Your scale vision..."
+          oninput="onInput(this,'scale-more')"></textarea>
+      </div>
+      <div class="entry-item">
+        <div class="entry-prompt prompt-scale">and less on . . .</div>
+        <textarea class="entry-area" id="scale-less"
+          placeholder="What to step back from..."
+          oninput="onInput(this,'scale-less')"></textarea>
+      </div>
+      <div class="entry-item">
+        <div class="entry-prompt prompt-scale">A big idea I've got is to . . .</div>
+        <textarea class="entry-area" id="scale-idea"
+          placeholder="Your big idea..."
+          oninput="onInput(this,'scale-idea')"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FREEDOM ── -->
+  <div class="col" id="col-freedom">
+    <div class="col-header">
+      <span class="col-kicker kicker-freedom">Freedom</span>
+      <span class="col-badge badge-freedom" id="badge-freedom">✓ Complete</span>
+    </div>
+    <div class="context-qs">
+      <div class="cq">How many hours do you want to be working (12 months, 3 years, eventually)?</div>
+      <div class="cq">What would you do with your time if you could take 3 months off? (include at least 2 bucket list items and a health/fitness goal)</div>
+      <div class="cq">If free from operations, what personal, humanitarian, community, family or investment projects would you pursue?</div>
+    </div>
+    <div class="entry-group">
+      <div class="entry-item">
+        <div class="entry-prompt prompt-freedom">If I had more time I'd be working on . . .</div>
+        <textarea class="entry-area" id="freedom-projects"
+          placeholder="Your freedom projects..."
+          oninput="onInput(this,'freedom-projects')"></textarea>
+      </div>
+      <div class="entry-item">
+        <div class="entry-prompt prompt-freedom">or doing more . . .</div>
+        <textarea class="entry-area" id="freedom-more"
+          placeholder="What more of looks like..."
+          oninput="onInput(this,'freedom-more')"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── INCOME ── -->
+  <div class="col" id="col-income">
+    <div class="col-header">
+      <span class="col-kicker kicker-income">Income</span>
+      <span class="col-badge badge-income" id="badge-income">✓ Complete</span>
+    </div>
+    <div class="context-qs">
+      <div class="cq">What net profit should we be targeting (12 months, 3 years, 5 years)?</div>
+      <div class="cq">What do you want your business to be worth (12 months, 3 years, eventually)?</div>
+      <div class="cq">How much more income would the business need to generate to recruit/promote a General Manager?</div>
+    </div>
+    <div class="entry-group">
+      <div class="entry-item">
+        <div class="entry-prompt prompt-income">I'd like the business to be making me $&nbsp;. . .</div>
+        <textarea class="entry-area" id="income-target"
+          placeholder="Your target income..."
+          oninput="onInput(this,'income-target')"></textarea>
+      </div>
+      <div class="entry-item">
+        <div class="entry-prompt prompt-income">An extra $&nbsp;. . . per w/m/y</div>
+        <textarea class="entry-area" id="income-extra"
+          placeholder="Additional amount needed..."
+          oninput="onInput(this,'income-extra')"></textarea>
+      </div>
+      <div class="entry-item">
+        <div class="entry-prompt prompt-income">That would allow me to . . . (reduce debt, holiday etc)</div>
+        <textarea class="entry-area" id="income-unlock"
+          placeholder="What extra income unlocks..."
+          oninput="onInput(this,'income-unlock')"></textarea>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-section" id="summary-section">
+  <h2 class="summary-title">Your ideal business — <em>mapped so far</em></h2>
+  <div class="summary-grid">
+    <div class="sc">
+      <div class="sc-head"><span class="sc-kicker kicker-scale">Scale</span></div>
+      <div class="sc-body" id="sum-scale"></div>
+    </div>
+    <div class="sc">
+      <div class="sc-head"><span class="sc-kicker kicker-freedom">Freedom</span></div>
+      <div class="sc-body" id="sum-freedom"></div>
+    </div>
+    <div class="sc">
+      <div class="sc-head"><span class="sc-kicker kicker-income">Income</span></div>
+      <div class="sc-body" id="sum-income"></div>
+    </div>
+  </div>
+</div>
+
+<!-- INSIGHT -->
+<div class="insight-strip" id="insight-strip">
+  <div class="is-dot"></div>
+  <div class="is-body">
+    <span class="is-tag" id="is-tag">Progress</span>
+    <div class="is-text" id="is-text"></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <div class="cta-heading">Now let's build<br><em>the path to get there.</em></div>
+      <p class="cta-sub">Your Ideal Business is mapped. The next step is a Boardroom session to identify exactly what is standing between where you are now and what you've described here.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="form-footer">
+  Your responses are confidential and used only to prepare your consulting session.
+</div>
+
+<script>
+var fields={
+  'scale-more':{col:'scale',label:"Work more on"},
+  'scale-less':{col:'scale',label:"Work less on"},
+  'scale-idea':{col:'scale',label:"Big idea"},
+  'freedom-projects':{col:'freedom',label:"Time projects"},
+  'freedom-more':{col:'freedom',label:"More of"},
+  'income-target':{col:'income',label:"Target income"},
+  'income-extra':{col:'income',label:"Extra needed"},
+  'income-unlock':{col:'income',label:"What it unlocks"}
+};
+var totalFields=Object.keys(fields).length;
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.max(88,el.scrollHeight)+'px';
+}
+
+function onInput(el,id){
+  autoResize(el);
+  var filled=el.value.trim().length>0;
+  el.classList.toggle('has-content',filled);
+  updateAll();
+}
+
+function updateAll(){
+  var answered=0;
+  Object.keys(fields).forEach(function(id){
+    var el=document.getElementById(id);
+    if(el&&el.value.trim().length>0)answered++;
+  });
+
+  // Progress
+  var pct=Math.round(answered/totalFields*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-count').textContent=answered+' of '+totalFields+' answered';
+
+  // Column badges + backgrounds
+  updateCol('scale',['scale-more','scale-less','scale-idea'],'badge-scale','col-scale');
+  updateCol('freedom',['freedom-projects','freedom-more'],'badge-freedom','col-freedom');
+  updateCol('income',['income-target','income-extra','income-unlock'],'badge-income','col-income');
+
+  // Summary
+  var ss=document.getElementById('summary-section');
+  if(answered>0){
+    ss.classList.add('visible');
+    renderSummary('sum-scale',['scale-more','scale-less','scale-idea']);
+    renderSummary('sum-freedom',['freedom-projects','freedom-more']);
+    renderSummary('sum-income',['income-target','income-extra','income-unlock']);
+  }
+
+  // Insight
+  var strip=document.getElementById('insight-strip');
+  var itag=document.getElementById('is-tag');
+  var itext=document.getElementById('is-text');
+  if(answered>0){
+    strip.className='insight-strip visible';
+    if(answered===totalFields){
+      strip.classList.add('complete');
+      itag.textContent='Framework complete';
+      itext.textContent='You\'ve mapped all three dimensions of your Ideal Business. Scale, Freedom, and Income are now on paper — not just in your head. The next step is a Boardroom session to identify the specific gaps between where you are now and what you\'ve described here, and to agree the plan to close them.';
+    } else if(answered>=4){
+      strip.classList.add('partial');
+      itag.textContent=answered+' of '+totalFields+' answered — almost there';
+      itext.textContent='The picture is building. The more specific your answers, the more useful the session that follows. Especially in the Income column — the numbers you put there will shape the entire engagement.';
+    } else {
+      strip.classList.add('partial');
+      itag.textContent='Getting started';
+      itext.textContent='Keep going — complete all three columns to map your full Ideal Business. Scale, Freedom, and Income need to be considered together, not in isolation. A business that delivers two out of three is still a business with a problem.';
+    }
+  } else {
+    strip.className='insight-strip';
+  }
+
+  // CTA
+  document.getElementById('cta-wrap').classList.toggle('visible',answered>=5);
+}
+
+function updateCol(col,ids,badgeId,colId){
+  var count=ids.filter(function(id){
+    var el=document.getElementById(id);
+    return el&&el.value.trim().length>0;
+  }).length;
+  var complete=count===ids.length;
+  document.getElementById(badgeId).classList.toggle('visible',complete);
+  document.getElementById(colId).classList.toggle('filled',count>0);
+}
+
+function renderSummary(containerId,ids){
+  var container=document.getElementById(containerId);
+  container.innerHTML='';
+  var hasAny=false;
+  ids.forEach(function(id){
+    var el=document.getElementById(id);
+    var val=el?el.value.trim():'';
+    var meta=fields[id];
+    var div=document.createElement('div');
+    div.className='sc-entry';
+    if(val.length>0){
+      hasAny=true;
+      div.innerHTML='<div class="sc-entry-label">'+meta.label+'</div>'+escHtml(val);
+    } else {
+      div.innerHTML='<div class="sc-entry-label">'+meta.label+'</div><span class="sc-empty">Not yet answered</span>';
+    }
+    container.appendChild(div);
+  });
+}
+
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+updateAll();
+</script>
+</body>
+</html>

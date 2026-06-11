@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cost Controls / Supplier Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --cream3:#E0D8C8;
+  --gold:#C9A84C;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+  --ink:#1A1208;
+  --mid:#5C5040;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',sans-serif;
+}
+html,body{
+  font-family:var(--sans);background:var(--cream);color:var(--ink);
+  padding:0;margin:0;
+}
+body{padding:1.75rem 1.5rem 2.5rem}
+
+/* ── EYEBROW ── */
+.eyebrow-tag{
+  display:inline-flex;align-items:center;
+  background:var(--forest);color:#fff;
+  font-size:10px;font-weight:500;letter-spacing:0.18em;
+  text-transform:uppercase;padding:5px 14px;border-radius:100px;
+  margin-bottom:1.25rem;
+}
+
+/* ── INFO CALLOUT ── */
+.info-callout{
+  background:var(--gold-pale);
+  border-left:4px solid var(--gold);
+  border-radius:0 7px 7px 0;
+  padding:1.125rem 1.375rem;
+  margin-bottom:1.5rem;
+  font-size:13px;font-weight:300;color:var(--mid);line-height:1.8;
+}
+.info-callout strong{font-weight:600;color:var(--ink)}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin-bottom:1.25rem}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;gap:.5rem}
+.prog-label{font-size:11px;font-weight:300;color:var(--soft)}
+.prog-count{font-size:11px;font-weight:500;color:var(--forest)}
+.prog-track{height:3px;background:var(--cream3);border-radius:100px;overflow:hidden}
+.prog-fill{
+  height:100%;border-radius:100px;
+  background:linear-gradient(to right,var(--forest-light),var(--gold));
+  transition:width 0.4s ease;
+}
+
+/* ── TABLE ── */
+.policy-table{
+  width:100%;border-collapse:collapse;
+  border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;
+  margin-bottom:1.5rem;
+}
+
+.table-head{background:var(--forest)}
+.th-num{
+  width:44px;padding:.875rem 1rem;
+  font-size:10px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;color:rgba(255,255,255,0.4);
+  border-right:1px solid rgba(255,255,255,0.08);
+  vertical-align:middle;
+}
+.th-strategy{
+  padding:.875rem 1.25rem;
+  font-size:10px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;color:rgba(201,168,76,0.7);
+  border-right:1px solid rgba(255,255,255,0.08);
+  vertical-align:middle;
+}
+.th-notes{
+  width:38%;padding:.875rem 1.25rem;
+  font-size:10px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;color:rgba(255,255,255,0.4);
+  vertical-align:middle;
+}
+@media(max-width:600px){.th-notes{width:45%}}
+
+.tr-row{
+  border-bottom:1px solid var(--border);
+  transition:background 0.15s;
+}
+.tr-row:last-child{border-bottom:none}
+.tr-row:hover{background:#FAFDF9}
+.tr-row.has-note{background:#F5FBF7}
+.tr-row.has-note:hover{background:#EAF5EE}
+
+.td-num{
+  width:44px;padding:1rem;
+  font-family:var(--serif);font-size:18px;font-weight:300;
+  color:var(--cream3);text-align:center;
+  vertical-align:top;padding-top:1.125rem;
+  border-right:1px solid var(--border);
+  transition:color 0.2s;
+}
+.tr-row.has-note .td-num{color:rgba(45,106,79,0.4)}
+
+.td-strategy{
+  padding:1rem 1.25rem;
+  font-size:13px;font-weight:300;color:var(--mid);
+  line-height:1.65;vertical-align:middle;
+  border-right:1px solid var(--border);
+}
+.td-strategy strong{font-weight:500;color:var(--ink)}
+.td-strategy em{font-style:italic}
+
+.td-notes{
+  width:38%;padding:.75rem 1rem;
+  vertical-align:top;
+}
+@media(max-width:600px){.td-notes{width:45%}}
+
+.note-area{
+  width:100%;font-family:var(--sans);
+  font-size:12px;font-weight:300;line-height:1.65;
+  color:var(--ink);padding:8px 10px;
+  border:1.5px solid var(--cream3);border-radius:5px;
+  background:var(--cream);resize:none;min-height:64px;
+  transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;
+  overflow:hidden;
+}
+.note-area:focus{
+  outline:none;border-color:var(--gold);background:#fff;
+  box-shadow:0 0 0 3px rgba(201,168,76,0.08);
+  min-height:80px;
+}
+.note-area::placeholder{font-style:italic;font-size:11px;color:var(--cream3)}
+.note-area.has-content{border-color:rgba(45,106,79,0.25);background:#fff}
+
+.applied-badge{
+  font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  background:#EAF5F0;color:var(--forest-light);
+  border:1px solid #97C8B4;padding:2px 8px;border-radius:100px;
+  margin-top:5px;
+  opacity:0;transform:scale(0.85);
+  transition:opacity 0.2s,transform 0.2s;
+  display:none;
+}
+.applied-badge.visible{display:inline-block;opacity:1;transform:scale(1)}
+
+/* ── POTENTIAL SAVINGS STRIP ── */
+.savings-strip{
+  background:var(--forest);border-radius:8px;
+  padding:1.25rem 1.5rem;margin-bottom:1.5rem;
+  display:none;animation:fadeIn 0.35s ease;
+}
+.savings-strip.visible{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+@media(max-width:500px){.savings-strip.visible{grid-template-columns:1fr}}
+.sv-item{display:flex;flex-direction:column;gap:3px}
+.sv-label{font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:rgba(201,168,76,0.55)}
+.sv-val{font-family:var(--serif);font-size:clamp(18px,3vw,24px);font-weight:300;color:var(--gold);line-height:1}
+.sv-sub{font-size:11px;font-weight:300;color:rgba(255,255,255,0.35);margin-top:2px}
+
+/* ── SUMMARY ── */
+.summary-section{display:none;margin-bottom:1.5rem;animation:fadeIn 0.35s ease}
+.summary-section.visible{display:block}
+.sum-title{
+  font-family:var(--serif);font-size:clamp(18px,3vw,24px);
+  font-weight:300;color:var(--ink);margin-bottom:.875rem;
+}
+.sum-title em{font-style:italic;color:var(--forest-light)}
+.sum-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;
+}
+.sum-item{
+  background:#fff;border:1px solid var(--border);border-radius:6px;
+  padding:.875rem 1rem;border-left:3px solid var(--forest-light);
+}
+.sum-num{font-family:var(--serif);font-size:13px;font-weight:300;color:var(--gold);margin-bottom:3px}
+.sum-strategy{font-size:11px;font-weight:500;color:var(--ink);margin-bottom:.375rem;line-height:1.3}
+.sum-note{font-size:11px;font-weight:300;color:var(--mid);line-height:1.55}
+
+/* ── INSIGHT ── */
+.insight-strip{
+  border-radius:8px;padding:1.125rem 1.5rem;
+  margin-bottom:1.5rem;display:none;animation:fadeIn 0.35s ease;
+}
+.insight-strip.visible{display:flex;gap:12px;align-items:flex-start}
+.insight-strip.partial{background:var(--gold-pale);border:1.5px solid var(--gold-light)}
+.insight-strip.complete{background:#EAF5F0;border:1.5px solid #97C8B4}
+.is-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.insight-strip.partial .is-dot{background:var(--gold)}
+.insight-strip.complete .is-dot{background:var(--forest-light)}
+.is-tag{font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;display:block}
+.insight-strip.partial .is-tag{color:var(--gold)}
+.insight-strip.complete .is-tag{color:var(--forest-light)}
+.is-text{font-size:13px;font-weight:300;color:var(--ink);line-height:1.8}
+
+/* ── CTA ── */
+.cta-wrap{display:none;animation:fadeIn 0.4s ease}
+.cta-wrap.visible{display:block}
+.cta-inner{
+  background:var(--forest);border-radius:8px;
+  padding:1.625rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;position:relative;overflow:hidden;
+}
+.cta-inner::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:170px;height:170px;border-radius:50%;
+  background:rgba(201,168,76,0.07);pointer-events:none;
+}
+.cta-text{flex:1;min-width:180px}
+.cta-heading{
+  font-family:var(--serif);font-size:clamp(18px,3vw,24px);
+  font-weight:300;color:#fff;line-height:1.25;margin-bottom:.375rem;
+}
+.cta-heading em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:12px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.7;max-width:380px}
+.cta-btn{
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:13px 26px;border-radius:5px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;position:relative;z-index:1;
+}
+.cta-btn:hover{background:#DFB84A;transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,168,76,0.28)}
+
+/* ── FOOTER ── */
+.form-footer{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:11px;font-weight:300;color:var(--soft);
+  text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- EYEBROW -->
+<div class="eyebrow-tag">Cost Controls / Supplier Review</div>
+
+<!-- INFO CALLOUT -->
+<div class="info-callout">
+  Reducing costs has the same effect as increasing prices — you make better margin from exactly the same work. <strong>Reducing costs is not the same as "being tight" or "buying cheap".</strong> If it affects the customer experience negatively it will be a false economy.
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-top">
+    <span class="prog-label">Strategies applied</span>
+    <span class="prog-count" id="prog-count">0 of 8 addressed</span>
+  </div>
+  <div class="prog-track">
+    <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- TABLE -->
+<table class="policy-table">
+  <thead>
+    <tr class="table-head">
+      <th class="th-num">#</th>
+      <th class="th-strategy">Cost control strategy</th>
+      <th class="th-notes">Your application / notes</th>
+    </tr>
+  </thead>
+  <tbody id="table-body"></tbody>
+</table>
+
+<!-- POTENTIAL SAVINGS STRIP -->
+<div class="savings-strip" id="savings-strip">
+  <div class="sv-item">
+    <div class="sv-label">Strategies applied</div>
+    <div class="sv-val" id="sv-applied">0</div>
+    <div class="sv-sub">of 8 available</div>
+  </div>
+  <div class="sv-item">
+    <div class="sv-label">Completion</div>
+    <div class="sv-val" id="sv-pct">0%</div>
+    <div class="sv-sub">of cost review done</div>
+  </div>
+  <div class="sv-item">
+    <div class="sv-label">Remember</div>
+    <div class="sv-val" style="font-size:16px;color:rgba(255,255,255,0.7)">1% cost save = 1% margin gain</div>
+    <div class="sv-sub">without touching price</div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-section" id="summary-section">
+  <h2 class="sum-title">Your cost controls — <em>actions applied</em></h2>
+  <div class="sum-grid" id="sum-grid"></div>
+</div>
+
+<!-- INSIGHT -->
+<div class="insight-strip" id="insight-strip">
+  <div class="is-dot"></div>
+  <div>
+    <span class="is-tag" id="is-tag">Insight</span>
+    <div class="is-text" id="is-text"></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <div class="cta-heading">Same work.<br><em>Better margin.</em></div>
+      <p class="cta-sub">Every cost you reduce has the same effect as raising your prices — but with none of the client conversations. A Boardroom session will identify exactly where your biggest cost opportunities are sitting.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="form-footer">
+  Your responses are confidential and used only to prepare your consulting session.
+</div>
+
+<script>
+var strategies=[
+  {n:1,text:'Set or calculate a time limit on the work you do — communicate it, measure it and stick to it'},
+  {n:2,text:'Reward timely completion of work with bonus, recognition or something fun'},
+  {n:3,text:'Tender your key suppliers with their competitors as an "annual review" to keep them on their toes'},
+  {n:4,text:'Ask for discounts — "you don\'t ask, you don\'t get"'},
+  {n:5,text:'Find out the volume you need to buy to achieve a price break'},
+  {n:6,text:'Cancel non-essential expenses by reviewing all outgoings'},
+  {n:7,text:'Evaluate asset usage (including slow-moving inventory) and sell non-performers'},
+  {n:8,text:'Complete an analysis of "time spent" vs "margin/money made" and focus on your highest-payoff activities'}
+];
+
+function buildTable(){
+  var tbody=document.getElementById('table-body');
+  tbody.innerHTML='';
+  strategies.forEach(function(s){
+    var tr=document.createElement('tr');
+    tr.className='tr-row';
+    tr.id='row-'+s.n;
+    tr.innerHTML=
+      '<td class="td-num">'+s.n+'</td>'+
+      '<td class="td-strategy">'+escHtml(s.text)+'</td>'+
+      '<td class="td-notes">'+
+        '<textarea class="note-area" id="note-'+s.n+'" '+
+          'placeholder="Apply to your business…" '+
+          'oninput="onNote(this,'+s.n+')" rows="2"></textarea>'+
+        '<span class="applied-badge" id="badge-'+s.n+'">Applied ✓</span>'+
+      '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.max(64,el.scrollHeight)+'px';
+}
+
+function onNote(el,n){
+  autoResize(el);
+  var filled=el.value.trim().length>0;
+  el.classList.toggle('has-content',filled);
+  document.getElementById('row-'+n).classList.toggle('has-note',filled);
+  document.getElementById('badge-'+n).classList.toggle('visible',filled);
+  updateAll();
+}
+
+function updateAll(){
+  var filled=strategies.filter(function(s){
+    var el=document.getElementById('note-'+s.n);
+    return el&&el.value.trim().length>0;
+  });
+  var count=filled.length;
+  var pct=Math.round(count/strategies.length*100);
+
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-count').textContent=count+' of '+strategies.length+' addressed';
+
+  // Savings strip
+  var ss=document.getElementById('savings-strip');
+  if(count>0){
+    ss.classList.add('visible');
+    document.getElementById('sv-applied').textContent=count;
+    document.getElementById('sv-pct').textContent=pct+'%';
+  } else {
+    ss.classList.remove('visible');
+  }
+
+  // Summary
+  var sumSec=document.getElementById('summary-section');
+  var sumGrid=document.getElementById('sum-grid');
+  if(count>0){
+    sumSec.classList.add('visible');
+    sumGrid.innerHTML='';
+    filled.forEach(function(s){
+      var note=document.getElementById('note-'+s.n).value.trim();
+      var div=document.createElement('div');
+      div.className='sum-item';
+      div.innerHTML=
+        '<div class="sum-num">Strategy '+s.n+'</div>'+
+        '<div class="sum-strategy">'+escHtml(s.text)+'</div>'+
+        '<div class="sum-note">'+escHtml(note).replace(/\n/g,'<br>')+'</div>';
+      sumGrid.appendChild(div);
+    });
+  }
+
+  // Insight
+  var strip=document.getElementById('insight-strip');
+  var itag=document.getElementById('is-tag');
+  var itext=document.getElementById('is-text');
+  if(count>0){
+    strip.className='insight-strip visible';
+    if(count===strategies.length){
+      strip.classList.add('complete');
+      itag.textContent='Cost review complete — 8 strategies addressed';
+      itext.textContent='You\'ve mapped all 8 cost control strategies against your business. Reducing costs has the same margin effect as raising prices — but none of the client friction. If each strategy you\'ve applied saves even 0.5% of revenue, the compound effect over 12 months is significant. A Boardroom session will help you prioritise and measure the impact.';
+    } else if(count>=4){
+      strip.classList.add('partial');
+      itag.textContent=count+' of 8 strategies applied';
+      itext.textContent='Strong start. Strategies 3 (tender suppliers annually), 6 (cancel non-essentials), and 8 (time vs margin analysis) tend to surface the largest savings fastest if you haven\'t addressed those yet. Complete all 8 to finish the review.';
+    } else {
+      strip.classList.add('partial');
+      itag.textContent=count+' of 8 strategies addressed';
+      itext.textContent='Keep going — every cost strategy you apply here reduces the gap between revenue and margin. Even small reductions in cost have a direct and lasting impact on profitability without affecting what you charge.';
+    }
+  } else {
+    strip.className='insight-strip';
+  }
+
+  document.getElementById('cta-wrap').classList.toggle('visible',count>=2);
+}
+
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+buildTable();
+</script>
+</body>
+</html>

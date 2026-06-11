@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Stock Take</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --cream3:#E0D8C8;
+  --gold:#C9A84C;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+  --ink:#1A1208;
+  --mid:#5C5040;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --forest:#0D2B1F;
+  --forest-light:#2D6A4F;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',sans-serif;
+}
+
+html,body{
+  font-family:var(--sans);
+  background:var(--cream);
+  color:var(--ink);
+  padding:0;margin:0;
+}
+body{padding:1.75rem 1.5rem 2.5rem}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{
+  margin-bottom:2rem;
+}
+.progress-top{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:.625rem;
+}
+.progress-label{
+  font-size:11px;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--soft);
+}
+.progress-count{
+  font-size:12px;font-weight:500;color:var(--forest);
+}
+.progress-track{
+  height:4px;background:var(--cream3);border-radius:100px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;border-radius:100px;
+  background:linear-gradient(to right,var(--forest-light),var(--gold));
+  transition:width 0.4s ease;
+}
+
+/* ── GRID ── */
+.questions-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-bottom:1.75rem;
+}
+@media(max-width:700px){
+  .questions-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .questions-grid{grid-template-columns:1fr}
+}
+
+/* ── QUESTION CARD ── */
+.q-card{
+  background:#fff;
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  padding:1.25rem 1.25rem 1rem;
+  display:flex;flex-direction:column;gap:.625rem;
+  transition:border-color 0.2s,box-shadow 0.2s;
+  position:relative;
+}
+.q-card:focus-within{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,168,76,0.1);
+}
+.q-card.answered{
+  border-color:var(--forest-light);
+  background:#FAFDF9;
+}
+
+/* Number */
+.q-num{
+  font-family:var(--serif);
+  font-size:32px;font-weight:300;
+  color:var(--cream3);
+  line-height:1;
+  transition:color 0.3s;
+  user-select:none;
+}
+.q-card.answered .q-num{color:rgba(45,106,79,0.18)}
+.q-card:focus-within .q-num{color:rgba(201,168,76,0.35)}
+
+/* Title */
+.q-title{
+  font-size:14px;font-weight:500;color:var(--ink);
+  line-height:1.3;
+}
+
+/* Textarea */
+.q-textarea{
+  width:100%;font-family:var(--sans);
+  font-size:13px;font-weight:300;
+  line-height:1.7;color:var(--ink);
+  border:1.5px solid var(--cream3);
+  border-radius:6px;
+  padding:10px 11px;
+  background:var(--cream);
+  resize:vertical;min-height:90px;
+  transition:border-color 0.2s,background 0.2s;
+}
+.q-textarea:focus{
+  outline:none;
+  border-color:var(--gold);
+  background:#fff;
+}
+.q-textarea::placeholder{
+  color:var(--cream3);
+  font-style:italic;
+  font-size:12px;
+}
+.q-card.answered .q-textarea{
+  border-color:rgba(45,106,79,0.2);
+  background:#fff;
+}
+
+/* Tick indicator */
+.q-tick{
+  position:absolute;top:1rem;right:1rem;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--forest-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:#fff;font-weight:600;
+  opacity:0;transform:scale(0.6);
+  transition:opacity 0.25s,transform 0.25s;
+}
+.q-card.answered .q-tick{opacity:1;transform:scale(1)}
+
+/* Word count hint */
+.q-wordcount{
+  font-size:10px;color:var(--cream3);text-align:right;
+  transition:color 0.2s;height:14px;
+}
+.q-card.answered .q-wordcount{color:rgba(45,106,79,0.4)}
+
+/* ── SUMMARY SECTION ── */
+.summary-wrap{
+  display:none;margin-bottom:1.75rem;
+  animation:fadeIn 0.4s ease;
+}
+.summary-wrap.visible{display:block}
+.summary-title{
+  font-family:var(--serif);
+  font-size:clamp(22px,4vw,32px);font-weight:300;
+  color:var(--ink);margin-bottom:1rem;line-height:1.2;
+}
+.summary-title em{font-style:italic;color:var(--forest-light)}
+.summary-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;
+}
+@media(max-width:600px){.summary-grid{grid-template-columns:1fr}}
+
+.summary-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:8px;padding:1rem 1.125rem;
+}
+.sc-num{
+  font-family:var(--serif);font-size:14px;font-weight:300;
+  color:var(--gold);margin-bottom:3px;
+}
+.sc-title{font-size:11px;font-weight:500;color:var(--soft);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:0.08em}
+.sc-answer{
+  font-size:13px;font-weight:300;color:var(--ink);
+  line-height:1.65;
+}
+.sc-empty{font-size:12px;font-style:italic;color:var(--border)}
+
+/* ── INSIGHT STRIP ── */
+.insight-strip{
+  background:var(--forest);border-radius:8px;
+  padding:1.25rem 1.5rem;margin-bottom:1.75rem;
+  display:none;animation:fadeIn 0.4s ease;
+}
+.insight-strip.visible{display:block}
+.is-label{
+  font-size:9px;font-weight:500;letter-spacing:0.18em;
+  text-transform:uppercase;color:rgba(201,168,76,0.6);margin-bottom:.625rem;
+}
+.is-text{
+  font-family:var(--serif);font-size:17px;font-weight:300;
+  font-style:italic;color:rgba(255,255,255,0.8);line-height:1.6;
+}
+
+/* ── SUBMIT / CTA ── */
+.submit-wrap{
+  display:none;animation:fadeIn 0.4s ease;
+}
+.submit-wrap.visible{display:block}
+.submit-inner{
+  border:1.5px solid var(--border);border-radius:10px;
+  padding:1.75rem 2rem;text-align:center;
+  background:#fff;
+}
+.submit-heading{
+  font-family:var(--serif);font-size:clamp(20px,3.5vw,28px);
+  font-weight:300;color:var(--ink);margin-bottom:.5rem;
+}
+.submit-heading em{font-style:italic;color:var(--forest-light)}
+.submit-sub{
+  font-size:13px;font-weight:300;color:var(--soft);
+  line-height:1.75;margin-bottom:1.5rem;max-width:440px;
+  margin-left:auto;margin-right:auto;
+}
+.submit-btn{
+  font-family:var(--sans);font-size:12px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--forest);color:#fff;
+  border:none;padding:14px 30px;border-radius:5px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;margin-bottom:.875rem;
+}
+.submit-btn:hover{
+  background:var(--forest-light);
+  transform:translateY(-2px);
+  box-shadow:0 6px 18px rgba(13,43,31,0.2);
+}
+.submit-note{
+  font-size:11px;font-weight:300;color:var(--soft);
+  display:block;
+}
+
+/* ── FOOTER ── */
+.form-footer{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:11px;font-weight:300;color:var(--soft);
+  text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-top">
+    <span class="progress-label">The Stock Take</span>
+    <span class="progress-count" id="prog-count">0 of 9 answered</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- QUESTIONS GRID -->
+<div class="questions-grid">
+
+  <div class="q-card" id="card-1">
+    <div class="q-tick">✓</div>
+    <div class="q-num">1</div>
+    <div class="q-title">Time in Business</div>
+    <textarea class="q-textarea" id="q1" placeholder="How long have you been in business for?" oninput="onType(this,1)"></textarea>
+    <div class="q-wordcount" id="wc-1"></div>
+  </div>
+
+  <div class="q-card" id="card-2">
+    <div class="q-tick">✓</div>
+    <div class="q-num">2</div>
+    <div class="q-title">Hours in Business</div>
+    <textarea class="q-textarea" id="q2" placeholder="How many hours a week do you work? (include weekends/evenings if needed)" oninput="onType(this,2)"></textarea>
+    <div class="q-wordcount" id="wc-2"></div>
+  </div>
+
+  <div class="q-card" id="card-3">
+    <div class="q-tick">✓</div>
+    <div class="q-num">3</div>
+    <div class="q-title">Role in Business</div>
+    <textarea class="q-textarea" id="q3" placeholder="What are the main tasks (or role) you do?" oninput="onType(this,3)"></textarea>
+    <div class="q-wordcount" id="wc-3"></div>
+  </div>
+
+  <div class="q-card" id="card-4">
+    <div class="q-tick">✓</div>
+    <div class="q-num">4</div>
+    <div class="q-title">Income in Business</div>
+    <textarea class="q-textarea" id="q4" placeholder="How much do you draw from the business per annum?" oninput="onType(this,4)"></textarea>
+    <div class="q-wordcount" id="wc-4"></div>
+  </div>
+
+  <div class="q-card" id="card-5">
+    <div class="q-tick">✓</div>
+    <div class="q-num">5</div>
+    <div class="q-title">Progress of Business</div>
+    <textarea class="q-textarea" id="q5" placeholder="Is your income (roughly) ahead, behind or the same as it was 2 years ago?" oninput="onType(this,5)"></textarea>
+    <div class="q-wordcount" id="wc-5"></div>
+  </div>
+
+  <div class="q-card" id="card-6">
+    <div class="q-tick">✓</div>
+    <div class="q-num">6</div>
+    <div class="q-title">Ideal Income</div>
+    <textarea class="q-textarea" id="q6" placeholder="How much should you (or would you like to) be making from your business?" oninput="onType(this,6)"></textarea>
+    <div class="q-wordcount" id="wc-6"></div>
+  </div>
+
+  <div class="q-card" id="card-7">
+    <div class="q-tick">✓</div>
+    <div class="q-num">7</div>
+    <div class="q-title">Point of Difference</div>
+    <textarea class="q-textarea" id="q7" placeholder="What do you do better than most in your industry?" oninput="onType(this,7)"></textarea>
+    <div class="q-wordcount" id="wc-7"></div>
+  </div>
+
+  <div class="q-card" id="card-8">
+    <div class="q-tick">✓</div>
+    <div class="q-num">8</div>
+    <div class="q-title">Competition in Business</div>
+    <textarea class="q-textarea" id="q8" placeholder="Is it competitive or is there enough work for everyone?" oninput="onType(this,8)"></textarea>
+    <div class="q-wordcount" id="wc-8"></div>
+  </div>
+
+  <div class="q-card" id="card-9">
+    <div class="q-tick">✓</div>
+    <div class="q-num">9</div>
+    <div class="q-title">Success in Business</div>
+    <textarea class="q-textarea" id="q9" placeholder="What's one thing you'd want to achieve in your business in the next 90 days?" oninput="onType(this,9)"></textarea>
+    <div class="q-wordcount" id="wc-9"></div>
+  </div>
+
+</div>
+
+<!-- INSIGHT STRIP -->
+<div class="insight-strip" id="insight-strip">
+  <div class="is-label">What your answers are telling us</div>
+  <div class="is-text" id="is-text">Keep going — the pattern becomes visible once more answers are in.</div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-wrap" id="summary-wrap">
+  <h2 class="summary-title">Your Stock Take <em>summary</em></h2>
+  <div class="summary-grid" id="summary-grid"></div>
+</div>
+
+<!-- SUBMIT / CTA -->
+<div class="submit-wrap" id="submit-wrap">
+  <div class="submit-inner">
+    <h2 class="submit-heading">Your Stock Take is <em>complete.</em></h2>
+    <p class="submit-sub">These nine answers tell us more about your business than most owners share in a first meeting. The next step is a 20-minute conversation to map what they mean — and what to do about it.</p>
+    <a class="submit-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free Boardroom session →</a>
+    <span class="submit-note">No obligation · 20 minutes · Free</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="form-footer">
+  Your answers are confidential and used only to prepare your consulting session.
+</div>
+
+<script>
+var labels=[
+  'Time in Business','Hours in Business','Role in Business',
+  'Income in Business','Progress of Business','Ideal Income',
+  'Point of Difference','Competition in Business','Success in Business'
+];
+
+function wordCount(str){
+  return str.trim().split(/\s+/).filter(function(w){return w.length>0}).length;
+}
+
+function onType(el,num){
+  var val=el.value.trim();
+  var card=document.getElementById('card-'+num);
+  var wc=document.getElementById('wc-'+num);
+  var words=wordCount(el.value);
+
+  if(val.length>0){
+    card.classList.add('answered');
+    wc.textContent=words+' word'+(words===1?'':'s');
+  } else {
+    card.classList.remove('answered');
+    wc.textContent='';
+  }
+  updateAll();
+}
+
+function updateAll(){
+  var answered=0;
+  for(var i=1;i<=9;i++){
+    var el=document.getElementById('q'+i);
+    if(el&&el.value.trim().length>0)answered++;
+  }
+
+  // Progress
+  var pct=Math.round((answered/9)*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-count').textContent=answered+' of 9 answered';
+
+  // Insight strip
+  var strip=document.getElementById('insight-strip');
+  var isText=document.getElementById('is-text');
+  if(answered>=3){
+    strip.classList.add('visible');
+    isText.textContent=getInsight(answered);
+  } else {
+    strip.classList.remove('visible');
+  }
+
+  // Summary
+  var sumWrap=document.getElementById('summary-wrap');
+  if(answered>=1){
+    sumWrap.classList.add('visible');
+    renderSummary();
+  }
+
+  // Submit CTA
+  var sub=document.getElementById('submit-wrap');
+  sub.classList.toggle('visible',answered===9);
+}
+
+function getInsight(n){
+  var q4=document.getElementById('q4').value.trim();
+  var q2=document.getElementById('q2').value.trim();
+  var q5=document.getElementById('q5').value.trim();
+  var q6=document.getElementById('q6').value.trim();
+  var q9=document.getElementById('q9').value.trim();
+
+  var behind=q5.toLowerCase().includes('behind')||q5.toLowerCase().includes('same');
+  var hasIncome=q4.length>0&&q6.length>0;
+
+  if(n>=9){
+    return 'Your Stock Take is complete. The nine answers you\'ve given reveal the gap between where your business is and where you want it to be. That gap is what the Boardroom session is designed to close.';
+  }
+  if(n>=6){
+    if(behind){
+      return 'A pattern is emerging: effort has not translated into income growth. That is almost never a skills problem. It is almost always a pricing or billing structure problem — and those are solvable.';
+    }
+    if(hasIncome){
+      return 'The gap between what you draw and what you want to be making is visible. Quantifying that gap is the first step. Closing it is what follows.';
+    }
+    return 'Your answers are building a clear picture of where the business is — and where it needs to go. The final questions will complete the pattern.';
+  }
+  if(n>=3){
+    return 'Keep going — the more honest and specific your answers, the more useful the session that follows will be.';
+  }
+  return '';
+}
+
+function renderSummary(){
+  var grid=document.getElementById('summary-grid');
+  grid.innerHTML='';
+  var perRow=3;
+  for(var i=1;i<=9;i++){
+    var el=document.getElementById('q'+i);
+    var val=el?el.value.trim():'';
+    var card=document.createElement('div');
+    card.className='summary-card';
+    card.innerHTML='<div class="sc-num">'+i+'.</div>'+
+      '<div class="sc-title">'+labels[i-1]+'</div>'+
+      (val.length>0
+        ?'<div class="sc-answer">'+escHtml(val)+'</div>'
+        :'<div class="sc-empty">Not answered yet</div>');
+    grid.appendChild(card);
+  }
+}
+
+function escHtml(str){
+  return str
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/\n/g,'<br>');
+}
+</script>
+</body>
+</html>

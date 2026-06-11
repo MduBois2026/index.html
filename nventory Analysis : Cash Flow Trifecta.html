@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuBois Consulting — Inventory Analysis / Cash Flow Trifecta</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --cream3:#E0D8C8;
+  --gold:#C9A84C;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+  --ink:#1A1208;
+  --mid:#5C5040;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',sans-serif;
+}
+html,body{
+  font-family:var(--sans);
+  background:var(--cream);
+  color:var(--ink);
+  padding:0;margin:0;
+}
+body{padding:0 0 2rem}
+
+/* ── HERO BAND ── */
+.hero-band{
+  background:var(--forest);
+  padding:2rem 2rem 2.25rem;
+  position:relative;overflow:hidden;
+  margin-bottom:1.75rem;
+}
+.hero-band::after{
+  content:'';position:absolute;
+  top:-60px;right:-60px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,0.12),transparent 70%);
+  pointer-events:none;
+}
+.hero-band::before{
+  content:'';position:absolute;
+  bottom:-40px;left:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(45,106,79,0.18);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:.75rem;opacity:0.8;
+  position:relative;z-index:1;
+}
+.hero-title{
+  font-family:var(--serif);font-size:clamp(26px,5vw,40px);
+  font-weight:300;color:#fff;line-height:1.1;
+  margin-bottom:.875rem;position:relative;z-index:1;
+}
+.hero-desc{
+  font-size:13px;font-weight:300;color:rgba(255,255,255,0.55);
+  line-height:1.8;max-width:620px;position:relative;z-index:1;
+}
+
+/* ── 80/20 CALLOUT ── */
+.rule-callout{
+  margin:0 1.5rem 1.75rem;
+  background:var(--gold-pale);
+  border:1.5px solid var(--gold-light);
+  border-radius:8px;
+  padding:1.125rem 1.5rem;
+  display:flex;align-items:flex-start;gap:12px;
+}
+.rc-icon{
+  font-size:22px;flex-shrink:0;margin-top:1px;
+}
+.rc-body{font-size:13px;font-weight:300;color:var(--mid);line-height:1.8}
+.rc-body strong{font-weight:500;color:var(--ink)}
+
+/* ── PROGRESS TRACKER ── */
+.progress-strip{
+  margin:0 1.5rem 1.75rem;
+  background:#fff;border:1px solid var(--border);
+  border-radius:8px;padding:1rem 1.25rem;
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+}
+.ps-label{font-size:11px;font-weight:500;color:var(--soft);letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap}
+.ps-dots{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.ps-dot{
+  width:10px;height:10px;border-radius:50%;
+  border:1.5px solid var(--border);
+  background:transparent;
+  transition:all 0.3s;
+}
+.ps-dot.filled{background:var(--forest-light);border-color:var(--forest-light)}
+.ps-count{font-size:12px;font-weight:500;color:var(--forest);white-space:nowrap}
+
+/* ── TRIFECTA GRID ── */
+.trifecta-wrap{
+  padding:0 1.5rem;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:1.75rem;
+}
+@media(max-width:720px){
+  .trifecta-wrap{grid-template-columns:1fr}
+}
+
+.column{
+  background:var(--cream);
+  padding:1.75rem 1.5rem;
+  display:flex;flex-direction:column;
+  gap:0;
+  position:relative;
+  transition:background 0.2s;
+}
+.column.complete{background:var(--gold-pale)}
+
+/* Column header */
+.col-header{
+  padding-bottom:1rem;
+  margin-bottom:1.25rem;
+  border-bottom:2px solid var(--gold);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:.5rem;
+}
+.col-title{
+  font-family:var(--serif);font-size:22px;font-weight:400;
+  color:var(--ink);
+}
+.col-badge{
+  font-size:9px;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;padding:3px 9px;border-radius:100px;
+  opacity:0;transition:opacity 0.3s;
+}
+.col-badge.visible{opacity:1}
+.badge-inv{background:#EAF3DE;color:#3B6D11}
+.badge-deb{background:#E6F1FB;color:#185FA5}
+.badge-ter{background:#EEEDFE;color:#533AB7}
+
+/* Steps list */
+.steps-list{
+  list-style:none;
+  display:flex;flex-direction:column;
+  gap:0;
+  margin-bottom:1.5rem;
+}
+.step-item{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:.75rem 0;
+  border-bottom:1px dashed var(--cream3);
+  font-size:13px;font-weight:300;color:var(--mid);
+  line-height:1.55;
+  transition:color 0.2s;
+  cursor:pointer;
+}
+.step-item:last-child{border-bottom:none}
+.step-item:hover{color:var(--ink)}
+.step-num{
+  font-family:var(--serif);font-size:18px;font-weight:300;
+  color:var(--gold);line-height:1.1;flex-shrink:0;
+  min-width:16px;
+}
+.step-check{
+  width:18px;height:18px;border-radius:50%;
+  border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:#fff;flex-shrink:0;
+  margin-top:1px;transition:all 0.2s;cursor:pointer;
+}
+.step-item.checked .step-check{background:var(--forest-light);border-color:var(--forest-light)}
+.step-item.checked .step-body{text-decoration:line-through;color:var(--soft);opacity:0.7}
+
+/* Question block */
+.question-block{
+  background:#fff;border:1px solid var(--border);
+  border-radius:6px;padding:1.125rem;
+  margin-bottom:1rem;
+  transition:border-color 0.2s;
+}
+.question-block:focus-within{border-color:var(--gold)}
+.qb-question{
+  font-size:13px;font-weight:500;color:var(--ink);
+  line-height:1.45;margin-bottom:.5rem;
+}
+.qb-example{
+  font-size:11px;font-style:italic;color:var(--soft);
+  margin-bottom:.75rem;line-height:1.5;
+}
+.qb-label{
+  font-size:10px;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:.5rem;display:block;
+}
+
+/* Top 3 inputs */
+.top3-wrap{display:flex;flex-direction:column;gap:6px}
+.top3-row{
+  display:flex;align-items:flex-start;gap:8px;
+}
+.top3-n{
+  font-family:var(--serif);font-size:17px;font-weight:300;
+  color:var(--gold);line-height:1;padding-top:10px;
+  min-width:14px;
+}
+.top3-input{
+  flex:1;font-family:var(--sans);font-size:13px;font-weight:300;
+  padding:9px 11px;
+  border:1.5px solid var(--border);border-radius:5px;
+  background:var(--cream);color:var(--ink);
+  transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;
+  line-height:1.4;
+  resize:none;
+  min-height:38px;
+  overflow:hidden;
+}
+.top3-input:focus{
+  outline:none;border-color:var(--gold);background:#fff;
+  box-shadow:0 0 0 3px rgba(201,168,76,0.1);
+}
+.top3-input::placeholder{color:var(--border)}
+.top3-input.filled{
+  border-color:var(--forest-light);background:#EAF5F0;
+}
+
+/* Priority tag that appears when item is filled */
+.priority-tag{
+  font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  padding:2px 7px;border-radius:100px;white-space:nowrap;
+  opacity:0;transition:opacity 0.3s;margin-top:10px;
+}
+.priority-tag.visible{opacity:1}
+.pt-inv{background:#EAF3DE;color:#3B6D11}
+.pt-deb{background:#E6F1FB;color:#185FA5}
+.pt-ter{background:#EEEDFE;color:#533AB7}
+
+/* ── SUMMARY PANEL ── */
+.summary-panel{
+  margin:0 1.5rem 1.75rem;
+  display:none;
+}
+.summary-panel.visible{display:block;animation:fadeIn 0.4s ease}
+.summary-title{
+  font-family:var(--serif);font-size:clamp(22px,3.5vw,30px);
+  font-weight:300;color:var(--ink);margin-bottom:1rem;
+}
+.summary-title em{font-style:italic;color:var(--forest-light)}
+.summary-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+}
+@media(max-width:600px){.summary-grid{grid-template-columns:1fr}}
+
+.summary-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;
+}
+.sc-head{
+  padding:.75rem 1.125rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sc-title{font-size:12px;font-weight:500;color:var(--ink)}
+.sc-count{
+  font-size:10px;font-weight:500;padding:2px 8px;border-radius:100px;
+}
+.sc-count.inv{background:#EAF3DE;color:#3B6D11}
+.sc-count.deb{background:#E6F1FB;color:#185FA5}
+.sc-count.ter{background:#EEEDFE;color:#533AB7}
+.sc-body{padding:.875rem 1.125rem}
+.sc-item{
+  font-size:12px;font-weight:300;color:var(--mid);
+  padding:.375rem 0;border-bottom:1px solid var(--cream3);
+  line-height:1.5;display:flex;gap:6px;align-items:flex-start;
+}
+.sc-item:last-child{border-bottom:none}
+.sc-item::before{
+  content:'→';color:var(--gold);flex-shrink:0;
+  font-size:11px;margin-top:2px;
+}
+.sc-empty{
+  font-size:12px;font-style:italic;color:var(--border);
+  padding:.375rem 0;
+}
+
+/* ── INSIGHT BANNER ── */
+.insight-banner{
+  margin:0 1.5rem 1.75rem;
+  border-radius:8px;padding:1.125rem 1.5rem;
+  display:none;
+}
+.insight-banner.visible{display:block;animation:fadeIn 0.35s ease}
+.insight-banner.partial{background:#FBF3E4;border:1.5px solid #E8C86A}
+.insight-banner.complete{background:#EAF5F0;border:1.5px solid #5DCAA5}
+.ib-tag{
+  font-size:9px;font-weight:500;letter-spacing:0.16em;
+  text-transform:uppercase;margin-bottom:.5rem;display:block;
+}
+.insight-banner.partial .ib-tag{color:#854F0B}
+.insight-banner.complete .ib-tag{color:var(--forest-light)}
+.ib-text{font-size:13px;font-weight:300;color:var(--ink);line-height:1.75}
+
+/* ── CTA ── */
+.cta-wrap{
+  padding:0 1.5rem;
+  display:none;
+}
+.cta-wrap.visible{display:block;animation:fadeIn 0.4s ease}
+.cta-inner{
+  background:var(--forest);border-radius:8px;
+  padding:1.75rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+}
+.cta-inner::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:180px;height:180px;border-radius:50%;
+  background:rgba(201,168,76,0.07);pointer-events:none;
+}
+.cta-text-block{flex:1;min-width:200px}
+.cta-heading{
+  font-family:var(--serif);font-size:clamp(20px,3vw,28px);
+  font-weight:300;color:#fff;line-height:1.2;margin-bottom:.5rem;
+}
+.cta-heading em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:12px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.7;max-width:380px}
+.cta-btn{
+  font-family:var(--sans);font-size:12px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:13px 26px;border-radius:5px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;
+  position:relative;z-index:1;
+}
+.cta-btn:hover{background:#DFB84A;transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,168,76,0.3)}
+
+/* ── FOOTER ── */
+.calc-footer{
+  margin:1.5rem 1.5rem 0;
+  padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:11px;font-weight:300;color:var(--soft);
+  text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- HERO BAND -->
+<div class="hero-band">
+  <div class="hero-eyebrow">Financial Tool 2</div>
+  <h1 class="hero-title">Inventory Analysis / Cash Flow Trifecta</h1>
+  <p class="hero-desc">Three measures that can be handled together as they all affect cash flow. They use the 80/20 rule to guide where to start or focus your efforts.</p>
+</div>
+
+<!-- 80/20 CALLOUT -->
+<div class="rule-callout">
+  <div class="rc-icon">📊</div>
+  <div class="rc-body"><strong>The 80/20 rule applies to all three:</strong> 80% of the value in your stock sits in 20% of items. 80% of your overdue accounts come from 20% of your debtors. 80% of your credit risk comes from 20% of your customers. Start with that 20% — always.</div>
+</div>
+
+<!-- PROGRESS TRACKER -->
+<div class="progress-strip">
+  <span class="ps-label">Actions captured</span>
+  <div class="ps-dots" id="ps-dots"></div>
+  <span class="ps-count" id="ps-count">0 / 9</span>
+</div>
+
+<!-- TRIFECTA GRID -->
+<div class="trifecta-wrap">
+
+  <!-- ── COLUMN 1: INVENTORY ── -->
+  <div class="column" id="col-inv">
+    <div class="col-header">
+      <div class="col-title">Inventory</div>
+      <span class="col-badge badge-inv" id="badge-inv">✓ Complete</span>
+    </div>
+
+    <ul class="steps-list">
+      <li class="step-item" onclick="toggleStep(this)" id="inv-s1">
+        <span class="step-num">1</span>
+        <div class="step-check"></div>
+        <span class="step-body">Do a stocktake of what you have on hand</span>
+      </li>
+      <li class="step-item" onclick="toggleStep(this)" id="inv-s2">
+        <span class="step-num">2</span>
+        <div class="step-check"></div>
+        <span class="step-body">Usually 80% of the value of your total stock will be in 20% of your stock items on your stock list</span>
+      </li>
+      <li class="step-item" onclick="toggleStep(this)" id="inv-s3">
+        <span class="step-num">3</span>
+        <div class="step-check"></div>
+        <span class="step-body">These items are the ones to target for reducing or conversion into cash</span>
+      </li>
+    </ul>
+
+    <div class="question-block">
+      <div class="qb-question">What are the top 3 things you can do to convert your inventory into cash (or reduce)?</div>
+      <div class="qb-example">e.g. switch it with supplier for a faster mover</div>
+      <span class="qb-label">Top 3…</span>
+      <div class="top3-wrap">
+        <div class="top3-row">
+          <span class="top3-n">1.</span>
+          <textarea class="top3-input" id="inv-1" placeholder="Your first action..." oninput="onInput(this,'inv-1','pt-inv');autoResize(this)" rows="1"></textarea>
+          <span class="priority-tag pt-inv" id="tag-inv-1">Priority</span>
+        </div>
+        <div class="top3-row">
+          <span class="top3-n">2.</span>
+          <textarea class="top3-input" id="inv-2" placeholder="Your second action..." oninput="onInput(this,'inv-2','pt-inv');autoResize(this)" rows="1"></textarea>
+          <span class="priority-tag pt-inv" id="tag-inv-2">Priority</span>
+        </div>
+        <div class="top3-row">
+          <span class="top3-n">3.</span>
+          <textarea class="top3-input" id="inv-3" placeholder="Your third action..." oninput="onInput(this,'inv-3','pt-inv');autoResize(this)" rows="1"></textarea>
+          <span class="priority-tag pt-inv" id="tag-inv-3">Priority</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COLUMN 2: DEBTORS ── -->
+  <div class="column" id="col-deb">
+    <div class="col-header">
+      <div class="col-title">Debtors</div>
+      <span class="col-badge badge-deb" id="badge-deb">✓ Complete</span>
+    </div>
+
+    <ul class="steps-list">
+      <li class="step-item" onclick="toggleStep(this)" id="deb-s1">
+        <span class="step-num">1</span>
+        <div class="step-check"></div>
+        <span class="step-body">Run a report on who owes what</span>
+      </li>
+      <li class="step-item" onclick="toggleStep(this)" id="deb-s2">
+        <span class="step-num">2</span>
+        <div class="step-check"></div>
+        <span class="step-body">Usually 80% of your overdue accounts will come from 20% of the names on the list (the usual suspects)</span>
+      </li>
+      <li class="step-item" onclick="toggleStep(this)" id="deb-s3">
+        <span class="step-num">3</span>
+        <div class="step-check"></div>
+        <span class="step-body">These are the ones to target first</span>
+      </li>
+    </ul>
+
+    <div class="question-block">
+      <div class="qb-question">What are the top 3 things you can do to improve the usual suspects?</div>
+      <div class="qb-example">e.g. review meeting to clarify relationship</div>
+      <span class="qb-label">Top 3…</span>
+      <div class="top3-wrap">
+        <div class="top3-row">
+          <span class="top3-n">1.</span>
+          <textarea class="top3-input" id="deb-1" placeholder="Your first action..." oninput="onInput(this,'deb-1','pt-deb');autoResize(this)" rows="1"></textarea>
+          <span class="priority-tag pt-deb" id="tag-deb-1">Priority</span>
+        </div>
+        <div class="top3-row">
+          <span class="top3-n">2.</span>
+          <textarea class="top3-input" id="deb-2" placeholder="Your second action..." oninput="onInput(this,'deb-2','pt-deb');autoResize(this)" rows="1"></textarea>
+          <span class="priority-tag pt-deb" id="tag-deb-2">Priority</span>
+        </div>
+        <div class="top3-row">
+          <span class="top3-n">3.</span>
+          <textarea class="top3-input" id="deb-3" placeholder="Your third action..." oninput="onInput(this,'deb-3','pt-deb');autoResize(this)" rows="1"></textarea>
+          <span class="priority-tag pt-deb" id="tag-deb-3">Priority</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COLUMN 3: TERMS ── -->
+  <div class="column" id="col-ter">
+    <div class="col-header">
+      <div class="col-title">Terms</div>
+      <span class="col-badge badge-ter" id="badge-ter">✓ Complete</span>
+    </div>
+
+    <ul class="steps-list">
+      <li class="step-item" onclick="toggleStep(this)" id="ter-s1">
+        <span class="step-num">1</span>
+        <div class="step-check"></div>
+        <span class="step-body">Have a look at who you extend credit to</span>
+      </li>
+      <li class="step-item" onclick="toggleStep(this)" id="ter-s2">
+        <span class="step-num">2</span>
+        <div class="step-check"></div>
+        <span class="step-body">Many accounts could be cash or 7-day terms due to size or frequency of purchase</span>
+      </li>
+      <li class="step-item" onclick="toggleStep(this)" id="ter-s3">
+        <span class="step-num">3</span>
+        <div class="step-check"></div>
+        <span class="step-body">Who are the customers that will be 80% ok with your change in credit policy?</span>
+      </li>
+    </ul>
+
+    <div class="question-block">
+      <div class="qb-question">What are the top 3 credit policy changes that would get you paid faster?</div>
+      <div class="qb-example">e.g. get a deposit or a higher % deposit</div>
+      <span class="qb-label">Top 3…</span>
+      <div class="top3-wrap">
+        <div class="top3-row">
+          <span class="top3-n">1.</span>
+          <textarea class="top3-input" id="ter-1" placeholder="Your first action..." oninput="onInput(this,'ter-1','pt-ter');autoResize(this)" rows="1"></textarea>
+          <span class="priority-tag pt-ter" id="tag-ter-1">Priority</span>
+        </div>
+        <div class="top3-row">
+          <span class="top3-n">2.</span>
+          <textarea class="top3-input" id="ter-2" placeholder="Your second action..." oninput="onInput(this,'ter-2','pt-ter');autoResize(this)" rows="1"></textarea>
+          <span class="priority-tag pt-ter" id="tag-ter-2">Priority</span>
+        </div>
+        <div class="top3-row">
+          <span class="top3-n">3.</span>
+          <textarea class="top3-input" id="ter-3" placeholder="Your third action..." oninput="onInput(this,'ter-3','pt-ter');autoResize(this)" rows="1"></textarea>
+          <span class="priority-tag pt-ter" id="tag-ter-3">Priority</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SUMMARY PANEL -->
+<div class="summary-panel" id="summary-panel">
+  <h2 class="summary-title">Your cash flow <em>action plan</em></h2>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="sc-head">
+        <span class="sc-title">Inventory actions</span>
+        <span class="sc-count inv" id="inv-count">0 entered</span>
+      </div>
+      <div class="sc-body" id="summary-inv">
+        <div class="sc-empty">No actions entered yet</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-head">
+        <span class="sc-title">Debtor actions</span>
+        <span class="sc-count deb" id="deb-count">0 entered</span>
+      </div>
+      <div class="sc-body" id="summary-deb">
+        <div class="sc-empty">No actions entered yet</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-head">
+        <span class="sc-title">Terms actions</span>
+        <span class="sc-count ter" id="ter-count">0 entered</span>
+      </div>
+      <div class="sc-body" id="summary-ter">
+        <div class="sc-empty">No actions entered yet</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INSIGHT BANNER -->
+<div class="insight-banner" id="insight-banner">
+  <span class="ib-tag" id="ib-tag">Progress</span>
+  <div class="ib-text" id="ib-text"></div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text-block">
+      <div class="cta-heading">Cash flow is a<br><em>structure problem.</em></div>
+      <p class="cta-sub">Your Trifecta actions are a strong start. A DuBois Boardroom session will show you exactly how to implement them — and what to do next.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="calc-footer">
+  DuBois Business Consulting · duboisbusinessconsulting.com.au
+</div>
+
+<script>
+var allIds=['inv-1','inv-2','inv-3','deb-1','deb-2','deb-3','ter-1','ter-2','ter-3'];
+var stepIds=['inv-s1','inv-s2','inv-s3','deb-s1','deb-s2','deb-s3','ter-s1','ter-s2','ter-s3'];
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=el.scrollHeight+'px';
+}
+
+function toggleStep(li){
+  li.classList.toggle('checked');
+  updateAll();
+}
+
+function onInput(el,id,tagClass){
+  var filled=el.value.trim().length>0;
+  el.classList.toggle('filled',filled);
+  var tag=document.getElementById('tag-'+id);
+  if(tag)tag.classList.toggle('visible',filled);
+  updateAll();
+}
+
+function updateAll(){
+  var totalFilled=0;
+  allIds.forEach(function(id){
+    var el=document.getElementById(id);
+    if(el&&el.value.trim().length>0)totalFilled++;
+  });
+
+  var totalChecked=0;
+  stepIds.forEach(function(id){
+    var el=document.getElementById(id);
+    if(el&&el.classList.contains('checked'))totalChecked++;
+  });
+
+  var total=totalFilled+totalChecked;
+
+  // Progress dots
+  var dotsWrap=document.getElementById('ps-dots');
+  dotsWrap.innerHTML='';
+  for(var i=0;i<9;i++){
+    var dot=document.createElement('div');
+    dot.className='ps-dot'+(i<totalFilled?' filled':'');
+    dotsWrap.appendChild(dot);
+  }
+  document.getElementById('ps-count').textContent=totalFilled+' / 9 actions';
+
+  // Column badges
+  checkColBadge('inv',['inv-1','inv-2','inv-3'],'badge-inv');
+  checkColBadge('deb',['deb-1','deb-2','deb-3'],'badge-deb');
+  checkColBadge('ter',['ter-1','ter-2','ter-3'],'badge-ter');
+
+  // Column background
+  ['inv','deb','ter'].forEach(function(col){
+    var ids=[col+'-1',col+'-2',col+'-3'];
+    var count=ids.filter(function(id){return document.getElementById(id)&&document.getElementById(id).value.trim().length>0}).length;
+    var colEl=document.getElementById('col-'+col);
+    if(colEl)colEl.classList.toggle('complete',count===3);
+  });
+
+  // Summary panel
+  var sp=document.getElementById('summary-panel');
+  if(totalFilled>0){
+    sp.classList.add('visible');
+    updateSummary('inv',['inv-1','inv-2','inv-3'],'summary-inv','inv-count');
+    updateSummary('deb',['deb-1','deb-2','deb-3'],'summary-deb','deb-count');
+    updateSummary('ter',['ter-1','ter-2','ter-3'],'summary-ter','ter-count');
+  }
+
+  // Insight
+  var banner=document.getElementById('insight-banner');
+  var tag=document.getElementById('ib-tag');
+  var text=document.getElementById('ib-text');
+  if(totalFilled>0){
+    banner.className='insight-banner visible';
+    if(totalFilled>=9){
+      banner.classList.add('complete');
+      tag.textContent='Trifecta complete — 9 actions captured';
+      text.textContent='You\'ve identified all 9 cash flow actions across Inventory, Debtors, and Terms. The 80/20 principle means implementing even the top 3 from each area will unlock the majority of the available cash sitting in your business right now. The next step is agreeing a timeline and who is accountable for each action.';
+    } else if(totalFilled>=5){
+      banner.classList.add('partial');
+      tag.textContent='Good progress — '+totalFilled+' of 9 actions captured';
+      text.textContent='You\'re building a clear cash flow action plan. Complete the remaining '+(9-totalFilled)+' actions to get the full picture across all three areas. The more specific each action, the more likely it is to get done.';
+    } else {
+      banner.classList.add('partial');
+      tag.textContent='Getting started — keep going';
+      text.textContent='You\'ve captured '+totalFilled+' action'+(totalFilled===1?'':'s')+' so far. Work through all three columns — Inventory, Debtors, and Terms — to build a complete cash flow action plan using the 80/20 rule.';
+    }
+  } else {
+    banner.className='insight-banner';
+  }
+
+  // CTA
+  var cta=document.getElementById('cta-wrap');
+  cta.classList.toggle('visible',totalFilled>=6);
+}
+
+function checkColBadge(col,ids,badgeId){
+  var count=ids.filter(function(id){return document.getElementById(id)&&document.getElementById(id).value.trim().length>0}).length;
+  var badge=document.getElementById(badgeId);
+  if(badge)badge.classList.toggle('visible',count===3);
+}
+
+function updateSummary(col,ids,containerId,countId){
+  var container=document.getElementById(containerId);
+  var countEl=document.getElementById(countId);
+  var items=ids.map(function(id){
+    var el=document.getElementById(id);
+    return el?el.value.trim():'';
+  }).filter(function(v){return v.length>0});
+
+  countEl.textContent=items.length+' entered';
+  container.innerHTML='';
+  if(items.length===0){
+    container.innerHTML='<div class="sc-empty">No actions entered yet</div>';
+  } else {
+    items.forEach(function(item){
+      var div=document.createElement('div');
+      div.className='sc-item';
+      div.textContent=item;
+      container.appendChild(div);
+    });
+  }
+}
+
+// Init dots
+updateAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hourly Reality Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dark:#1A1510;
+  --dark2:#221D17;
+  --dark3:#2E271F;
+  --dark4:#3A3028;
+  --dark5:#4A3E33;
+  --gold:#C9A84C;
+  --gold2:#DFC070;
+  --gold-dim:rgba(201,168,76,0.35);
+  --gold-faint:rgba(201,168,76,0.08);
+  --text:#F0EAE0;
+  --text-mid:rgba(240,234,224,0.55);
+  --text-soft:rgba(240,234,224,0.3);
+  --text-dim:rgba(240,234,224,0.15);
+  --border:rgba(255,255,255,0.07);
+  --border-focus:rgba(201,168,76,0.5);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',sans-serif;
+}
+
+html,body{
+  font-family:var(--sans);
+  background:var(--dark);
+  color:var(--text);
+  padding:0;margin:0;
+  min-height:100%;
+}
+body{padding:2rem 1.75rem 2.5rem}
+
+/* ── TITLE ── */
+.calc-title{
+  font-family:var(--serif);
+  font-size:clamp(22px,4vw,30px);
+  font-weight:300;color:var(--text);
+  letter-spacing:0.01em;margin-bottom:1.75rem;
+  line-height:1.2;
+}
+
+/* ── INPUTS ROW ── */
+.inputs-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:12px;
+}
+@media(max-width:600px){
+  .inputs-row{grid-template-columns:1fr}
+}
+
+.field{display:flex;flex-direction:column;gap:7px}
+.field-label{
+  font-size:10px;font-weight:500;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--text-soft);
+}
+
+/* Number input wrapper */
+.input-wrap{position:relative}
+.calc-input{
+  width:100%;font-family:var(--sans);
+  font-size:15px;font-weight:300;color:var(--text);
+  background:var(--dark3);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:13px 36px 13px 15px;
+  transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;
+  -webkit-appearance:none;appearance:none;
+  cursor:text;
+}
+.calc-input::placeholder{color:var(--text-dim)}
+.calc-input:focus{
+  outline:none;
+  border-color:var(--border-focus);
+  background:var(--dark4);
+  box-shadow:0 0 0 3px rgba(201,168,76,0.08);
+}
+/* Spinner buttons */
+.calc-input[type=number]::-webkit-inner-spin-button,
+.calc-input[type=number]::-webkit-outer-spin-button{
+  -webkit-appearance:none;margin:0;
+}
+.calc-input[type=number]{-moz-appearance:textfield}
+/* Custom spinners */
+.spin-btns{
+  position:absolute;right:0;top:0;bottom:0;
+  display:flex;flex-direction:column;width:28px;
+}
+.spin-btn{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;
+  color:var(--text-soft);font-size:9px;
+  transition:color 0.15s,background 0.15s;
+  border-left:1px solid var(--border);
+}
+.spin-btn:first-child{border-bottom:1px solid var(--border);border-radius:0 6px 0 0}
+.spin-btn:last-child{border-radius:0 0 6px 0}
+.spin-btn:hover{color:var(--gold);background:rgba(201,168,76,0.06)}
+
+/* ── RESULT CARDS ── */
+.results-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:1.5rem;
+}
+@media(max-width:700px){
+  .results-row{grid-template-columns:1fr 1fr}
+}
+@media(max-width:420px){
+  .results-row{grid-template-columns:1fr}
+}
+
+.result-card{
+  background:var(--dark3);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:1.125rem 1.25rem 1.25rem;
+  display:flex;flex-direction:column;gap:.5rem;
+  transition:border-color 0.2s;
+  position:relative;overflow:hidden;
+}
+.result-card.active{
+  border-color:var(--gold-dim);
+}
+.result-card.highlight{
+  background:linear-gradient(135deg,var(--dark4),var(--dark3));
+  border-color:rgba(201,168,76,0.25);
+}
+.result-card.highlight::before{
+  content:'';position:absolute;
+  top:-30px;right:-30px;
+  width:100px;height:100px;border-radius:50%;
+  background:rgba(201,168,76,0.05);
+  pointer-events:none;
+}
+.rc-label{
+  font-size:10px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--text-soft);
+}
+.rc-value{
+  font-family:var(--serif);
+  font-size:clamp(24px,4vw,34px);
+  font-weight:300;color:var(--gold);
+  line-height:1;
+  transition:all 0.35s ease;
+}
+.rc-value.empty{
+  font-size:20px;color:var(--text-dim);
+  font-style:normal;
+}
+.rc-sub{
+  font-size:11px;font-weight:300;color:var(--text-soft);
+  line-height:1.5;margin-top:2px;
+}
+
+/* ── INSIGHT STRIP ── */
+.insight-strip{
+  border-radius:6px;padding:1rem 1.25rem;
+  margin-bottom:1.5rem;
+  border:1px solid transparent;
+  display:none;animation:fadeIn 0.35s ease;
+}
+.insight-strip.visible{display:block}
+.insight-strip.good{
+  background:rgba(45,106,79,0.15);
+  border-color:rgba(45,106,79,0.3);
+}
+.insight-strip.warn{
+  background:rgba(180,120,20,0.12);
+  border-color:rgba(201,168,76,0.3);
+}
+.insight-strip.alert{
+  background:rgba(140,56,32,0.15);
+  border-color:rgba(200,100,80,0.3);
+}
+.is-tag{
+  font-size:9px;font-weight:500;letter-spacing:0.16em;
+  text-transform:uppercase;margin-bottom:.5rem;display:block;
+}
+.insight-strip.good .is-tag{color:rgba(90,200,140,0.8)}
+.insight-strip.warn .is-tag{color:var(--gold)}
+.insight-strip.alert .is-tag{color:rgba(220,130,110,0.9)}
+.is-text{
+  font-size:13px;font-weight:300;color:var(--text-mid);
+  line-height:1.8;
+}
+
+/* ── COMPARISON BARS ── */
+.comparison-wrap{
+  background:var(--dark2);border:1px solid var(--border);
+  border-radius:6px;padding:1.25rem;
+  margin-bottom:1.5rem;
+  display:none;animation:fadeIn 0.35s ease;
+}
+.comparison-wrap.visible{display:block}
+.cw-title{
+  font-size:10px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--text-soft);
+  margin-bottom:1rem;
+}
+.comp-row{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:9px;font-size:12px;
+}
+.comp-row:last-child{margin-bottom:0}
+.comp-label{color:var(--text-soft);min-width:140px}
+.comp-track{
+  flex:1;height:5px;background:var(--dark4);
+  border-radius:100px;overflow:hidden;
+}
+.comp-fill{height:100%;border-radius:100px;transition:width 0.6s ease}
+.cf-yours{background:var(--gold)}
+.cf-team{background:rgba(90,200,140,0.7)}
+.cf-target{background:rgba(240,234,224,0.25)}
+.comp-val{
+  font-weight:500;color:var(--text);
+  min-width:65px;text-align:right;font-size:12px;
+}
+
+/* ── OPTIONAL INPUTS ── */
+.optional-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  margin-bottom:1.5rem;
+}
+.optional-label{
+  font-size:10px;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--text-soft);
+  display:flex;align-items:center;gap:6px;
+}
+.opt-tag{
+  font-size:8px;font-weight:400;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--text-dim);
+  border:1px solid var(--border);padding:1px 6px;border-radius:100px;
+}
+@media(max-width:500px){.optional-row{grid-template-columns:1fr}}
+
+/* ── CTA ── */
+.cta-wrap{
+  display:none;animation:fadeIn 0.4s ease;
+}
+.cta-wrap.visible{display:block}
+.cta-inner{
+  background:linear-gradient(135deg,var(--dark4),var(--dark3));
+  border:1px solid var(--gold-dim);
+  border-radius:8px;
+  padding:1.625rem 1.75rem;
+  display:flex;align-items:center;
+  justify-content:space-between;gap:1.5rem;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+}
+.cta-inner::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(201,168,76,0.05);pointer-events:none;
+}
+.cta-text{flex:1;min-width:180px}
+.cta-heading{
+  font-family:var(--serif);font-size:clamp(18px,3vw,24px);
+  font-weight:300;color:var(--text);line-height:1.25;margin-bottom:.4rem;
+}
+.cta-heading em{font-style:italic;color:var(--gold)}
+.cta-sub{
+  font-size:12px;font-weight:300;color:var(--text-mid);
+  line-height:1.7;max-width:360px;
+}
+.cta-btn{
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--gold);color:var(--dark);
+  border:none;padding:12px 24px;border-radius:5px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;
+  flex-shrink:0;position:relative;z-index:1;
+}
+.cta-btn:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,168,76,0.25)}
+
+/* ── DIVIDER ── */
+.divider{
+  height:1px;background:var(--border);
+  margin:1.375rem 0;
+}
+
+/* ── FOOTER ── */
+.calc-footer{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:11px;font-weight:300;color:var(--text-dim);
+  text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- TITLE -->
+<h1 class="calc-title">Hourly Reality Calculator</h1>
+
+<!-- MAIN INPUTS -->
+<div class="inputs-row">
+  <div class="field">
+    <label class="field-label" for="inp-income">Annual income ($)</label>
+    <div class="input-wrap">
+      <input class="calc-input" type="number" id="inp-income" min="0" max="5000000" step="1000" placeholder="e.g. 120000" oninput="calc()">
+      <div class="spin-btns">
+        <button class="spin-btn" onclick="step('inp-income',5000,1)" tabindex="-1">▲</button>
+        <button class="spin-btn" onclick="step('inp-income',5000,-1)" tabindex="-1">▼</button>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="field-label" for="inp-weeks">Weeks worked / year</label>
+    <div class="input-wrap">
+      <input class="calc-input" type="number" id="inp-weeks" min="1" max="52" step="1" placeholder="e.g. 48" oninput="calc()">
+      <div class="spin-btns">
+        <button class="spin-btn" onclick="step('inp-weeks',1,1)" tabindex="-1">▲</button>
+        <button class="spin-btn" onclick="step('inp-weeks',1,-1)" tabindex="-1">▼</button>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="field-label" for="inp-hours">Hours worked / week</label>
+    <div class="input-wrap">
+      <input class="calc-input" type="number" id="inp-hours" min="1" max="100" step="1" placeholder="e.g. 55" oninput="calc()">
+      <div class="spin-btns">
+        <button class="spin-btn" onclick="step('inp-hours',1,1)" tabindex="-1">▲</button>
+        <button class="spin-btn" onclick="step('inp-hours',1,-1)" tabindex="-1">▼</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT CARDS -->
+<div class="results-row">
+  <div class="result-card" id="card-hourly">
+    <div class="rc-label">Your hourly rate</div>
+    <div class="rc-value empty" id="r-hourly">—</div>
+    <div class="rc-sub" id="r-hourly-sub"> </div>
+  </div>
+  <div class="result-card" id="card-weekly">
+    <div class="rc-label">Weekly income</div>
+    <div class="rc-value empty" id="r-weekly">—</div>
+    <div class="rc-sub">Before tax</div>
+  </div>
+  <div class="result-card highlight" id="card-annual">
+    <div class="rc-label">Annual income</div>
+    <div class="rc-value empty" id="r-annual">—</div>
+    <div class="rc-sub">As entered</div>
+  </div>
+  <div class="result-card" id="card-total">
+    <div class="rc-label">Total hours / year</div>
+    <div class="rc-value empty" id="r-total">—</div>
+    <div class="rc-sub" id="r-total-sub"> </div>
+  </div>
+</div>
+
+<!-- INSIGHT STRIP -->
+<div class="insight-strip" id="insight-strip">
+  <span class="is-tag" id="is-tag">Insight</span>
+  <div class="is-text" id="is-text"></div>
+</div>
+
+<!-- DIVIDER -->
+<div class="divider"></div>
+
+<!-- OPTIONAL INPUTS -->
+<div class="optional-row">
+  <div class="field">
+    <label class="optional-label" for="inp-team">
+      Team member hourly rate ($)
+      <span class="opt-tag">optional</span>
+    </label>
+    <div class="input-wrap">
+      <input class="calc-input" type="number" id="inp-team" min="0" max="500" step="1" placeholder="e.g. 38" oninput="calc()">
+      <div class="spin-btns">
+        <button class="spin-btn" onclick="step('inp-team',1,1)" tabindex="-1">▲</button>
+        <button class="spin-btn" onclick="step('inp-team',1,-1)" tabindex="-1">▼</button>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="optional-label" for="inp-target">
+      Target annual income ($)
+      <span class="opt-tag">optional</span>
+    </label>
+    <div class="input-wrap">
+      <input class="calc-input" type="number" id="inp-target" min="0" max="5000000" step="5000" placeholder="e.g. 180000" oninput="calc()">
+      <div class="spin-btns">
+        <button class="spin-btn" onclick="step('inp-target',5000,1)" tabindex="-1">▲</button>
+        <button class="spin-btn" onclick="step('inp-target',5000,-1)" tabindex="-1">▼</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON BARS -->
+<div class="comparison-wrap" id="comparison-wrap">
+  <div class="cw-title">Rate comparison</div>
+  <div class="comp-row">
+    <span class="comp-label">Your effective rate</span>
+    <div class="comp-track"><div class="comp-fill cf-yours" id="bar-yours" style="width:0%"></div></div>
+    <span class="comp-val" id="bv-yours">—</span>
+  </div>
+  <div class="comp-row" id="row-team" style="display:none">
+    <span class="comp-label">Team member rate</span>
+    <div class="comp-track"><div class="comp-fill cf-team" id="bar-team" style="width:0%"></div></div>
+    <span class="comp-val" id="bv-team">—</span>
+  </div>
+  <div class="comp-row" id="row-target" style="display:none">
+    <span class="comp-label">Target rate</span>
+    <div class="comp-track"><div class="comp-fill cf-target" id="bar-target" style="width:0%"></div></div>
+    <span class="comp-val" id="bv-target">—</span>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <div class="cta-heading">That number has <em>landed.</em></div>
+      <p class="cta-sub">This isn't a workload problem — it's a business structure problem. Book a free 20-minute session to see exactly how to fix it.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="calc-footer">
+  Figures are estimates based on inputs provided. For illustrative purposes only.
+</div>
+
+<script>
+function v(id){return parseFloat(document.getElementById(id).value)||0}
+
+function fmtRate(n){
+  if(!n)return'—';
+  return'$'+n.toFixed(2)+'/hr';
+}
+function fmtMoney(n){
+  if(!n)return'—';
+  return n>=1000?'$'+Math.round(n).toLocaleString('en-AU'):'$'+Math.round(n);
+}
+function fmtHrs(n){
+  return n?Math.round(n).toLocaleString('en-AU')+' hrs':'—';
+}
+
+function step(id,amount,dir){
+  var el=document.getElementById(id);
+  var cur=parseFloat(el.value)||0;
+  var next=Math.max(0,cur+amount*dir);
+  el.value=next;
+  calc();
+}
+
+function setCardActive(id,active){
+  var card=document.getElementById(id);
+  card.classList.toggle('active',active);
+}
+
+function calc(){
+  var income=v('inp-income');
+  var weeks=v('inp-weeks');
+  var hours=v('inp-hours');
+  var team=v('inp-team');
+  var target=v('inp-target');
+
+  var hasMain=income>0&&weeks>0&&hours>0;
+  var totalHrs=weeks*hours;
+  var hourly=hasMain?income/totalHrs:0;
+  var weekly=hasMain?income/weeks:0;
+
+  // Result cards
+  var rh=document.getElementById('r-hourly');
+  var rw=document.getElementById('r-weekly');
+  var ra=document.getElementById('r-annual');
+  var rt=document.getElementById('r-total');
+  var rhs=document.getElementById('r-hourly-sub');
+  var rts=document.getElementById('r-total-sub');
+
+  if(hasMain){
+    rh.textContent=fmtRate(hourly);rh.className='rc-value';
+    rw.textContent=fmtMoney(weekly);rw.className='rc-value';
+    ra.textContent=fmtMoney(income);ra.className='rc-value';
+    rt.textContent=fmtHrs(totalHrs);rt.className='rc-value';
+    rts.textContent=weeks+' wks × '+hours+' hrs';
+    setCardActive('card-hourly',true);
+    setCardActive('card-weekly',true);
+    setCardActive('card-annual',true);
+    setCardActive('card-total',true);
+  } else {
+    ['r-hourly','r-weekly','r-annual','r-total'].forEach(function(id){
+      var el=document.getElementById(id);
+      el.textContent='—';el.className='rc-value empty';
+    });
+    rts.textContent=' ';
+    ['card-hourly','card-weekly','card-annual','card-total'].forEach(function(id){
+      document.getElementById(id).classList.remove('active');
+    });
+  }
+
+  // Sub-label on hourly card
+  if(hasMain&&team>0){
+    if(team>hourly){
+      rhs.textContent='Less than your team member';
+      rhs.style.color='rgba(220,130,110,0.8)';
+    } else {
+      rhs.textContent='More than your team member';
+      rhs.style.color='rgba(90,200,140,0.7)';
+    }
+  } else {
+    rhs.textContent=' ';
+    rhs.style.color='';
+  }
+
+  // Insight
+  var strip=document.getElementById('insight-strip');
+  var stag=document.getElementById('is-tag');
+  var stxt=document.getElementById('is-text');
+  if(hasMain){
+    strip.classList.add('visible');
+    strip.className='insight-strip visible';
+    if(hourly<30){
+      strip.classList.add('alert');
+      stag.textContent='Below minimum wage territory';
+      stxt.textContent='At '+fmtRate(hourly)+' you are earning less than the national minimum wage — while running an entire business, managing clients, and carrying full liability. This is not a workload problem. It is a business structure problem, and it has a business structure solution.';
+    } else if(hourly<50){
+      strip.classList.add('warn');
+      stag.textContent='Below what most employees earn';
+      stxt.textContent='At '+fmtRate(hourly)+' you are likely earning less per hour than your most experienced team member — while managing the full business on top. The gap is almost always in pricing and billing structure, not in effort or skill.';
+    } else if(hourly<80){
+      strip.classList.add('warn');
+      stag.textContent='Improving — but there is runway ahead';
+      stxt.textContent='At '+fmtRate(hourly)+' you are in a better position than most practitioners, but still largely dependent on a session-based billing model. Moving to subscriptions and recurring revenue typically lifts the effective rate to $90–130/hr without adding hours.';
+    } else {
+      strip.classList.add('good');
+      stag.textContent='Strong — now protect it with structure';
+      stxt.textContent='At '+fmtRate(hourly)+' you have built a solid position. The priority now is making sure this rate is backed by recurring revenue — not dependent on you personally delivering every session every week.';
+    }
+  } else {
+    strip.classList.remove('visible');
+  }
+
+  // Comparison bars
+  var compWrap=document.getElementById('comparison-wrap');
+  if(hasMain){
+    compWrap.classList.add('visible');
+    var targetRate=target>0&&totalHrs>0?target/totalHrs:0;
+    var maxVal=Math.max(hourly,team||0,targetRate||0,1);
+    document.getElementById('bar-yours').style.width=Math.round(hourly/maxVal*100)+'%';
+    document.getElementById('bv-yours').textContent=fmtRate(hourly);
+
+    var rowTeam=document.getElementById('row-team');
+    if(team>0){
+      rowTeam.style.display='flex';
+      document.getElementById('bar-team').style.width=Math.round(team/maxVal*100)+'%';
+      document.getElementById('bv-team').textContent=fmtRate(team);
+    } else {
+      rowTeam.style.display='none';
+    }
+
+    var rowTarget=document.getElementById('row-target');
+    if(targetRate>0){
+      rowTarget.style.display='flex';
+      document.getElementById('bar-target').style.width=Math.round(targetRate/maxVal*100)+'%';
+      document.getElementById('bv-target').textContent=fmtRate(targetRate)+' (target)';
+    } else {
+      rowTarget.style.display='none';
+    }
+  } else {
+    compWrap.classList.remove('visible');
+  }
+
+  // CTA
+  document.getElementById('cta-wrap').classList.toggle('visible',hasMain&&income>0);
+}
+</script>
+</body>
+</html>

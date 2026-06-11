@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GP Sweet Spot — Client Grading (ABCD)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --cream3:#E0D8C8;
+  --gold:#C9A84C;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+  --ink:#1A1208;
+  --mid:#5C5040;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --forest:#0D2B1F;
+  --forest-light:#2D6A4F;
+  /* Grade colours matching screenshot */
+  --a-bg:#D4EDE8;--a-border:#9ACFC7;--a-text:#1A5C54;--a-letter:#1D6B62;
+  --b-bg:#F5F0D8;--b-border:#DDD0A0;--b-text:#7A6020;--b-letter:#C9A84C;
+  --c-bg:#EEEAE4;--c-border:#CFC9BF;--c-text:#6A5E52;--c-letter:#8C7E6A;
+  --d-bg:#F5E0DC;--d-border:#D4A498;--d-text:#7A2C20;--d-letter:#A03828;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',sans-serif;
+}
+html,body{
+  font-family:var(--sans);background:var(--cream);color:var(--ink);
+  padding:0;margin:0;
+}
+body{padding:1.75rem 1.5rem 2.5rem}
+
+/* ── EYEBROW TAG ── */
+.eyebrow-tag{
+  display:inline-flex;align-items:center;
+  background:var(--forest);color:#fff;
+  font-size:10px;font-weight:500;letter-spacing:0.18em;
+  text-transform:uppercase;padding:5px 14px;border-radius:100px;
+  margin-bottom:1.25rem;
+}
+
+/* ── INTRO CALLOUT ── */
+.intro-callout{
+  background:var(--gold-pale);border:1.5px solid var(--gold-light);
+  border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;
+}
+.ic-body{
+  font-size:13px;font-weight:300;color:var(--mid);
+  line-height:1.8;margin-bottom:.875rem;
+}
+.ic-legend{
+  font-size:13px;font-weight:500;color:var(--ink);
+  line-height:1.8;
+}
+.ic-legend .la{color:var(--a-text)}
+.ic-legend .lb{color:var(--b-text)}
+.ic-legend .lc{color:var(--c-text)}
+.ic-legend .ld{color:var(--d-text)}
+.ic-legend .sep{color:var(--cream3);margin:0 2px}
+
+/* ── GRADE CARDS GRID ── */
+.grades-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:10px;
+  margin-bottom:1.25rem;
+}
+@media(max-width:700px){.grades-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.grades-grid{grid-template-columns:1fr}}
+
+/* ── GRADE CARD ── */
+.grade-card{
+  border-radius:10px;border:1.5px solid;
+  padding:1.375rem 1.125rem;
+  display:flex;flex-direction:column;
+  gap:.75rem;
+  transition:transform 0.15s,box-shadow 0.15s,opacity 0.2s;
+}
+.grade-card.a{background:var(--a-bg);border-color:var(--a-border)}
+.grade-card.b{background:var(--b-bg);border-color:var(--b-border)}
+.grade-card.c{background:var(--c-bg);border-color:var(--c-border)}
+.grade-card.d{background:var(--d-bg);border-color:var(--d-border)}
+.grade-card:focus-within{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.09)}
+
+/* Letter */
+.grade-letter{
+  font-family:var(--serif);
+  font-size:clamp(44px,8vw,64px);
+  font-weight:300;line-height:1;
+  text-align:center;
+}
+.grade-card.a .grade-letter{color:var(--a-letter)}
+.grade-card.b .grade-letter{color:var(--b-letter)}
+.grade-card.c .grade-letter{color:var(--c-letter)}
+.grade-card.d .grade-letter{color:var(--d-letter)}
+
+/* Label */
+.grade-label{
+  font-size:10px;font-weight:500;letter-spacing:0.18em;
+  text-transform:uppercase;text-align:center;
+}
+.grade-card.a .grade-label{color:var(--a-text)}
+.grade-card.b .grade-label{color:var(--b-text)}
+.grade-card.c .grade-label{color:var(--c-text)}
+.grade-card.d .grade-label{color:var(--d-text)}
+
+/* Traits */
+.grade-traits{
+  font-size:12px;font-weight:300;text-align:center;
+  line-height:1.65;
+}
+.grade-card.a .grade-traits{color:var(--a-text)}
+.grade-card.b .grade-traits{color:var(--b-text)}
+.grade-card.c .grade-traits{color:var(--c-text)}
+.grade-card.d .grade-traits{color:var(--d-text)}
+
+/* Textarea inside card */
+.grade-area{
+  width:100%;font-family:var(--sans);
+  font-size:12px;font-weight:300;line-height:1.65;
+  color:var(--ink);padding:9px 10px;
+  border-radius:6px;resize:vertical;
+  min-height:80px;
+  transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;
+}
+.grade-card.a .grade-area{
+  background:rgba(255,255,255,0.65);border:1.5px solid var(--a-border);
+}
+.grade-card.b .grade-area{
+  background:rgba(255,255,255,0.65);border:1.5px solid var(--b-border);
+}
+.grade-card.c .grade-area{
+  background:rgba(255,255,255,0.65);border:1.5px solid var(--c-border);
+}
+.grade-card.d .grade-area{
+  background:rgba(255,255,255,0.65);border:1.5px solid var(--d-border);
+}
+.grade-area:focus{
+  outline:none;background:#fff;
+  box-shadow:0 0 0 3px rgba(201,168,76,0.1);
+  border-color:var(--gold);
+}
+.grade-area::placeholder{
+  font-style:italic;font-size:11px;
+}
+.grade-card.a .grade-area::placeholder{color:var(--a-border)}
+.grade-card.b .grade-area::placeholder{color:var(--b-border)}
+.grade-card.c .grade-area::placeholder{color:var(--c-border)}
+.grade-card.d .grade-area::placeholder{color:var(--d-border)}
+.grade-area.has-content{background:#fff}
+
+/* Completion dot */
+.grade-done{
+  width:16px;height:16px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;color:#fff;
+  margin:0 auto 0;
+  opacity:0;transform:scale(0.5);
+  transition:opacity 0.2s,transform 0.2s;
+}
+.grade-card.a .grade-done{background:var(--a-letter)}
+.grade-card.b .grade-done{background:var(--b-letter)}
+.grade-card.c .grade-done{background:var(--c-letter)}
+.grade-card.d .grade-done{background:var(--d-letter)}
+.grade-done.visible{opacity:1;transform:scale(1)}
+
+/* ── COUNTER BAR ── */
+.counter-bar{
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:8px;margin-bottom:1.5rem;
+}
+.cb-item{
+  border-radius:6px;padding:.625rem .875rem;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;
+  transition:opacity 0.2s;
+}
+.cb-item.a{background:var(--a-bg);border:1px solid var(--a-border)}
+.cb-item.b{background:var(--b-bg);border:1px solid var(--b-border)}
+.cb-item.c{background:var(--c-bg);border:1px solid var(--c-border)}
+.cb-item.d{background:var(--d-bg);border:1px solid var(--d-border)}
+.cb-label{font-weight:400}
+.cb-item.a .cb-label{color:var(--a-text)}
+.cb-item.b .cb-label{color:var(--b-text)}
+.cb-item.c .cb-label{color:var(--c-text)}
+.cb-item.d .cb-label{color:var(--d-text)}
+.cb-val{
+  font-family:var(--serif);font-size:18px;font-weight:300;
+}
+.cb-item.a .cb-val{color:var(--a-letter)}
+.cb-item.b .cb-val{color:var(--b-letter)}
+.cb-item.c .cb-val{color:var(--c-letter)}
+.cb-item.d .cb-val{color:var(--d-letter)}
+
+/* ── ACTION CARDS ── */
+.action-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:10px;margin-bottom:1.5rem;
+}
+@media(max-width:640px){.action-grid{grid-template-columns:1fr}}
+
+.action-card{
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:8px;padding:1.25rem;
+  display:flex;flex-direction:column;gap:.875rem;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.action-card:focus-within{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,168,76,0.08);
+}
+.action-card.has-content{border-color:rgba(45,106,79,0.22)}
+.ac-title{
+  font-size:13px;font-weight:500;color:var(--ink);line-height:1.4;
+}
+/* Numbered list textarea */
+.action-area{
+  width:100%;font-family:var(--sans);
+  font-size:13px;font-weight:300;line-height:1.8;
+  color:var(--ink);padding:10px 12px;
+  border:1.5px solid var(--cream3);border-radius:6px;
+  background:var(--cream);resize:vertical;min-height:100px;
+  transition:border-color 0.2s,background 0.2s;
+}
+.action-area:focus{
+  outline:none;border-color:var(--gold);background:#fff;
+  box-shadow:0 0 0 3px rgba(201,168,76,0.08);
+}
+.action-area::placeholder{font-style:italic;font-size:12px;color:var(--cream3)}
+.action-area.has-content{border-color:rgba(45,106,79,0.2);background:#fff}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin-bottom:1.5rem}
+.progress-top{display:flex;justify-content:space-between;margin-bottom:.5rem}
+.prog-label{font-size:11px;font-weight:300;color:var(--soft)}
+.prog-count{font-size:11px;font-weight:500;color:var(--forest)}
+.prog-track{height:3px;background:var(--cream3);border-radius:100px;overflow:hidden}
+.prog-fill{
+  height:100%;border-radius:100px;
+  background:linear-gradient(to right,var(--forest-light),var(--gold));
+  transition:width 0.4s ease;
+}
+
+/* ── INSIGHT ── */
+.insight-strip{
+  border-radius:8px;padding:1.125rem 1.5rem;
+  margin-bottom:1.5rem;display:none;
+  animation:fadeIn 0.35s ease;
+}
+.insight-strip.visible{display:flex;gap:12px;align-items:flex-start}
+.insight-strip.partial{background:var(--gold-pale);border:1.5px solid var(--gold-light)}
+.insight-strip.complete{background:#EAF5F0;border:1.5px solid #97C8B4}
+.is-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.insight-strip.partial .is-dot{background:var(--gold)}
+.insight-strip.complete .is-dot{background:var(--forest-light)}
+.is-inner{}
+.is-tag{font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;display:block}
+.insight-strip.partial .is-tag{color:var(--gold)}
+.insight-strip.complete .is-tag{color:var(--forest-light)}
+.is-text{font-size:13px;font-weight:300;color:var(--ink);line-height:1.8}
+
+/* ── CTA ── */
+.cta-wrap{display:none;animation:fadeIn 0.4s ease}
+.cta-wrap.visible{display:block}
+.cta-inner{
+  background:var(--forest);border-radius:8px;
+  padding:1.625rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+}
+.cta-inner::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:170px;height:170px;border-radius:50%;
+  background:rgba(201,168,76,0.07);pointer-events:none;
+}
+.cta-text{flex:1;min-width:180px}
+.cta-heading{
+  font-family:var(--serif);font-size:clamp(18px,3vw,24px);
+  font-weight:300;color:#fff;line-height:1.25;margin-bottom:.375rem;
+}
+.cta-heading em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:12px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.7;max-width:380px}
+.cta-btn{
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:13px 26px;border-radius:5px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;
+  position:relative;z-index:1;
+}
+.cta-btn:hover{background:#DFB84A;transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,168,76,0.28)}
+
+/* ── FOOTER ── */
+.form-footer{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:11px;font-weight:300;color:var(--soft);
+  text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- EYEBROW -->
+<div class="eyebrow-tag">GP Sweet Spot — Client Grading (ABCD)</div>
+
+<!-- INTRO CALLOUT -->
+<div class="intro-callout">
+  <p class="ic-body">Understanding which customers/job types make you the most margin and dealing MORE with them grows margins. Understanding those that make you the least and dealing LESS with them also grows margins.</p>
+  <div class="ic-legend">
+    <span class="la">A = Awesome</span>
+    <span class="sep">·</span>
+    <span class="lb">B = Basic</span>
+    <span class="sep">·</span>
+    <span class="lc">C = Can deal with</span>
+    <span class="sep">·</span>
+    <span class="ld">D = Don't go there!</span>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-top">
+    <span class="prog-label">Grading completion</span>
+    <span class="prog-count" id="prog-count">0 of 7 answered</span>
+  </div>
+  <div class="prog-track">
+    <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- GRADE CARDS -->
+<div class="grades-grid">
+
+  <!-- A -->
+  <div class="grade-card a">
+    <div class="grade-done" id="done-a">✓</div>
+    <div class="grade-letter">A</div>
+    <div class="grade-label">Awesome</div>
+    <div class="grade-traits">Don't challenge price · Accept recommendations · Appreciate work · Pay on time · Refer others like them</div>
+    <textarea class="grade-area" id="ta-a"
+      placeholder="Give your A-grade client a NAME and describe them…"
+      oninput="onGrade(this,'done-a')"></textarea>
+  </div>
+
+  <!-- B -->
+  <div class="grade-card b">
+    <div class="grade-done" id="done-b">✓</div>
+    <div class="grade-letter">B</div>
+    <div class="grade-label">Basic</div>
+    <div class="grade-traits">Mostly good · Occasional price sensitivity · Generally accept your recommendations · Usually pay on time</div>
+    <textarea class="grade-area" id="ta-b"
+      placeholder="Describe your B-grade client…"
+      oninput="onGrade(this,'done-b')"></textarea>
+  </div>
+
+  <!-- C -->
+  <div class="grade-card c">
+    <div class="grade-done" id="done-c">✓</div>
+    <div class="grade-letter">C</div>
+    <div class="grade-label">Can deal with</div>
+    <div class="grade-traits">Sometimes challenging · Margin is okay · Not ideal but workable · May require more management</div>
+    <textarea class="grade-area" id="ta-c"
+      placeholder="Describe your C-grade client…"
+      oninput="onGrade(this,'done-c')"></textarea>
+  </div>
+
+  <!-- D -->
+  <div class="grade-card d">
+    <div class="grade-done" id="done-d">✓</div>
+    <div class="grade-letter">D</div>
+    <div class="grade-label">Don't go there!</div>
+    <div class="grade-traits">Always challenge price · Never accept recommendations · Don't pay on time · Refer others like them</div>
+    <textarea class="grade-area" id="ta-d"
+      placeholder="Give your D-grade client a NAME and describe them…"
+      oninput="onGrade(this,'done-d')"></textarea>
+  </div>
+
+</div>
+
+<!-- COUNTER BAR — live word/char counts per grade -->
+<div class="counter-bar">
+  <div class="cb-item a"><span class="cb-label">A — Awesome</span><span class="cb-val" id="ct-a">—</span></div>
+  <div class="cb-item b"><span class="cb-label">B — Basic</span><span class="cb-val" id="ct-b">—</span></div>
+  <div class="cb-item c"><span class="cb-label">C — Can deal with</span><span class="cb-val" id="ct-c">—</span></div>
+  <div class="cb-item d"><span class="cb-label">D — Don't go there</span><span class="cb-val" id="ct-d">—</span></div>
+</div>
+
+<!-- ACTION CARDS -->
+<div class="action-grid">
+
+  <div class="action-card" id="ac-1">
+    <div class="ac-title">3 things you can do to get more A-grade clients</div>
+    <textarea class="action-area" id="ta-more-a"
+      placeholder="1.&#10;2.&#10;3."
+      oninput="onAction(this,'ac-1')"></textarea>
+  </div>
+
+  <div class="action-card" id="ac-2">
+    <div class="ac-title">3 things you can do to turn D's into at least a C</div>
+    <textarea class="action-area" id="ta-upgrade-d"
+      placeholder="1.&#10;2.&#10;3."
+      oninput="onAction(this,'ac-2')"></textarea>
+  </div>
+
+  <div class="action-card" id="ac-3">
+    <div class="ac-title">What homework do you need to do to calculate your ABCD mix?</div>
+    <textarea class="action-area" id="ta-homework"
+      placeholder="e.g. Run a margin report by client/job type, review last 12 months invoicing…"
+      oninput="onAction(this,'ac-3')"></textarea>
+  </div>
+
+</div>
+
+<!-- INSIGHT -->
+<div class="insight-strip" id="insight-strip">
+  <div class="is-dot"></div>
+  <div class="is-inner">
+    <span class="is-tag" id="is-tag">Insight</span>
+    <div class="is-text" id="is-text"></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <div class="cta-heading">More A-grade clients.<br><em>Fewer D-grade headaches.</em></div>
+      <p class="cta-sub">The ABCD audit is the first step. A Boardroom session will show you how to systematically shift your mix — and what that shift means for your margin over 12 months.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="form-footer">
+  Your responses are confidential and used only to prepare your consulting session.
+</div>
+
+<script>
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.max(80,el.scrollHeight)+'px';
+}
+
+function wordCount(str){
+  return str.trim().split(/\s+/).filter(function(w){return w.length>0}).length;
+}
+
+function onGrade(el,doneId){
+  autoResize(el);
+  var w=wordCount(el.value);
+  var filled=el.value.trim().length>0;
+  el.classList.toggle('has-content',filled);
+  var done=document.getElementById(doneId);
+  done.classList.toggle('visible',filled);
+  // Counter
+  var map={
+    'ta-a':'ct-a','ta-b':'ct-b','ta-c':'ct-c','ta-d':'ct-d'
+  };
+  var key=el.id;
+  if(map[key]){
+    var ctEl=document.getElementById(map[key]);
+    ctEl.textContent=filled?w+' word'+(w===1?'':'s'):'—';
+  }
+  updateAll();
+}
+
+function onAction(el,cardId){
+  autoResize(el);
+  var filled=el.value.trim().length>0;
+  el.classList.toggle('has-content',filled);
+  document.getElementById(cardId).classList.toggle('has-content',filled);
+  updateAll();
+}
+
+function updateAll(){
+  var gradeIds=['ta-a','ta-b','ta-c','ta-d'];
+  var actionIds=['ta-more-a','ta-upgrade-d','ta-homework'];
+  var allIds=gradeIds.concat(actionIds);
+  var total=allIds.length;
+  var answered=allIds.filter(function(id){
+    var el=document.getElementById(id);
+    return el&&el.value.trim().length>0;
+  }).length;
+
+  var pct=Math.round(answered/total*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-count').textContent=answered+' of '+total+' answered';
+
+  var gradesFilled=gradeIds.filter(function(id){
+    return document.getElementById(id).value.trim().length>0;
+  }).length;
+
+  // Insight
+  var strip=document.getElementById('insight-strip');
+  var itag=document.getElementById('is-tag');
+  var itext=document.getElementById('is-text');
+  if(answered>0){
+    strip.className='insight-strip visible';
+    if(answered===total){
+      strip.classList.add('complete');
+      itag.textContent='ABCD grading complete';
+      itext.textContent='You\'ve graded all four client types and mapped the actions to improve your mix. The ABCD framework is one of the fastest ways to grow margin without adding a single new client — by doing more with your A\'s, developing your B\'s, managing your C\'s, and systematically reducing or upgrading your D\'s. A Boardroom session will help you put a number on what that shift is worth over 12 months.';
+    } else if(gradesFilled===4){
+      strip.classList.add('partial');
+      itag.textContent='All grades defined — complete the action section';
+      itext.textContent='You\'ve described all four client types. Now complete the three action questions to finish the audit. The most important one: the homework to calculate your actual ABCD mix. Until you know the percentages, you\'re estimating.';
+    } else if(gradesFilled>=1){
+      strip.classList.add('partial');
+      itag.textContent=gradesFilled+' of 4 grades defined';
+      itext.textContent='Keep going — the A and D grades are the most important to define first. Your A describes who to attract more of. Your D describes who to stop serving, transition, or reprice. Everything in between adjusts accordingly.';
+    } else {
+      strip.classList.add('partial');
+      itag.textContent='Getting started';
+      itext.textContent='Define each client grade in your own words. The more specific you are — including real names or business types — the more actionable the audit becomes.';
+    }
+  } else {
+    strip.className='insight-strip';
+  }
+
+  // CTA
+  document.getElementById('cta-wrap').classList.toggle('visible',answered>=2);
+}
+</script>
+</body>
+</html>

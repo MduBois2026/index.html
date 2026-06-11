@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuBois Consulting — Chargeable Hours Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --cream3:#E0D8C8;
+  --gold:#C9A84C;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+  --ink:#1A1208;
+  --mid:#5C5040;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',sans-serif;
+}
+html,body{
+  font-family:var(--sans);
+  background:var(--cream);
+  color:var(--ink);
+  padding:0;margin:0;
+}
+body{padding:0 0 2rem}
+
+/* ── HERO BAND ── */
+.hero-band{
+  background:var(--forest);
+  padding:2rem 2rem 2.25rem;
+  position:relative;overflow:hidden;
+  margin-bottom:1.5rem;
+}
+.hero-band::after{
+  content:'';position:absolute;
+  top:-60px;right:-60px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,0.12),transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:.75rem;opacity:0.8;
+}
+.hero-title{
+  font-family:var(--serif);font-size:clamp(28px,5vw,42px);
+  font-weight:300;color:#fff;line-height:1.1;margin-bottom:.875rem;
+}
+.hero-desc{
+  font-size:13px;font-weight:300;color:rgba(255,255,255,0.55);
+  line-height:1.8;max-width:640px;
+}
+
+/* ── EXAMPLE BOX ── */
+.example-box{
+  background:var(--gold-pale);
+  border:1.5px solid var(--gold-light);
+  border-radius:8px;
+  padding:1.25rem 1.5rem;
+  margin:0 1.5rem 1.5rem;
+  font-size:13px;font-weight:300;
+  color:var(--mid);line-height:1.8;
+}
+.example-box strong{font-weight:500;color:var(--ink)}
+.example-box .highlight{
+  font-family:var(--serif);font-size:17px;font-weight:400;
+  color:var(--forest);
+}
+
+/* ── INPUTS SECTION ── */
+.inputs-wrap{
+  padding:0 1.5rem;
+  display:flex;flex-direction:column;gap:1.25rem;
+  margin-bottom:1.5rem;
+}
+.input-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:14px;
+}
+.input-row.two-col{grid-template-columns:1fr 1fr}
+
+@media(max-width:640px){
+  .input-row,.input-row.two-col{grid-template-columns:1fr}
+  .result-main{grid-template-columns:1fr!important}
+}
+
+.field{display:flex;flex-direction:column;gap:6px}
+.field-label{
+  font-size:10px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--soft);
+}
+.field-input{
+  width:100%;font-family:var(--sans);
+  font-size:15px;font-weight:300;
+  padding:11px 14px;
+  border:1.5px solid var(--border);
+  border-radius:6px;
+  background:#fff;color:var(--ink);
+  transition:border-color 0.2s,box-shadow 0.2s;
+  -webkit-appearance:none;appearance:none;
+}
+.field-input:focus{
+  outline:none;
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,168,76,0.12);
+}
+.field-input::placeholder{color:var(--border)}
+.field-input::-webkit-inner-spin-button,
+.field-input::-webkit-outer-spin-button{opacity:0.4}
+
+/* ── RESULT MAIN ── */
+.result-main{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  padding:0 1.5rem;
+  margin-bottom:1.5rem;
+}
+.result-card-wrap{display:flex;flex-direction:column;gap:14px}
+
+.result-card{
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:8px;padding:1.25rem;
+  transition:border-color 0.2s;
+}
+.result-card.primary{
+  background:var(--forest);border-color:var(--forest);
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  text-align:center;min-height:130px;
+  position:relative;overflow:hidden;
+}
+.result-card.primary::before{
+  content:'';position:absolute;
+  top:-40px;right:-40px;
+  width:130px;height:130px;border-radius:50%;
+  background:rgba(201,168,76,0.08);
+  pointer-events:none;
+}
+.rc-label{
+  font-size:10px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--soft);margin-bottom:5px;
+}
+.result-card.primary .rc-label{color:rgba(201,168,76,0.6);font-size:9px;letter-spacing:0.18em}
+.rc-value{
+  font-family:var(--serif);font-size:clamp(28px,5vw,42px);
+  font-weight:300;color:var(--forest);line-height:1;
+  transition:all 0.4s ease;
+}
+.rc-value.empty{
+  font-size:clamp(20px,3.5vw,28px);
+  color:var(--border);font-style:italic;
+}
+.result-card.primary .rc-value{color:var(--gold)}
+.result-card.primary .rc-value.empty{color:rgba(255,255,255,0.2);font-style:italic}
+.rc-sub{
+  font-size:11px;font-weight:300;color:var(--soft);
+  margin-top:5px;line-height:1.5;
+}
+.result-card.primary .rc-sub{color:rgba(255,255,255,0.4)}
+
+/* ── BREAKDOWN GRID ── */
+.breakdown-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.breakdown-item{
+  background:var(--cream2);border-radius:6px;
+  padding:.875rem 1rem;
+  border:1px solid var(--cream3);
+  transition:border-color 0.2s;
+}
+.breakdown-item.active{border-color:var(--gold-light);background:var(--gold-pale)}
+.bi-label{
+  font-size:9px;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--soft);margin-bottom:4px;
+}
+.bi-value{
+  font-family:var(--serif);font-size:clamp(18px,3vw,24px);
+  font-weight:300;color:var(--forest);line-height:1;
+}
+.bi-value.empty{color:var(--border)}
+.bi-sub{font-size:10px;color:var(--soft);margin-top:3px}
+
+/* ── BAR CHART ── */
+.bar-section{
+  padding:0 1.5rem;margin-bottom:1.5rem;
+  display:none;
+}
+.bar-section.visible{display:block;animation:fadeIn 0.4s ease}
+.bar-title{
+  font-size:10px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--soft);
+  margin-bottom:1rem;
+}
+.bar-row{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:10px;font-size:12px;
+}
+.bar-label{color:var(--mid);min-width:160px}
+.bar-track{
+  flex:1;height:8px;background:var(--cream3);
+  border-radius:100px;overflow:hidden;
+}
+.bar-fill{height:100%;border-radius:100px;transition:width 0.7s ease}
+.bf-payroll{background:var(--cream3);border:1px solid var(--border)}
+.bf-current{background:var(--gold)}
+.bf-target{background:var(--forest-light)}
+.bf-lost{background:#E8A0A0}
+.bar-val{font-weight:500;color:var(--ink);min-width:70px;text-align:right}
+
+/* ── INSIGHT BANNER ── */
+.insight-banner{
+  margin:0 1.5rem 1.5rem;
+  border-radius:8px;padding:1.125rem 1.5rem;
+  display:none;
+}
+.insight-banner.visible{display:block;animation:fadeIn 0.35s ease}
+.insight-banner.warn{background:#FBF3E4;border:1.5px solid #E8C86A}
+.insight-banner.alert{background:#FCEBEB;border:1.5px solid #F09595}
+.insight-banner.good{background:#EAF5F0;border:1.5px solid #5DCAA5}
+.ib-tag{
+  font-size:9px;font-weight:500;letter-spacing:0.16em;
+  text-transform:uppercase;margin-bottom:.5rem;display:block;
+}
+.insight-banner.warn .ib-tag{color:#854F0B}
+.insight-banner.alert .ib-tag{color:#A32D2D}
+.insight-banner.good .ib-tag{color:var(--forest-light)}
+.ib-text{font-size:13px;font-weight:300;color:var(--ink);line-height:1.75}
+
+/* ── REFLECTION TEXTAREAS ── */
+.reflection-wrap{
+  padding:0 1.5rem;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;margin-bottom:1.5rem;
+}
+@media(max-width:600px){.reflection-wrap{grid-template-columns:1fr}}
+
+.reflection-card{
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:8px;padding:1.25rem;
+}
+.reflection-label{
+  font-size:13px;font-weight:500;color:var(--ink);
+  margin-bottom:.875rem;line-height:1.4;
+}
+.reflection-area{
+  width:100%;font-family:var(--sans);font-size:13px;
+  font-weight:300;line-height:1.7;
+  padding:10px 12px;
+  border:1.5px solid var(--border);border-radius:6px;
+  background:var(--cream);color:var(--ink);
+  resize:vertical;min-height:90px;
+  transition:border-color 0.2s,background 0.2s;
+}
+.reflection-area:focus{
+  outline:none;border-color:var(--gold);background:#fff;
+  box-shadow:0 0 0 3px rgba(201,168,76,0.1);
+}
+.reflection-area::placeholder{color:var(--border)}
+
+/* ── CTA ── */
+.cta-wrap{
+  padding:0 1.5rem;
+  display:none;
+}
+.cta-wrap.visible{display:block;animation:fadeIn 0.4s ease}
+.cta-inner{
+  background:var(--forest);border-radius:8px;
+  padding:1.75rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+}
+.cta-inner::before{
+  content:'';position:absolute;
+  top:-50px;right:-50px;
+  width:180px;height:180px;border-radius:50%;
+  background:rgba(201,168,76,0.07);pointer-events:none;
+}
+.cta-text-block{flex:1;min-width:200px}
+.cta-heading{
+  font-family:var(--serif);font-size:clamp(20px,3vw,28px);
+  font-weight:300;color:#fff;line-height:1.2;margin-bottom:.5rem;
+}
+.cta-heading em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:12px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.7;max-width:380px}
+.cta-btn{
+  font-family:var(--sans);font-size:12px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:13px 26px;border-radius:5px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;
+  position:relative;z-index:1;
+}
+.cta-btn:hover{background:#DFB84A;transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,168,76,0.3)}
+
+/* ── FOOTER ── */
+.calc-footer{
+  margin:1.5rem 1.5rem 0;
+  padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:11px;font-weight:300;color:var(--soft);
+  text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- HERO BAND -->
+<div class="hero-band">
+  <div class="hero-eyebrow">Financial Tool 1</div>
+  <h1 class="hero-title">Chargeable Hours</h1>
+  <p class="hero-desc">Optimising the "direct labour" hours worked relative to the hours that end up on an invoice — your recovery rate. Divide your measure in Column 2 into Column 1. Higher is better. Every unrecovered hour has a direct dollar cost.</p>
+</div>
+
+<!-- EXAMPLE BOX -->
+<div class="example-box">
+  <strong>Example:</strong> 5 staff × 40 hrs/week = 200 payroll hours. At 80% recovery = 160 chargeable hours. If actual recovery is only 60%, you're losing 40 hours/week = 1 full-timer worth of revenue. At $50/hr that's <span class="highlight">$100,000 per year walking out the door.</span>
+</div>
+
+<!-- INPUTS ROW 1 -->
+<div class="inputs-wrap">
+  <div class="input-row">
+    <div class="field">
+      <label class="field-label" for="inp-team">Team size (direct staff)</label>
+      <input class="field-input" type="number" id="inp-team" min="1" max="200" placeholder="e.g. 5" oninput="calc()">
+    </div>
+    <div class="field">
+      <label class="field-label" for="inp-hrs">Hours per week (per person)</label>
+      <input class="field-input" type="number" id="inp-hrs" min="1" max="80" placeholder="e.g. 40" oninput="calc()">
+    </div>
+    <div class="field">
+      <label class="field-label" for="inp-rate">Charge-out rate ($/hr)</label>
+      <input class="field-input" type="number" id="inp-rate" min="1" max="2000" placeholder="e.g. 85" oninput="calc()">
+    </div>
+  </div>
+
+  <!-- INPUTS ROW 2 -->
+  <div class="input-row two-col">
+    <div class="field">
+      <label class="field-label" for="inp-current">Current recovery rate (%)</label>
+      <input class="field-input" type="number" id="inp-current" min="1" max="100" placeholder="e.g. 65" oninput="calc()">
+    </div>
+    <div class="field">
+      <label class="field-label" for="inp-target">Target recovery rate (%)</label>
+      <input class="field-input" type="number" id="inp-target" min="1" max="100" placeholder="e.g. 80" oninput="calc()">
+    </div>
+  </div>
+</div>
+
+<!-- RESULT MAIN -->
+<div class="result-main">
+  <!-- PRIMARY RESULT -->
+  <div class="result-card primary">
+    <div class="rc-label">Annual revenue opportunity</div>
+    <div class="rc-value empty" id="r-opportunity">Enter figures above</div>
+    <div class="rc-sub" id="r-opp-sub">by reaching your target recovery rate</div>
+  </div>
+
+  <!-- BREAKDOWN CARDS -->
+  <div class="result-card-wrap">
+    <div class="breakdown-grid">
+      <div class="breakdown-item" id="bd-payroll">
+        <div class="bi-label">Payroll hrs / week</div>
+        <div class="bi-value empty" id="r-payroll">—</div>
+        <div class="bi-sub">Total available</div>
+      </div>
+      <div class="breakdown-item" id="bd-current">
+        <div class="bi-label">Current charged / week</div>
+        <div class="bi-value empty" id="r-current-hrs">—</div>
+        <div class="bi-sub" id="r-current-sub">At current rate</div>
+      </div>
+      <div class="breakdown-item" id="bd-target">
+        <div class="bi-label">Target charged / week</div>
+        <div class="bi-value empty" id="r-target-hrs">—</div>
+        <div class="bi-sub" id="r-target-sub">At target rate</div>
+      </div>
+      <div class="breakdown-item" id="bd-lost">
+        <div class="bi-label">Hours lost / week</div>
+        <div class="bi-value empty" id="r-lost">—</div>
+        <div class="bi-sub" id="r-lost-sub">Unrecovered</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BAR CHART -->
+<div class="bar-section" id="bar-section">
+  <div class="bar-title">Weekly hours breakdown</div>
+  <div class="bar-row">
+    <span class="bar-label">Total payroll hours</span>
+    <div class="bar-track"><div class="bar-fill bf-payroll" id="bar-payroll" style="width:100%"></div></div>
+    <span class="bar-val" id="bv-payroll">—</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Currently charged</span>
+    <div class="bar-track"><div class="bar-fill bf-current" id="bar-current" style="width:0%"></div></div>
+    <span class="bar-val" id="bv-current">—</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Target charged</span>
+    <div class="bar-track"><div class="bar-fill bf-target" id="bar-target-fill" style="width:0%"></div></div>
+    <span class="bar-val" id="bv-target">—</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Lost / unrecovered</span>
+    <div class="bar-track"><div class="bar-fill bf-lost" id="bar-lost" style="width:0%"></div></div>
+    <span class="bar-val" id="bv-lost">—</span>
+  </div>
+</div>
+
+<!-- INSIGHT BANNER -->
+<div class="insight-banner" id="insight-banner">
+  <span class="ib-tag" id="ib-tag">Insight</span>
+  <div class="ib-text" id="ib-text"></div>
+</div>
+
+<!-- REFLECTION TEXTAREAS -->
+<div class="reflection-wrap">
+  <div class="reflection-card">
+    <div class="reflection-label">What leads to a low recovery rate in your business?</div>
+    <textarea class="reflection-area" placeholder="e.g. Rework, non-billable admin, poor job scoping, unplanned interruptions, excessive WIP..."></textarea>
+  </div>
+  <div class="reflection-card">
+    <div class="reflection-label">How will you improve your recovery rate?</div>
+    <textarea class="reflection-area" placeholder="e.g. Time tracking tool, better job scoping, scheduling system, daily targets per team member..."></textarea>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text-block">
+      <div class="cta-heading">This is revenue<br><em>already in your business.</em></div>
+      <p class="cta-sub">A DuBois Boardroom session will show you exactly how to recover it — without adding a single new client.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="calc-footer">
+  Figures are estimates based on inputs provided. DuBois Business Consulting · duboisbusinessconsulting.com.au
+</div>
+
+<script>
+function n(id){return parseFloat(document.getElementById(id).value)||0}
+function fmt(v){return v>=1000?'$'+Math.round(v).toLocaleString('en-AU'):'$'+Math.round(v)}
+function fmtHrs(v){return Math.round(v)+' hrs'}
+
+function setEmpty(){
+  var ids=['r-payroll','r-current-hrs','r-target-hrs','r-lost'];
+  ids.forEach(function(id){
+    document.getElementById(id).textContent='—';
+    document.getElementById(id).className='bi-value empty';
+  });
+  var opp=document.getElementById('r-opportunity');
+  opp.textContent='Enter figures above';
+  opp.className='rc-value empty';
+  document.getElementById('r-opp-sub').textContent='by reaching your target recovery rate';
+  document.getElementById('bar-section').classList.remove('visible');
+  document.getElementById('insight-banner').className='insight-banner';
+  document.getElementById('cta-wrap').classList.remove('visible');
+  ['bd-payroll','bd-current','bd-target','bd-lost'].forEach(function(id){
+    document.getElementById(id).classList.remove('active');
+  });
+}
+
+function calc(){
+  var team=n('inp-team');
+  var hrs=n('inp-hrs');
+  var rate=n('inp-rate');
+  var current=n('inp-current');
+  var target=n('inp-target');
+
+  if(!team||!hrs||!rate||!current){setEmpty();return}
+
+  var payrollHrs=team*hrs;
+  var currentCharged=payrollHrs*(current/100);
+  var targetCharged=target>0?payrollHrs*(target/100):currentCharged;
+  var lostHrs=payrollHrs-currentCharged;
+  var currentRev=currentCharged*rate*50;
+  var targetRev=targetCharged*rate*50;
+  var opportunity=targetRev-currentRev;
+
+  // Values
+  document.getElementById('r-payroll').textContent=fmtHrs(payrollHrs);
+  document.getElementById('r-payroll').className='bi-value';
+  document.getElementById('r-current-hrs').textContent=fmtHrs(currentCharged);
+  document.getElementById('r-current-hrs').className='bi-value';
+  document.getElementById('r-current-sub').textContent='At '+current+'% recovery';
+  document.getElementById('r-target-hrs').textContent=target>0?fmtHrs(targetCharged):'—';
+  document.getElementById('r-target-hrs').className=target>0?'bi-value':'bi-value empty';
+  document.getElementById('r-target-sub').textContent=target>0?'At '+target+'% recovery':'Set a target above';
+  document.getElementById('r-lost').textContent=fmtHrs(lostHrs);
+  document.getElementById('r-lost').className=lostHrs>0?'bi-value':'bi-value';
+  document.getElementById('r-lost-sub').textContent='= '+Math.round(lostHrs/hrs*10)/10+' full-timers';
+
+  // Highlight cards
+  document.getElementById('bd-payroll').classList.add('active');
+  document.getElementById('bd-current').classList.add('active');
+  if(target>0)document.getElementById('bd-target').classList.add('active');
+  if(lostHrs>0)document.getElementById('bd-lost').classList.add('active');
+
+  // Primary result
+  var oppEl=document.getElementById('r-opportunity');
+  if(target>0&&opportunity>0){
+    oppEl.textContent=fmt(opportunity)+'/yr';
+    oppEl.className='rc-value';
+    document.getElementById('r-opp-sub').textContent='by lifting recovery from '+current+'% to '+target+'%';
+  } else if(target>0&&opportunity<=0){
+    oppEl.textContent='Target ≤ current';
+    oppEl.className='rc-value empty';
+    document.getElementById('r-opp-sub').textContent='Set a target higher than current rate';
+  } else {
+    oppEl.textContent=fmt(currentRev)+'/yr';
+    oppEl.className='rc-value';
+    document.getElementById('r-opp-sub').textContent='current annual revenue at '+current+'% recovery';
+  }
+
+  // Bar chart
+  document.getElementById('bar-section').classList.add('visible');
+  var maxV=payrollHrs;
+  document.getElementById('bar-payroll').style.width='100%';
+  document.getElementById('bv-payroll').textContent=fmtHrs(payrollHrs);
+  document.getElementById('bar-current').style.width=Math.round(currentCharged/maxV*100)+'%';
+  document.getElementById('bv-current').textContent=fmtHrs(currentCharged);
+  document.getElementById('bar-target-fill').style.width=target>0?Math.round(targetCharged/maxV*100)+'%':'0%';
+  document.getElementById('bv-target').textContent=target>0?fmtHrs(targetCharged):'—';
+  document.getElementById('bar-lost').style.width=Math.round(lostHrs/maxV*100)+'%';
+  document.getElementById('bv-lost').textContent=fmtHrs(lostHrs);
+
+  // Insight
+  var banner=document.getElementById('insight-banner');
+  var tag=document.getElementById('ib-tag');
+  var text=document.getElementById('ib-text');
+  banner.className='insight-banner visible';
+  if(current<60){
+    banner.classList.add('alert');
+    tag.textContent='Significant revenue loss detected';
+    text.textContent='At '+current+'% recovery you are losing '+fmtHrs(lostHrs)+' per week — the equivalent of '+Math.round(lostHrs/hrs*10)/10+' full-time staff members working without generating revenue. At $'+rate+'/hr that is '+fmt(lostHrs*rate*50)+' per year walking out the door uncaptured.';
+  } else if(current<75){
+    banner.classList.add('warn');
+    tag.textContent='Recovery gap identified';
+    text.textContent='At '+current+'% recovery there is meaningful room to improve. Every 5% lift in recovery adds '+fmt(payrollHrs*0.05*rate*50)+' per year at your current charge-out rate — without a single new client or additional hour from your team.';
+  } else {
+    banner.classList.add('good');
+    tag.textContent='Strong recovery rate';
+    text.textContent='A '+current+'% recovery rate is above average for most practices. The focus now is maintaining this as your team grows — and ensuring your charge-out rate is keeping pace with the quality of work being delivered.';
+  }
+
+  // CTA
+  if(opportunity>5000||currentRev>50000){
+    document.getElementById('cta-wrap').classList.add('visible');
+  }
+}
+</script>
+</body>
+</html>

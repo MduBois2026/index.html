@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden Revenue — Promotion · Profits · People</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --cream3:#E0D8C8;
+  --gold:#C9A84C;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+  --ink:#1A1208;
+  --mid:#5C5040;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  /* Lever colours matching screenshot */
+  --promo:#2D6A4F;   /* forest green */
+  --profits:#C9A84C; /* gold */
+  --people:#7A3020;  /* rust/burgundy */
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',sans-serif;
+}
+html,body{
+  font-family:var(--sans);
+  background:var(--cream);
+  color:var(--ink);
+  padding:0;margin:0;
+}
+body{padding:1.75rem 1.5rem 2.5rem}
+
+/* ── INTRO CALLOUT ── */
+.intro-callout{
+  background:var(--gold-pale);
+  border:1.5px solid var(--gold-light);
+  border-radius:8px;
+  padding:1.25rem 1.5rem;
+  margin-bottom:1.5rem;
+}
+.ic-title{
+  font-size:14px;font-weight:500;color:var(--ink);
+  margin-bottom:.625rem;line-height:1.4;
+  display:flex;gap:6px;align-items:center;flex-wrap:wrap;
+}
+.ic-promo{color:var(--promo)}
+.ic-profits{color:var(--profits)}
+.ic-people{color:var(--people)}
+.ic-sep{color:var(--cream3)}
+.ic-body{
+  font-size:13px;font-weight:300;color:var(--mid);
+  line-height:1.8;
+}
+
+/* ── LEVERS GRID ── */
+.levers-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:1.5rem;
+}
+@media(max-width:680px){
+  .levers-grid{grid-template-columns:1fr}
+}
+
+/* ── LEVER CARD ── */
+.lever-card{
+  background:#fff;
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  padding:1.5rem 1.375rem;
+  display:flex;flex-direction:column;
+  gap:.875rem;
+  cursor:pointer;
+  transition:border-color 0.2s,transform 0.15s,box-shadow 0.2s;
+  position:relative;overflow:hidden;
+  user-select:none;
+}
+.lever-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  transition:background 0.2s;
+}
+.lever-card.promo::before{background:var(--promo)}
+.lever-card.profits::before{background:var(--profits)}
+.lever-card.people::before{background:var(--people)}
+.lever-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(13,43,31,0.08);
+}
+.lever-card.selected.promo{border-color:var(--promo);background:#F0F7F3}
+.lever-card.selected.profits{border-color:var(--profits);background:var(--gold-pale)}
+.lever-card.selected.people{border-color:var(--people);background:#F7F0EE}
+
+/* Selected ring */
+.lever-card.selected{
+  box-shadow:0 0 0 3px rgba(0,0,0,0.06);
+  transform:translateY(0);
+}
+
+/* Lever num + title */
+.lever-header{display:flex;flex-direction:column;gap:2px}
+.lever-num{
+  font-size:9px;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--soft);
+}
+.lever-title{
+  font-family:var(--serif);
+  font-size:clamp(22px,3vw,28px);font-weight:300;font-style:italic;
+  line-height:1;
+}
+.promo .lever-title{color:var(--promo)}
+.profits .lever-title{color:var(--profits)}
+.people .lever-title{color:var(--people)}
+
+/* Lever desc */
+.lever-desc{
+  font-size:13px;font-weight:300;color:var(--mid);
+  line-height:1.7;flex:1;
+}
+
+/* Sub-items */
+.lever-subs{
+  display:flex;gap:5px;align-items:center;flex-wrap:wrap;
+  font-size:11px;font-weight:300;
+}
+.ls-arrow{color:var(--gold)}
+.ls-item{font-weight:400;color:var(--soft)}
+.lever-card.selected.promo .ls-item{color:var(--promo)}
+.lever-card.selected.profits .ls-item{color:var(--profits)}
+.lever-card.selected.people .ls-item{color:var(--people)}
+.ls-dot{color:var(--cream3)}
+
+/* Selected tick */
+.lever-tick{
+  position:absolute;top:.875rem;right:.875rem;
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;color:#fff;
+  opacity:0;transform:scale(0.6);
+  transition:opacity 0.2s,transform 0.2s;
+}
+.promo .lever-tick{background:var(--promo)}
+.profits .lever-tick{background:var(--profits)}
+.people .lever-tick{background:var(--people)}
+.lever-card.selected .lever-tick{opacity:1;transform:scale(1)}
+
+/* ── SELECTION SUMMARY ── */
+.selection-summary{
+  display:none;margin-bottom:1.5rem;
+  animation:fadeIn 0.3s ease;
+}
+.selection-summary.visible{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ss-label{font-size:11px;font-weight:300;color:var(--soft)}
+.ss-tag{
+  font-size:11px;font-weight:500;padding:4px 13px;
+  border-radius:100px;cursor:pointer;transition:opacity 0.15s;
+}
+.ss-tag:hover{opacity:0.75}
+.ss-tag-promo{background:#E0F0E8;color:var(--promo);border:1px solid rgba(45,106,79,0.2)}
+.ss-tag-profits{background:var(--gold-pale);color:var(--profits);border:1px solid var(--gold-light)}
+.ss-tag-people{background:#F3E8E5;color:var(--people);border:1px solid rgba(122,48,32,0.2)}
+
+/* ── QUESTION CARDS ── */
+.q-card{
+  background:#fff;
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  padding:1.375rem 1.5rem;
+  margin-bottom:10px;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.q-card:focus-within{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,168,76,0.08);
+}
+.q-card.has-content{
+  border-color:rgba(45,106,79,0.25);
+}
+.q-title{
+  font-size:14px;font-weight:500;color:var(--ink);
+  line-height:1.45;margin-bottom:.875rem;
+}
+.entry-area{
+  width:100%;font-family:var(--sans);
+  font-size:13px;font-weight:300;line-height:1.75;
+  color:var(--ink);
+  border:1.5px solid var(--cream3);
+  border-radius:6px;
+  padding:10px 12px;
+  background:var(--cream);
+  resize:vertical;min-height:95px;
+  transition:border-color 0.2s,background 0.2s;
+}
+.entry-area:focus{
+  outline:none;border-color:var(--gold);background:#fff;
+}
+.entry-area::placeholder{color:var(--cream3);font-style:italic;font-size:12px}
+.entry-area.has-content{border-color:rgba(45,106,79,0.2);background:#fff}
+
+/* ── LEVER DETAIL PANEL ── */
+.lever-detail{
+  background:var(--cream2);border:1px solid var(--border);
+  border-radius:8px;padding:1.125rem 1.375rem;
+  margin-bottom:1.25rem;display:none;
+  animation:fadeIn 0.25s ease;
+}
+.lever-detail.visible{display:block}
+.ld-title{
+  font-size:11px;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--soft);margin-bottom:.75rem;
+}
+.ld-items{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
+}
+@media(max-width:500px){.ld-items{grid-template-columns:1fr}}
+.ld-item{
+  background:#fff;border:1px solid var(--border);border-radius:5px;
+  padding:.75rem .875rem;font-size:12px;font-weight:300;
+  color:var(--mid);line-height:1.55;
+  display:flex;gap:7px;align-items:flex-start;
+}
+.ld-dot{
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+  margin-top:5px;
+}
+.ld-dot-promo{background:var(--promo)}
+.ld-dot-profits{background:var(--profits)}
+.ld-dot-people{background:var(--people)}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin-bottom:1.5rem}
+.progress-top{display:flex;justify-content:space-between;margin-bottom:.5rem}
+.prog-label{font-size:11px;font-weight:300;color:var(--soft)}
+.prog-count{font-size:11px;font-weight:500;color:var(--forest)}
+.prog-track{height:3px;background:var(--cream3);border-radius:100px;overflow:hidden}
+.prog-fill{
+  height:100%;border-radius:100px;
+  background:linear-gradient(to right,var(--forest-light),var(--gold));
+  transition:width 0.4s ease;
+}
+
+/* ── INSIGHT ── */
+.insight-strip{
+  border-radius:8px;padding:1.125rem 1.5rem;
+  margin-bottom:1.5rem;display:none;
+  animation:fadeIn 0.35s ease;
+}
+.insight-strip.visible{display:flex;gap:12px;align-items:flex-start}
+.insight-strip.partial{background:var(--gold-pale);border:1.5px solid var(--gold-light)}
+.insight-strip.complete{background:#EAF5F0;border:1.5px solid #97C8B4}
+.is-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.insight-strip.partial .is-dot{background:var(--gold)}
+.insight-strip.complete .is-dot{background:var(--forest-light)}
+.is-inner{}
+.is-tag{font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;display:block}
+.insight-strip.partial .is-tag{color:var(--gold)}
+.insight-strip.complete .is-tag{color:var(--forest-light)}
+.is-text{font-size:13px;font-weight:300;color:var(--ink);line-height:1.8}
+
+/* ── CTA ── */
+.cta-wrap{display:none;animation:fadeIn 0.4s ease}
+.cta-wrap.visible{display:block}
+.cta-inner{
+  background:var(--forest);border-radius:8px;
+  padding:1.625rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+}
+.cta-inner::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:170px;height:170px;border-radius:50%;
+  background:rgba(201,168,76,0.07);pointer-events:none;
+}
+.cta-text{flex:1;min-width:180px}
+.cta-heading{
+  font-family:var(--serif);font-size:clamp(18px,3vw,24px);
+  font-weight:300;color:#fff;line-height:1.25;margin-bottom:.375rem;
+}
+.cta-heading em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:12px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.7;max-width:360px}
+.cta-btn{
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:13px 26px;border-radius:5px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;
+  position:relative;z-index:1;
+}
+.cta-btn:hover{background:#DFB84A;transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,168,76,0.28)}
+
+/* ── FOOTER ── */
+.form-footer{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:11px;font-weight:300;color:var(--soft);
+  text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- INTRO CALLOUT -->
+<div class="intro-callout">
+  <div class="ic-title">
+    <span class="ic-promo">Promotion</span>
+    <span class="ic-sep">·</span>
+    <span><strong class="ic-profits">Profits</strong></span>
+    <span class="ic-sep">·</span>
+    <span><strong class="ic-people">People</strong></span>
+  </div>
+  <p class="ic-body">Each of these areas holds hidden value that isn't currently being utilised. We measure this based on the time you have available right now to increase your returns — or set aside for a forward plan to maximise returns and achieve your ideal business goal.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-top">
+    <span class="prog-label">Completion</span>
+    <span class="prog-count" id="prog-count">0 of 2 answered</span>
+  </div>
+  <div class="prog-track">
+    <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- LEVERS GRID -->
+<div class="levers-grid">
+
+  <!-- LEVER 1: PROMOTION -->
+  <div class="lever-card promo" id="card-promo" onclick="toggleLever('promo')">
+    <div class="lever-tick">✓</div>
+    <div class="lever-header">
+      <span class="lever-num">Lever 1</span>
+      <span class="lever-title">Promotion</span>
+    </div>
+    <p class="lever-desc">Targeting the right audience, flooding leads, and mastering conversion. The front door to revenue growth.</p>
+    <div class="lever-subs">
+      <span class="ls-arrow">→</span>
+      <span class="ls-item">Audience</span>
+      <span class="ls-dot">·</span>
+      <span class="ls-item">Leads</span>
+      <span class="ls-dot">·</span>
+      <span class="ls-item">Conversion</span>
+    </div>
+  </div>
+
+  <!-- LEVER 2: PROFITS -->
+  <div class="lever-card profits" id="card-profits" onclick="toggleLever('profits')">
+    <div class="lever-tick">✓</div>
+    <div class="lever-header">
+      <span class="lever-num">Lever 2</span>
+      <span class="lever-title">Profits</span>
+    </div>
+    <p class="lever-desc">Aligning prices, tuning costs, and taming cashflow. The engine room where margin is made or destroyed.</p>
+    <div class="lever-subs">
+      <span class="ls-arrow">→</span>
+      <span class="ls-item">Costs</span>
+      <span class="ls-dot">·</span>
+      <span class="ls-item">Prices</span>
+      <span class="ls-dot">·</span>
+      <span class="ls-item">Cashflow</span>
+    </div>
+  </div>
+
+  <!-- LEVER 3: PEOPLE -->
+  <div class="lever-card people" id="card-people" onclick="toggleLever('people')">
+    <div class="lever-tick">✓</div>
+    <div class="lever-header">
+      <span class="lever-num">Lever 3</span>
+      <span class="lever-title">People</span>
+    </div>
+    <p class="lever-desc">Installing systems, keeping score, and building culture. The foundation that lets the business run without the owner doing everything.</p>
+    <div class="lever-subs">
+      <span class="ls-arrow">→</span>
+      <span class="ls-item">Systems</span>
+      <span class="ls-dot">·</span>
+      <span class="ls-item">Score</span>
+      <span class="ls-dot">·</span>
+      <span class="ls-item">Culture</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- SELECTION TAGS -->
+<div class="selection-summary" id="selection-summary">
+  <span class="ss-label">Selected:</span>
+  <div id="sel-tags"></div>
+</div>
+
+<!-- LEVER DETAIL PANEL — appears on selection -->
+<div class="lever-detail" id="lever-detail">
+  <div class="ld-title" id="ld-title">What this lever covers</div>
+  <div class="ld-items" id="ld-items"></div>
+</div>
+
+<!-- QUESTION 1 -->
+<div class="q-card" id="qc-1">
+  <div class="q-title">Where do you believe the biggest hidden revenue opportunity sits right now?</div>
+  <textarea class="entry-area" id="ta-q1"
+    placeholder="Describe the area — e.g. pricing hasn't been reviewed in 3 years, chasing debtors is costing us time, team members aren't converting enquiries…"
+    oninput="onInput(this,'qc-1','ta-q1')"></textarea>
+</div>
+
+<!-- QUESTION 2 -->
+<div class="q-card" id="qc-2">
+  <div class="q-title">What is the #1 thing holding you back from accessing this revenue right now?</div>
+  <textarea class="entry-area" id="ta-q2"
+    placeholder="e.g. Time, knowledge, team capacity, fear of raising prices, no system for following up leads…"
+    oninput="onInput(this,'qc-2','ta-q2')"></textarea>
+</div>
+
+<!-- INSIGHT -->
+<div class="insight-strip" id="insight-strip">
+  <div class="is-dot"></div>
+  <div class="is-inner">
+    <span class="is-tag" id="is-tag">Insight</span>
+    <div class="is-text" id="is-text"></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <div class="cta-heading">The revenue is already<br><em>there. Let's find it.</em></div>
+      <p class="cta-sub">You've identified where the opportunity is and what's in the way. A Boardroom session will map the exact path from where you are now to where the hidden revenue is sitting.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="form-footer">
+  Your responses are confidential and used only to prepare your consulting session.
+</div>
+
+<script>
+var selected=new Set();
+
+var leverData={
+  promo:{
+    label:'Promotion',
+    tagClass:'ss-tag-promo',
+    dotClass:'ld-dot-promo',
+    items:[
+      'Define and target your A-grade client avatar',
+      'Build a structured referral system',
+      'Improve lead flow from LinkedIn and content',
+      'Audit your enquiry-to-conversion rate',
+      'Map every current lead source and its ROI',
+      'Design a 90-day content and outreach plan'
+    ]
+  },
+  profits:{
+    label:'Profits',
+    tagClass:'ss-tag-profits',
+    dotClass:'ld-dot-profits',
+    items:[
+      'Review pricing — has it kept pace with costs?',
+      'Identify the highest-margin services to promote more',
+      'Analyse debtor days and payment terms',
+      'Review supplier costs and renegotiate top 5',
+      'Build a discount policy — or remove discounting entirely',
+      'Move session billing to subscription and recurring revenue'
+    ]
+  },
+  people:{
+    label:'People',
+    tagClass:'ss-tag-people',
+    dotClass:'ld-dot-people',
+    items:[
+      'Document the top 10 operating procedures',
+      'Build individual performance targets per team member',
+      'Install a daily or weekly scorecard system',
+      'Define clear role authorities and decision rights',
+      'Identify who is ready for a promotion or more responsibility',
+      'Build a culture document — values, expectations, recognition'
+    ]
+  }
+};
+
+function toggleLever(key){
+  var card=document.getElementById('card-'+key);
+  if(selected.has(key)){
+    selected.delete(key);
+    card.classList.remove('selected');
+  } else {
+    selected.add(key);
+    card.classList.add('selected');
+  }
+  updateLevers();
+}
+
+function updateLevers(){
+  var arr=Array.from(selected);
+
+  // Tags
+  var ss=document.getElementById('selection-summary');
+  var tags=document.getElementById('sel-tags');
+  tags.innerHTML='';
+  if(arr.length>0){
+    ss.classList.add('visible');
+    arr.forEach(function(k){
+      var span=document.createElement('span');
+      span.className='ss-tag '+leverData[k].tagClass;
+      span.textContent=leverData[k].label+' ×';
+      span.onclick=function(){toggleLever(k)};
+      tags.appendChild(span);
+    });
+  } else {
+    ss.classList.remove('visible');
+  }
+
+  // Detail panel
+  var detail=document.getElementById('lever-detail');
+  var ldTitle=document.getElementById('ld-title');
+  var ldItems=document.getElementById('ld-items');
+  if(arr.length>0){
+    detail.classList.add('visible');
+    var lastKey=arr[arr.length-1];
+    var d=leverData[lastKey];
+    ldTitle.textContent='What '+d.label+' involves — areas to address';
+    ldItems.innerHTML='';
+    d.items.forEach(function(item){
+      var div=document.createElement('div');
+      div.className='ld-item';
+      div.innerHTML='<span class="ld-dot '+d.dotClass+'"></span>'+item;
+      ldItems.appendChild(div);
+    });
+  } else {
+    detail.classList.remove('visible');
+  }
+
+  // Insight
+  updateProgress();
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.max(95,el.scrollHeight)+'px';
+}
+
+function onInput(el,cardId,taId){
+  autoResize(el);
+  var filled=el.value.trim().length>0;
+  el.classList.toggle('has-content',filled);
+  document.getElementById(cardId).classList.toggle('has-content',filled);
+  updateProgress();
+}
+
+function updateProgress(){
+  var q1=document.getElementById('ta-q1').value.trim().length>0;
+  var q2=document.getElementById('ta-q2').value.trim().length>0;
+  var answered=(q1?1:0)+(q2?1:0);
+  var total=2;
+  var pct=Math.round(answered/total*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-count').textContent=answered+' of '+total+' answered';
+
+  var strip=document.getElementById('insight-strip');
+  var itag=document.getElementById('is-tag');
+  var itext=document.getElementById('is-text');
+
+  var leverCount=selected.size;
+  if(answered>0||leverCount>0){
+    strip.className='insight-strip visible';
+    if(answered===total&&leverCount>0){
+      strip.classList.add('complete');
+      itag.textContent='Audit complete';
+      var leverLabels=Array.from(selected).map(function(k){return leverData[k].label});
+      itext.textContent='You\'ve identified the hidden revenue area as '+(leverLabels.length>0?leverLabels.join(' and '):'your primary lever')+' and named the #1 barrier to accessing it. That\'s the hardest part. The next step is a Boardroom session to map the exact actions that close the gap — with a specific timeline and a number attached.';
+    } else if(answered===total){
+      strip.classList.add('complete');
+      itag.textContent='Questions answered — select a lever above';
+      itext.textContent='You\'ve answered both questions. Now select the lever — Promotion, Profits, or People — that best describes where the opportunity sits. This helps us prepare the right framework for your Boardroom session.';
+    } else if(leverCount>0){
+      strip.classList.add('partial');
+      itag.textContent='Lever'+(leverCount>1?'s':'')+' selected — now describe the opportunity';
+      itext.textContent='You\'ve identified '+(leverCount>1?leverCount+' levers':'the '+Array.from(selected).map(function(k){return leverData[k].label}).join(' lever'))+'. Answer both questions below to complete the audit and get the most out of your Boardroom session.';
+    } else {
+      strip.classList.add('partial');
+      itag.textContent='Good start — keep going';
+      itext.textContent='Select the lever that best matches where you answered, and complete both questions. The more specific you are, the more targeted the Boardroom session will be.';
+    }
+  } else {
+    strip.className='insight-strip';
+  }
+
+  document.getElementById('cta-wrap').classList.toggle('visible',
+    answered>=1||leverCount>=1);
+}
+</script>
+</body>
+</html>

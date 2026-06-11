@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Target & Schedule Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --cream3:#E0D8C8;
+  --gold:#C9A84C;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+  --ink:#1A1208;
+  --mid:#5C5040;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',sans-serif;
+}
+html,body{
+  font-family:var(--sans);
+  background:var(--cream);
+  color:var(--ink);
+  padding:0;margin:0;
+}
+body{padding:1.75rem 1.5rem 2.5rem}
+
+/* ── INTRO ── */
+.intro{margin-bottom:1.75rem}
+.intro-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:.625rem;display:flex;align-items:center;gap:10px;
+}
+.intro-eyebrow::before{content:'';width:18px;height:1px;background:var(--gold)}
+.intro-heading{
+  font-family:var(--serif);font-size:clamp(22px,4vw,34px);
+  font-weight:300;color:var(--ink);line-height:1.15;margin-bottom:.625rem;
+}
+.intro-heading em{font-style:italic;color:var(--forest-light)}
+.intro-desc{
+  font-size:13px;font-weight:300;color:var(--soft);
+  line-height:1.85;max-width:580px;
+}
+
+/* ── LIVE CALCULATOR STRIP ── */
+.calc-strip{
+  background:var(--forest);border-radius:8px;
+  padding:1.25rem 1.5rem;margin-bottom:1.5rem;
+  display:grid;grid-template-columns:1fr 1fr 1fr auto;
+  gap:12px;align-items:end;
+}
+@media(max-width:680px){
+  .calc-strip{grid-template-columns:1fr 1fr}
+}
+@media(max-width:420px){
+  .calc-strip{grid-template-columns:1fr}
+}
+.cs-field{display:flex;flex-direction:column;gap:5px}
+.cs-label{
+  font-size:9px;font-weight:500;letter-spacing:0.16em;
+  text-transform:uppercase;color:rgba(201,168,76,0.6);
+}
+.cs-input{
+  width:100%;font-family:var(--sans);font-size:14px;font-weight:300;
+  color:#fff;background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);border-radius:5px;
+  padding:9px 12px;transition:border-color 0.2s,background 0.2s;
+  -webkit-appearance:none;appearance:none;
+}
+.cs-input::placeholder{color:rgba(255,255,255,0.2)}
+.cs-input:focus{
+  outline:none;border-color:rgba(201,168,76,0.5);
+  background:rgba(255,255,255,0.12);
+}
+.cs-input[type=number]::-webkit-inner-spin-button,
+.cs-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+.cs-input[type=number]{-moz-appearance:textfield}
+.cs-result{
+  display:flex;flex-direction:column;gap:3px;justify-content:flex-end;
+}
+.cs-result-label{
+  font-size:9px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;color:rgba(201,168,76,0.55);
+}
+.cs-result-value{
+  font-family:var(--serif);font-size:clamp(20px,3.5vw,28px);
+  font-weight:300;color:var(--gold);line-height:1;
+  transition:all 0.3s ease;
+}
+.cs-result-value.empty{color:rgba(255,255,255,0.15);font-size:18px}
+
+/* ── TWO-COL GRID ── */
+.two-col{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:1px;
+}
+@media(max-width:640px){
+  .two-col{grid-template-columns:1fr}
+}
+
+/* ── PANEL ── */
+.panel{
+  background:var(--cream);
+  padding:1.625rem 1.5rem;
+  display:flex;flex-direction:column;
+  gap:1.25rem;
+  transition:background 0.2s;
+}
+.panel.has-content{background:#FAFBF8}
+.panel-kicker{
+  font-size:10px;font-weight:500;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--soft);
+  padding-bottom:.875rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.panel-done-badge{
+  font-size:9px;font-weight:500;letter-spacing:0.1em;
+  padding:2px 9px;border-radius:100px;
+  background:#EAF5F0;color:var(--forest-light);
+  border:1px solid #97C8B4;
+  opacity:0;transition:opacity 0.3s;
+}
+.panel-done-badge.visible{opacity:1}
+
+/* Callout box */
+.callout-box{
+  background:var(--gold-pale);border:1.5px solid var(--gold-light);
+  border-radius:7px;padding:1rem 1.125rem;
+}
+.cb-example{
+  font-size:12px;font-weight:300;color:var(--mid);
+  line-height:1.75;margin-bottom:.5rem;
+}
+.cb-example strong{font-weight:500;color:var(--ink)}
+.cb-example .highlight{
+  font-family:var(--serif);font-size:18px;font-weight:400;
+  color:var(--forest);display:block;margin:.25rem 0;
+}
+.cb-example .highlight-sm{
+  font-family:var(--serif);font-size:16px;font-weight:400;
+  color:var(--forest);
+}
+.cb-bullets{
+  font-size:12px;font-weight:300;color:var(--mid);
+  line-height:1.8;display:flex;flex-direction:column;gap:1px;
+}
+.cb-bullet{display:flex;gap:6px;align-items:flex-start}
+.cb-arrow{color:var(--gold);flex-shrink:0;margin-top:1px}
+
+/* ── LIVE CALLOUT ── */
+.live-callout{
+  background:var(--gold-pale);border:1.5px solid var(--gold-light);
+  border-radius:7px;padding:1rem 1.125rem;
+  display:none;animation:fadeIn 0.3s ease;
+}
+.live-callout.visible{display:block}
+.lc-calc{
+  font-size:12px;font-weight:300;color:var(--mid);
+  line-height:1.75;margin-bottom:.375rem;
+}
+.lc-result{
+  font-family:var(--serif);font-size:clamp(16px,2.5vw,22px);
+  font-weight:400;color:var(--forest);line-height:1.2;
+  margin-bottom:.5rem;
+}
+.lc-tips{
+  font-size:11px;font-weight:300;color:var(--mid);
+  line-height:1.75;display:flex;flex-direction:column;gap:2px;
+}
+.lc-tip{display:flex;gap:6px}
+.lc-arrow{color:var(--gold);flex-shrink:0}
+
+/* ── QUESTION + TEXTAREA ── */
+.q-block{display:flex;flex-direction:column;gap:.5rem}
+.q-text{
+  font-size:13px;font-weight:500;color:var(--ink);
+  line-height:1.45;
+}
+.entry-area{
+  width:100%;font-family:var(--sans);
+  font-size:13px;font-weight:300;line-height:1.7;
+  color:var(--ink);
+  border:1.5px solid var(--cream3);
+  border-radius:6px;
+  padding:10px 12px;
+  background:#fff;
+  resize:vertical;min-height:90px;
+  transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;
+}
+.entry-area:focus{
+  outline:none;border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,168,76,0.08);
+}
+.entry-area::placeholder{
+  color:var(--cream3);font-style:italic;font-size:12px;
+}
+.entry-area.has-content{
+  border-color:rgba(45,106,79,0.25);background:#FAFDF9;
+}
+
+/* ── LEADERBOARD PANEL ── */
+.leaderboard-panel{
+  background:var(--cream);
+  border:1px solid var(--border);
+  border-radius:0 0 10px 10px;
+  padding:1.625rem 1.5rem;
+  border-top:none;
+  margin-bottom:1.5rem;
+}
+.lb-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1.25rem;flex-wrap:wrap;gap:.5rem;
+}
+.lb-title{
+  font-size:14px;font-weight:500;color:var(--ink);
+}
+.lb-badge{
+  font-size:9px;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;padding:2px 9px;border-radius:100px;
+  background:#EAF5F0;color:var(--forest-light);border:1px solid #97C8B4;
+  opacity:0;transition:opacity 0.3s;
+}
+.lb-badge.visible{opacity:1}
+.lb-q{
+  font-size:13px;font-weight:400;color:var(--ink);
+  margin-bottom:.75rem;line-height:1.45;
+}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin-bottom:1.5rem}
+.progress-top{display:flex;justify-content:space-between;margin-bottom:.5rem}
+.prog-label{font-size:11px;font-weight:300;color:var(--soft)}
+.prog-count{font-size:11px;font-weight:500;color:var(--forest)}
+.prog-track{height:3px;background:var(--cream3);border-radius:100px;overflow:hidden}
+.prog-fill{
+  height:100%;border-radius:100px;
+  background:linear-gradient(to right,var(--forest-light),var(--gold));
+  transition:width 0.4s ease;
+}
+
+/* ── INSIGHT ── */
+.insight-strip{
+  border-radius:8px;padding:1rem 1.375rem;
+  margin-bottom:1.5rem;display:none;
+  animation:fadeIn 0.35s ease;
+}
+.insight-strip.visible{display:flex;gap:12px;align-items:flex-start}
+.insight-strip.partial{background:var(--gold-pale);border:1.5px solid var(--gold-light)}
+.insight-strip.complete{background:#EAF5F0;border:1.5px solid #97C8B4}
+.is-dot{
+  width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;
+}
+.insight-strip.partial .is-dot{background:var(--gold)}
+.insight-strip.complete .is-dot{background:var(--forest-light)}
+.is-tag{
+  font-size:9px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;margin-bottom:4px;display:block;
+}
+.insight-strip.partial .is-tag{color:var(--gold)}
+.insight-strip.complete .is-tag{color:var(--forest-light)}
+.is-text{font-size:13px;font-weight:300;color:var(--ink);line-height:1.8}
+
+/* ── CTA ── */
+.cta-wrap{display:none;animation:fadeIn 0.4s ease}
+.cta-wrap.visible{display:block}
+.cta-inner{
+  background:var(--forest);border-radius:8px;
+  padding:1.625rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;position:relative;overflow:hidden;
+}
+.cta-inner::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:170px;height:170px;border-radius:50%;
+  background:rgba(201,168,76,0.07);pointer-events:none;
+}
+.cta-text{flex:1;min-width:180px}
+.cta-heading{
+  font-family:var(--serif);font-size:clamp(18px,3vw,24px);
+  font-weight:300;color:#fff;line-height:1.25;margin-bottom:.375rem;
+}
+.cta-heading em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:12px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.7;max-width:360px}
+.cta-btn{
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:13px 26px;border-radius:5px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;
+  position:relative;z-index:1;
+}
+.cta-btn:hover{background:#DFB84A;transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,168,76,0.28)}
+
+/* ── FOOTER ── */
+.form-footer{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:11px;font-weight:300;color:var(--soft);
+  text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="intro">
+  <div class="intro-eyebrow">Business Framework</div>
+  <h1 class="intro-heading">Daily Target &amp;<br><em>Schedule Planner</em></h1>
+  <p class="intro-desc">What does your team need to hit each day to reach your monthly revenue target? Work out the number — then build the schedule that makes it visible, measurable, and accountable.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-top">
+    <span class="prog-label">Planner completion</span>
+    <span class="prog-count" id="prog-count">0 of 3 answered</span>
+  </div>
+  <div class="prog-track">
+    <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- LIVE CALCULATOR -->
+<div class="calc-strip">
+  <div class="cs-field">
+    <label class="cs-label" for="cs-monthly">Monthly target ($)</label>
+    <input class="cs-input" type="number" id="cs-monthly"
+      min="0" step="1000" placeholder="e.g. 40,000"
+      oninput="liveCalc()">
+  </div>
+  <div class="cs-field">
+    <label class="cs-label" for="cs-days">Working days / month</label>
+    <input class="cs-input" type="number" id="cs-days"
+      min="1" max="31" step="1" placeholder="e.g. 20"
+      oninput="liveCalc()">
+  </div>
+  <div class="cs-field">
+    <label class="cs-label" for="cs-avg">Avg transaction value ($) <span style="font-size:8px;color:rgba(255,255,255,0.2);text-transform:none;letter-spacing:0">optional</span></label>
+    <input class="cs-input" type="number" id="cs-avg"
+      min="0" step="10" placeholder="e.g. 200"
+      oninput="liveCalc()">
+  </div>
+  <div class="cs-result">
+    <span class="cs-result-label">Daily target</span>
+    <span class="cs-result-value empty" id="cs-daily">—</span>
+    <span id="cs-txns" style="font-size:11px;font-weight:300;color:rgba(255,255,255,0.35);margin-top:3px;white-space:nowrap"></span>
+  </div>
+</div>
+
+<!-- TWO COLUMN PANELS -->
+<div class="two-col">
+
+  <!-- LEFT: HOURLY RATE BUSINESSES -->
+  <div class="panel" id="panel-hourly">
+    <div class="panel-kicker">
+      Hourly rate businesses &nbsp;·&nbsp; Professions · Trades · Manufacturers
+      <span class="panel-done-badge" id="badge-hourly">✓ Done</span>
+    </div>
+
+    <!-- Static callout -->
+    <div class="callout-box">
+      <div class="cb-example">
+        Come up with the estimated $ per day you need to achieve your monthly sales target.
+        <span class="highlight" id="static-hourly-calc">e.g. $40k/month ÷ 20 days = <strong>$2,000 per day target</strong></span>
+      </div>
+      <div class="cb-bullets">
+        <div class="cb-bullet"><span class="cb-arrow">→</span><span>A $10k job → 1 week full team</span></div>
+        <div class="cb-bullet"><span class="cb-arrow">→</span><span>A $5k job → 2.5 days full team</span></div>
+      </div>
+    </div>
+
+    <!-- Live callout — appears when inputs are filled -->
+    <div class="live-callout" id="live-hourly">
+      <div class="lc-calc" id="lc-hourly-calc"></div>
+      <div class="lc-result" id="lc-hourly-result"></div>
+      <div class="lc-tips">
+        <div class="lc-tip"><span class="lc-arrow">→</span><span>Schedule jobs so daily billing targets are always visible</span></div>
+        <div class="lc-tip"><span class="lc-arrow">→</span><span>Track hours-on-job vs hours-billed daily, not monthly</span></div>
+        <div class="lc-tip"><span class="lc-arrow">→</span><span>Daily target board keeps the team focused between invoices</span></div>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">How will you develop a schedule that allocates time estimates per job/task?</div>
+      <textarea class="entry-area" id="ta-hourly"
+        placeholder="e.g. Job card system, PM software, daily target board…"
+        oninput="onInput(this,'ta-hourly')"></textarea>
+    </div>
+  </div>
+
+  <!-- RIGHT: TRANSACTION-BASED BUSINESSES -->
+  <div class="panel" id="panel-trans">
+    <div class="panel-kicker">
+      Transaction-based businesses &nbsp;·&nbsp; Brokers · Retailers · Wholesalers
+      <span class="panel-done-badge" id="badge-trans">✓ Done</span>
+    </div>
+
+    <!-- Static callout -->
+    <div class="callout-box">
+      <div class="cb-example">
+        Come up with the estimated $ per day your sales team needs to hit the monthly target.
+        <span class="highlight-sm" id="static-trans-calc">e.g. $40k/month ÷ 20 days = $2,000/day · Avg transaction $200 = <strong>10</strong></span>
+        <span class="highlight" style="font-size:20px" id="static-trans-result">sales/day needed</span>
+      </div>
+      <div class="cb-bullets">
+        <div class="cb-bullet"><span class="cb-arrow">→</span><span>Upsell</span></div>
+        <div class="cb-bullet"><span class="cb-arrow">→</span><span>Improve conversion</span></div>
+        <div class="cb-bullet"><span class="cb-arrow">→</span><span>Increase transactions with next-purchase offers</span></div>
+      </div>
+    </div>
+
+    <!-- Live callout -->
+    <div class="live-callout" id="live-trans">
+      <div class="lc-calc" id="lc-trans-calc"></div>
+      <div class="lc-result" id="lc-trans-result"></div>
+      <div class="lc-tips">
+        <div class="lc-tip"><span class="lc-arrow">→</span><span>Upsell — every transaction has an add-on opportunity</span></div>
+        <div class="lc-tip"><span class="lc-arrow">→</span><span>Improve conversion — track enquiries vs purchases daily</span></div>
+        <div class="lc-tip"><span class="lc-arrow">→</span><span>Increase avg transaction — bundle, tier, or cross-sell</span></div>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">How will you develop a schedule that tracks conversion rate or avg transaction value?</div>
+      <textarea class="entry-area" id="ta-trans"
+        placeholder="e.g. Daily sales board, CRM tracking, leaderboard…"
+        oninput="onInput(this,'ta-trans')"></textarea>
+    </div>
+  </div>
+
+</div>
+
+<!-- LEADERBOARD PANEL -->
+<div class="leaderboard-panel">
+  <div class="lb-header">
+    <div class="lb-title">Leaderboards — How will you display and communicate your schedule to the team?</div>
+    <span class="lb-badge" id="badge-lb">✓ Done</span>
+  </div>
+  <textarea class="entry-area" id="ta-lb" style="min-height:100px"
+    placeholder="e.g. Weekly team scoreboard on the wall, dashboard on the TV in the staffroom, Monday team meeting…"
+    oninput="onInput(this,'ta-lb')"></textarea>
+</div>
+
+<!-- INSIGHT -->
+<div class="insight-strip" id="insight-strip">
+  <div class="is-dot"></div>
+  <div>
+    <span class="is-tag" id="is-tag">Progress</span>
+    <div class="is-text" id="is-text"></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <div class="cta-heading">A daily target without<br><em>a schedule is just a wish.</em></div>
+      <p class="cta-sub">You now have the number. A Boardroom session will show you exactly how to build the system that makes it real — visible, tracked, and team-owned every day.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="form-footer">
+  Your responses are confidential and used only to prepare your consulting session.
+</div>
+
+<script>
+function fmt(n){
+  if(!n)return'—';
+  return n>=1000?'$'+Math.round(n).toLocaleString('en-AU'):'$'+Math.round(n);
+}
+function fmtN(n){return Math.round(n).toLocaleString('en-AU')}
+
+function liveCalc(){
+  var monthly=parseFloat(document.getElementById('cs-monthly').value)||0;
+  var days=parseFloat(document.getElementById('cs-days').value)||0;
+  var avg=parseFloat(document.getElementById('cs-avg').value)||0;
+  var hasMain=monthly>0&&days>0;
+
+  var daily=hasMain?monthly/days:0;
+  var txns=daily>0&&avg>0?daily/avg:0;
+
+  // Top result
+  var dailyEl=document.getElementById('cs-daily');
+  var txnEl=document.getElementById('cs-txns');
+  if(hasMain){
+    dailyEl.textContent=fmt(daily)+'/day';
+    dailyEl.className='cs-result-value';
+    txnEl.textContent=txns>0?fmtN(txns)+' transactions/day':'';
+  } else {
+    dailyEl.textContent='—';
+    dailyEl.className='cs-result-value empty';
+    txnEl.textContent='';
+  }
+
+  // Live hourly callout
+  var lhc=document.getElementById('live-hourly');
+  var lhCalc=document.getElementById('lc-hourly-calc');
+  var lhResult=document.getElementById('lc-hourly-result');
+  if(hasMain){
+    lhc.classList.add('visible');
+    lhCalc.textContent=fmt(monthly)+'/month ÷ '+days+' days =';
+    lhResult.textContent=fmt(daily)+' per day target';
+  } else {
+    lhc.classList.remove('visible');
+  }
+
+  // Live transaction callout
+  var ltc=document.getElementById('live-trans');
+  var ltCalc=document.getElementById('lc-trans-calc');
+  var ltResult=document.getElementById('lc-trans-result');
+  if(hasMain){
+    ltc.classList.add('visible');
+    if(avg>0){
+      ltCalc.textContent=fmt(monthly)+'/month ÷ '+days+' days = '+fmt(daily)+'/day · Avg transaction '+fmt(avg)+' =';
+      ltResult.textContent=fmtN(txns)+' sales/day needed';
+    } else {
+      ltCalc.textContent=fmt(monthly)+'/month ÷ '+days+' days =';
+      ltResult.textContent=fmt(daily)+' revenue/day needed — enter avg transaction value above to calculate daily sales target';
+    }
+  } else {
+    ltc.classList.remove('visible');
+  }
+
+  updateProgress();
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.max(90,el.scrollHeight)+'px';
+}
+
+function onInput(el,id){
+  autoResize(el);
+  el.classList.toggle('has-content',el.value.trim().length>0);
+  var panelMap={'ta-hourly':'panel-hourly','ta-trans':'panel-trans'};
+  if(panelMap[id]){
+    document.getElementById(panelMap[id]).classList.toggle('has-content',el.value.trim().length>0);
+  }
+  // Badges
+  document.getElementById('badge-hourly').classList.toggle('visible',
+    document.getElementById('ta-hourly').value.trim().length>0);
+  document.getElementById('badge-trans').classList.toggle('visible',
+    document.getElementById('ta-trans').value.trim().length>0);
+  document.getElementById('badge-lb').classList.toggle('visible',
+    document.getElementById('ta-lb').value.trim().length>0);
+  updateProgress();
+}
+
+function updateProgress(){
+  var fields=['ta-hourly','ta-trans','ta-lb'];
+  var answered=fields.filter(function(id){
+    return document.getElementById(id).value.trim().length>0;
+  }).length;
+  var pct=Math.round(answered/fields.length*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-count').textContent=answered+' of '+fields.length+' answered';
+
+  var strip=document.getElementById('insight-strip');
+  var itag=document.getElementById('is-tag');
+  var itext=document.getElementById('is-text');
+  if(answered>0){
+    strip.className='insight-strip visible';
+    if(answered===fields.length){
+      strip.classList.add('complete');
+      itag.textContent='Planner complete';
+      itext.textContent='You have defined the daily target and the schedule system to track it — for both billing-based and transaction-based activity. The leaderboard plan completes the loop: visibility creates accountability, and accountability drives the number. The next step is a Boardroom session to build this into your weekly operating rhythm.';
+    } else {
+      strip.classList.add('partial');
+      itag.textContent=answered+' of 3 sections answered';
+      itext.textContent='Keep going — complete all three sections to finish the planner. The leaderboard question is the most important: how the target is communicated to the team determines whether it actually gets hit.';
+    }
+  } else {
+    strip.className='insight-strip';
+  }
+
+  var monthly=parseFloat(document.getElementById('cs-monthly').value)||0;
+  document.getElementById('cta-wrap').classList.toggle('visible',answered>=2||monthly>0);
+}
+</script>
+</body>
+</html>

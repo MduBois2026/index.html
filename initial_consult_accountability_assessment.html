@@ -1,0 +1,631 @@
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  .wrap{font-family:var(--font-sans);color:var(--color-text-primary);padding:0}
+  .consult-header{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.5rem 1.75rem;margin-bottom:1.25rem}
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#0F6E56;margin-bottom:6px}
+  .consult-title{font-family:var(--font-serif);font-size:22px;font-weight:400;color:var(--color-text-primary);margin-bottom:6px}
+  .consult-sub{font-size:13px;color:var(--color-text-secondary);line-height:1.6;max-width:520px}
+  .progress-bar{height:4px;background:var(--color-background-secondary);border-radius:100px;margin:1.25rem 0;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+  .progress-fill{height:100%;background:#1D9E75;border-radius:100px;transition:width 0.4s ease}
+  .progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary);margin-bottom:6px}
+  .section-nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.25rem}
+  .snav-btn{font-size:11px;font-weight:500;padding:5px 12px;border-radius:100px;border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-secondary);cursor:pointer;transition:all 0.15s}
+  .snav-btn:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+  .snav-btn.done{background:#EAF3DE;color:#3B6D11;border-color:#97C459}
+  .snav-btn.active{background:#1D9E75;color:white;border-color:#1D9E75}
+  .assess-section{display:none}
+  .assess-section.active{display:block}
+  .section-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem}
+  .section-head{display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding-bottom:10px;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .section-num{width:28px;height:28px;border-radius:50%;background:#E1F5EE;color:#0F6E56;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .section-name{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+  .section-intent{font-size:12px;color:var(--color-text-secondary);margin-top:1px}
+  .q-block{margin-bottom:1rem}
+  .q-label{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px;line-height:1.5}
+  .q-hint{font-size:11px;color:var(--color-text-secondary);margin-bottom:6px;font-style:italic}
+  textarea{width:100%;min-height:72px;font-size:13px;font-family:var(--font-sans);padding:10px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);resize:vertical;line-height:1.6}
+  textarea:focus{outline:none;border-color:#1D9E75;background:var(--color-background-primary)}
+  .rating-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+  .rating-label{font-size:11px;color:var(--color-text-secondary);min-width:40px}
+  .rating-dots{display:flex;gap:6px}
+  .rdot{width:28px;height:28px;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:none;cursor:pointer;font-size:11px;font-weight:500;color:var(--color-text-secondary);transition:all 0.1s;display:flex;align-items:center;justify-content:center}
+  .rdot:hover{border-color:#1D9E75;color:#1D9E75}
+  .rdot.selected{background:#1D9E75;border-color:#1D9E75;color:white}
+  .role-input-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .role-input-row input{flex:1;font-size:13px;font-family:var(--font-sans);padding:8px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary)}
+  .role-input-row input:focus{outline:none;border-color:#1D9E75}
+  .tag-pill{display:inline-flex;align-items:center;gap:4px;background:#E1F5EE;color:#0F6E56;font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px;margin:3px}
+  .tag-pill button{background:none;border:none;color:#0F6E56;cursor:pointer;font-size:13px;line-height:1;padding:0 0 0 2px}
+  .tags-area{margin-top:6px;min-height:28px}
+  .nav-btns{display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;padding-top:1rem;border-top:0.5px solid var(--color-border-tertiary)}
+  .btn{font-family:var(--font-sans);font-size:13px;font-weight:500;padding:8px 20px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-primary);cursor:pointer;transition:background 0.1s}
+  .btn:hover{background:var(--color-background-secondary)}
+  .btn.primary{background:#1D9E75;color:white;border-color:#1D9E75}
+  .btn.primary:hover{background:#0F6E56;border-color:#0F6E56}
+  .btn:disabled{opacity:0.35;cursor:default}
+  .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+  .sum-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px}
+  .sum-head{font-size:11px;font-weight:500;color:#0F6E56;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+  .sum-item{font-size:12px;color:var(--color-text-secondary);padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.5}
+  .sum-item:last-child{border-bottom:none}
+  .score-ring{display:flex;gap:12px;align-items:center;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
+  .score-num{font-family:var(--font-serif);font-size:36px;color:#1D9E75;min-width:60px}
+  .score-detail{font-size:12px;color:var(--color-text-secondary);line-height:1.7}
+  .gap-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+  .gap-row:last-child{border-bottom:none}
+  .gap-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .dot-red{background:#E24B4A}
+  .dot-amber{background:#EF9F27}
+  .dot-green{background:#639922}
+  .gap-name{font-weight:500;color:var(--color-text-primary);flex:1}
+  .gap-score{font-size:12px;color:var(--color-text-secondary)}
+  .info-strip{background:#E1F5EE;border:0.5px solid #5DCAA5;border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;color:#085041;line-height:1.6;margin-bottom:1rem}
+  select{font-size:13px;font-family:var(--font-sans);padding:8px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);width:100%}
+  select:focus{outline:none;border-color:#1D9E75}
+  .checkbox-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer}
+  .checkbox-row:last-child{border-bottom:none}
+  .checkbox-row input[type=checkbox]{margin-top:2px;accent-color:#1D9E75;cursor:pointer}
+  .checkbox-label{font-size:13px;color:var(--color-text-primary);line-height:1.5}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Initial consult: accountability and growth gap self-assessment for health and wellness business owners</h2>
+
+  <div class="consult-header">
+    <div class="eyebrow">Initial consultation · Vitality Consulting Group</div>
+    <div class="consult-title">Accountability &amp; Growth Gap Assessment</div>
+    <div class="consult-sub">A structured self-assessment for health &amp; wellness business owners. Work through each section honestly — your answers shape the entire consulting engagement.</div>
+  </div>
+
+  <div class="progress-label">
+    <span id="prog-text">Section 1 of 8</span>
+    <span id="prog-pct">0% complete</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+
+  <div class="section-nav" id="section-nav"></div>
+
+  <div id="sec-0" class="assess-section active">
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-num">1</div>
+        <div>
+          <div class="section-name">Pain points &amp; what's working</div>
+          <div class="section-intent">Establish baseline — where the business is right now</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What are your business' current pain points?</div>
+        <div class="q-hint">Be specific — revenue, client retention, time, team, pricing, delivery</div>
+        <textarea id="s0q1" placeholder="e.g. I'm fully booked but still not profitable. Clients drop off after a few sessions..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What has been working, and how is this measured?</div>
+        <div class="q-hint">Include the metric or signal that tells you it's working</div>
+        <textarea id="s0q2" placeholder="e.g. Referrals from existing clients are strong — 60% of new enquiries come via word of mouth..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What has not been working, and how was that measured?</div>
+        <textarea id="s0q3" placeholder="e.g. Social media — posting weekly for 6 months, zero client conversions from it..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What happens with this information once identified?</div>
+        <div class="q-hint">Do you act on it, document it, discuss it, or does it stay in your head?</div>
+        <textarea id="s0q4" placeholder="e.g. I usually identify the issue but there's no formal process for acting on it..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-1" class="assess-section">
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-num">2</div>
+        <div>
+          <div class="section-name">Team involvement &amp; feedback loops</div>
+          <div class="section-intent">Who else sees the full picture — and are they heard?</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Who, what, where, when, how, and why has your current approach been working?</div>
+        <div class="q-hint">Walk through the specifics — not just that it works, but the conditions that make it work</div>
+        <textarea id="s1q1" placeholder="e.g. Our morning wellness consultations work best — clients are fresh, unhurried, and more likely to commit..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Are other team members included in identifying pain points?</div>
+        <div style="display:flex;gap:8px;margin:6px 0 10px">
+          <button class="btn" onclick="toggleYN(this,'s1yn1','yes')" id="s1yn1-yes">Yes</button>
+          <button class="btn" onclick="toggleYN(this,'s1yn1','no')" id="s1yn1-no">No</button>
+          <button class="btn" onclick="toggleYN(this,'s1yn1','sometimes')" id="s1yn1-sometimes">Sometimes</button>
+        </div>
+        <textarea id="s1q2" placeholder="If yes — how? Regular meetings, open-door, surveys? If no — why not?"></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Do team members provide productive and proactive feedback?</div>
+        <div class="q-hint">Rate the quality of internal feedback culture</div>
+        <div class="rating-row">
+          <span class="rating-label">Low</span>
+          <div class="rating-dots" id="s1r1">
+            <button class="rdot" onclick="rate('s1r1',1)">1</button>
+            <button class="rdot" onclick="rate('s1r1',2)">2</button>
+            <button class="rdot" onclick="rate('s1r1',3)">3</button>
+            <button class="rdot" onclick="rate('s1r1',4)">4</button>
+            <button class="rdot" onclick="rate('s1r1',5)">5</button>
+          </div>
+          <span class="rating-label">High</span>
+        </div>
+        <textarea id="s1q3" placeholder="Describe what that looks like in practice — or what's missing..." style="margin-top:10px"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-2" class="assess-section">
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-num">3</div>
+        <div>
+          <div class="section-name">Unexplored opportunities</div>
+          <div class="section-intent">Identifying what's been left on the table</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What other opportunities exist for your practice?</div>
+        <div class="q-hint">Think: new service lines, formats, partnerships, markets, technology, pricing</div>
+        <textarea id="s2q1" placeholder="e.g. Online group programs, corporate wellness contracts, referral partnerships with GPs..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Have these been explored? What were the outcomes, and how were they measured?</div>
+        <textarea id="s2q2" placeholder="e.g. We trialled a group class — 4 sign-ups, not enough to continue. No formal follow-up was done..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Which opportunities feel most viable right now?</div>
+        <div class="q-hint">Add as many as apply — press Enter or comma to add each one</div>
+        <div class="role-input-row">
+          <input type="text" id="opp-input" placeholder="Type an opportunity and press Enter..." onkeydown="addTag(event,'opp-input','opp-tags')">
+        </div>
+        <div class="tags-area" id="opp-tags"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-3" class="assess-section">
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-num">4</div>
+        <div>
+          <div class="section-name">Benchmarks &amp; success modelling</div>
+          <div class="section-intent">Where are you aiming, and who are you aiming to be like?</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">How are performance benchmarks currently set in your business?</div>
+        <div class="q-hint">e.g. gut feel, industry averages, competitor comparison, historical data</div>
+        <textarea id="s3q1" placeholder="e.g. I set a monthly revenue target at the start of each year but rarely track against it formally..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Who do you model your success on — and why them?</div>
+        <div class="q-hint">Could be a practitioner, a business, a model you've seen elsewhere</div>
+        <textarea id="s3q2" placeholder="e.g. A functional medicine practice I follow online — they run group programs and a membership model..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">How is progress toward your benchmarks measured, and how often reviewed?</div>
+        <div style="margin:6px 0 10px">
+          <select id="s3sel1">
+            <option value="">Select review frequency</option>
+            <option>Daily</option>
+            <option>Weekly</option>
+            <option>Monthly</option>
+            <option>Quarterly</option>
+            <option>Annually</option>
+            <option>Rarely or never</option>
+          </select>
+        </div>
+        <textarea id="s3q3" placeholder="What tools, metrics or conversations are used to review progress?"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-4" class="assess-section">
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-num">5</div>
+        <div>
+          <div class="section-name">Values, beliefs &amp; individual motivators</div>
+          <div class="section-intent">What drives the team — and is that known, supported, and measured?</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What is important to you and your team — both as a group and individually?</div>
+        <div class="q-hint">Think about what genuinely motivates people beyond the pay cheque</div>
+        <textarea id="s4q1" placeholder="e.g. Autonomy, helping clients achieve real transformation, being part of a respected practice..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What are the team's values, beliefs, and goals?</div>
+        <div class="q-hint">Are these documented anywhere, or are they assumed?</div>
+        <textarea id="s4q2" placeholder="e.g. We haven't formally defined values — but there's an unspoken commitment to holistic care..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">How are individual goals supported within the business?</div>
+        <div class="rating-row" style="margin-bottom:10px">
+          <span class="rating-label">Not at all</span>
+          <div class="rating-dots" id="s4r1">
+            <button class="rdot" onclick="rate('s4r1',1)">1</button>
+            <button class="rdot" onclick="rate('s4r1',2)">2</button>
+            <button class="rdot" onclick="rate('s4r1',3)">3</button>
+            <button class="rdot" onclick="rate('s4r1',4)">4</button>
+            <button class="rdot" onclick="rate('s4r1',5)">5</button>
+          </div>
+          <span class="rating-label">Fully</span>
+        </div>
+        <textarea id="s4q3" placeholder="How does this support currently manifest — or what would ideal support look like?"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-5" class="assess-section">
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-num">6</div>
+        <div>
+          <div class="section-name">Training, development &amp; forward opportunity</div>
+          <div class="section-intent">How the team grows — and whether it's systematic or ad hoc</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What training, development, mentoring, or advancement opportunities are available?</div>
+        <textarea id="s5q1" placeholder="e.g. Annual CPD budget, in-house training, external conferences, leadership pathways..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">How are these communicated, measured, incentivised — and how often?</div>
+        <div class="q-hint">Check all that apply</div>
+        <div style="margin-top:6px">
+          <label class="checkbox-row"><input type="checkbox" id="s5c1"> <span class="checkbox-label">Formally communicated (written policy, onboarding docs)</span></label>
+          <label class="checkbox-row"><input type="checkbox" id="s5c2"> <span class="checkbox-label">Measured with clear outcomes or completion tracking</span></label>
+          <label class="checkbox-row"><input type="checkbox" id="s5c3"> <span class="checkbox-label">Incentivised (pay review, recognition, advancement linked to development)</span></label>
+          <label class="checkbox-row"><input type="checkbox" id="s5c4"> <span class="checkbox-label">Discussed regularly (at least quarterly in 1:1s)</span></label>
+          <label class="checkbox-row"><input type="checkbox" id="s5c5"> <span class="checkbox-label">Team-driven (individuals can request or propose development)</span></label>
+          <label class="checkbox-row"><input type="checkbox" id="s5c6"> <span class="checkbox-label">Mostly informal or ad hoc</span></label>
+        </div>
+      </div>
+      <div class="q-block" style="margin-top:14px">
+        <div class="q-label">What does the ideal development culture look like for your practice?</div>
+        <textarea id="s5q2" placeholder="e.g. Every team member has a 12-month growth plan reviewed quarterly with clear milestones..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-6" class="assess-section">
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-num">7</div>
+        <div>
+          <div class="section-name">Goals, controls &amp; employee autonomy</div>
+          <div class="section-intent">What's being aimed for — and who has the power to move things</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What goals are currently in place, and how are these measured?</div>
+        <textarea id="s6q1" placeholder="e.g. Revenue target of $15K/month, 10 new clients per quarter — tracked monthly in a spreadsheet..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What role type are you assessing controls for?</div>
+        <div class="role-input-row" style="margin-top:6px">
+          <input type="text" id="s6-role" placeholder="e.g. Practice Manager, Senior Therapist, Receptionist...">
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What controls does this role have over the following areas?</div>
+        <div class="q-hint">Describe the scope of authority — full, partial, advisory, or none</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+          <div>
+            <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">People decisions</div>
+            <textarea id="s6c1" style="min-height:56px" placeholder="Hiring, rosters, performance..."></textarea>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Promotions &amp; recognition</div>
+            <textarea id="s6c2" style="min-height:56px" placeholder="Recommending, approving, actioning..."></textarea>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Financial decisions</div>
+            <textarea id="s6c3" style="min-height:56px" placeholder="Spend approvals, pricing, invoicing..."></textarea>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Appointments &amp; client allocation</div>
+            <textarea id="s6c4" style="min-height:56px" placeholder="Booking, assigning, managing waitlists..."></textarea>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Presentations &amp; external comms</div>
+            <textarea id="s6c5" style="min-height:56px" placeholder="Speaking, representing, publishing..."></textarea>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Profit participation</div>
+            <textarea id="s6c6" style="min-height:56px" placeholder="Bonuses, revenue share, KPI-linked pay..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-7" class="assess-section">
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-num">8</div>
+        <div>
+          <div class="section-name">Communication, objections &amp; behavioural skills</div>
+          <div class="section-intent">How the team handles the human side of business</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What training does the team have in the following areas?</div>
+        <div class="q-hint">Rate current capability and note any gaps</div>
+
+        <div style="margin-top:10px">
+          <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Identifying and managing objections</div>
+          <div class="rating-row" style="margin-bottom:8px">
+            <span class="rating-label">Untrained</span>
+            <div class="rating-dots" id="s7r1">
+              <button class="rdot" onclick="rate('s7r1',1)">1</button>
+              <button class="rdot" onclick="rate('s7r1',2)">2</button>
+              <button class="rdot" onclick="rate('s7r1',3)">3</button>
+              <button class="rdot" onclick="rate('s7r1',4)">4</button>
+              <button class="rdot" onclick="rate('s7r1',5)">5</button>
+            </div>
+            <span class="rating-label">Expert</span>
+          </div>
+          <textarea id="s7q1" placeholder="What training exists? What common objections are being mishandled?..." style="min-height:56px"></textarea>
+        </div>
+
+        <div style="margin-top:14px">
+          <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Managing behavioural or attitude differences</div>
+          <div class="rating-row" style="margin-bottom:8px">
+            <span class="rating-label">Untrained</span>
+            <div class="rating-dots" id="s7r2">
+              <button class="rdot" onclick="rate('s7r2',1)">1</button>
+              <button class="rdot" onclick="rate('s7r2',2)">2</button>
+              <button class="rdot" onclick="rate('s7r2',3)">3</button>
+              <button class="rdot" onclick="rate('s7r2',4)">4</button>
+              <button class="rdot" onclick="rate('s7r2',5)">5</button>
+            </div>
+            <span class="rating-label">Expert</span>
+          </div>
+          <textarea id="s7q2" placeholder="How are clashes or disengagement currently handled?..." style="min-height:56px"></textarea>
+        </div>
+
+        <div style="margin-top:14px">
+          <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Tonality, negotiation &amp; general communication</div>
+          <div class="rating-row" style="margin-bottom:8px">
+            <span class="rating-label">Untrained</span>
+            <div class="rating-dots" id="s7r3">
+              <button class="rdot" onclick="rate('s7r3',1)">1</button>
+              <button class="rdot" onclick="rate('s7r3',2)">2</button>
+              <button class="rdot" onclick="rate('s7r3',3)">3</button>
+              <button class="rdot" onclick="rate('s7r3',4)">4</button>
+              <button class="rdot" onclick="rate('s7r3',5)">5</button>
+            </div>
+            <span class="rating-label">Expert</span>
+          </div>
+          <textarea id="s7q3" placeholder="Do team members adapt tone for different clients, situations, or roles?..." style="min-height:56px"></textarea>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What is the single biggest communication gap in your practice right now?</div>
+        <textarea id="s7q4" placeholder="e.g. We avoid difficult conversations with clients about money — always discount rather than hold the price..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-summary" class="assess-section">
+    <div class="info-strip">
+      <i class="ti ti-check" aria-hidden="true"></i> Assessment complete. Below is a snapshot of your accountability and growth gap profile — ready to share with your Vitality consultant.
+    </div>
+    <div class="score-ring">
+      <div class="score-num" id="sum-score">—</div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Overall readiness score</div>
+        <div class="score-detail" id="sum-interpretation">Complete the assessment to see your score and gap priorities.</div>
+      </div>
+    </div>
+    <div class="summary-grid">
+      <div class="sum-card">
+        <div class="sum-head">Key strengths identified</div>
+        <div id="sum-strengths">
+          <div class="sum-item">Complete assessment to generate</div>
+        </div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-head">Priority gaps to address</div>
+        <div id="sum-gaps">
+          <div class="sum-item">Complete assessment to generate</div>
+        </div>
+      </div>
+    </div>
+    <div class="section-card">
+      <div class="card-title" style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px"><i class="ti ti-chart-bar" aria-hidden="true"></i> Gap profile by domain</div>
+      <div id="gap-bars"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:1rem">
+      <button class="btn primary" onclick="sendPrompt('Based on my completed accountability and growth gap assessment, what are the top 3 consulting priorities you recommend for my health and wellness practice?')">Get consulting recommendations ↗</button>
+      <button class="btn" onclick="sendPrompt('Generate a PDF-ready summary report of my accountability and growth gap assessment results')">Generate summary report ↗</button>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn" id="btn-prev" onclick="navSection(-1)" disabled>← Previous</button>
+    <button class="btn primary" id="btn-next" onclick="navSection(1)">Next section →</button>
+  </div>
+</div>
+
+<script>
+  var current = 0;
+  var total = 8;
+  var ratings = {};
+  var yns = {};
+  var tags = {};
+
+  var sections = [
+    'Pain points & what\'s working',
+    'Team involvement & feedback',
+    'Unexplored opportunities',
+    'Benchmarks & success modelling',
+    'Values, beliefs & motivators',
+    'Training & development',
+    'Goals, controls & autonomy',
+    'Communication & skills'
+  ];
+
+  var nav = document.getElementById('section-nav');
+  sections.forEach(function(s, i) {
+    var b = document.createElement('button');
+    b.className = 'snav-btn';
+    b.textContent = (i+1) + '. ' + s;
+    b.setAttribute('data-idx', i);
+    b.onclick = function() { goTo(i); };
+    nav.appendChild(b);
+  });
+
+  function updateUI() {
+    document.querySelectorAll('.assess-section').forEach(function(s){ s.classList.remove('active'); });
+    var id = current < total ? 'sec-' + current : 'sec-summary';
+    document.getElementById(id).classList.add('active');
+
+    var pct = Math.round((current / total) * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-pct').textContent = pct + '% complete';
+    document.getElementById('prog-text').textContent = current < total ? 'Section ' + (current+1) + ' of ' + total : 'Summary';
+
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').textContent = current === total-1 ? 'View summary →' : current >= total ? 'Back to start →' : 'Next section →';
+
+    document.querySelectorAll('.snav-btn').forEach(function(b){
+      var idx = parseInt(b.getAttribute('data-idx'));
+      b.classList.remove('active','done');
+      if(idx === current) b.classList.add('active');
+      else if(idx < current) b.classList.add('done');
+    });
+
+    if(current >= total) buildSummary();
+  }
+
+  function navSection(dir) {
+    if(dir === 1 && current >= total) { current = 0; updateUI(); return; }
+    current = Math.max(0, Math.min(total, current + dir));
+    updateUI();
+  }
+
+  function goTo(i) {
+    current = i;
+    updateUI();
+  }
+
+  function rate(groupId, val) {
+    ratings[groupId] = val;
+    document.querySelectorAll('#' + groupId + ' .rdot').forEach(function(d, i){
+      d.classList.toggle('selected', i < val);
+    });
+  }
+
+  function toggleYN(btn, key, val) {
+    yns[key] = val;
+    ['yes','no','sometimes'].forEach(function(v){
+      var el = document.getElementById(key + '-' + v);
+      if(el) el.classList.toggle('primary', v === val);
+    });
+  }
+
+  function addTag(e, inputId, tagsId) {
+    if(e.key !== 'Enter' && e.key !== ',') return;
+    e.preventDefault();
+    var inp = document.getElementById(inputId);
+    var val = inp.value.replace(',','').trim();
+    if(!val) return;
+    if(!tags[tagsId]) tags[tagsId] = [];
+    tags[tagsId].push(val);
+    inp.value = '';
+    renderTags(tagsId);
+  }
+
+  function renderTags(tagsId) {
+    var area = document.getElementById(tagsId);
+    area.innerHTML = '';
+    (tags[tagsId] || []).forEach(function(t, i){
+      var pill = document.createElement('span');
+      pill.className = 'tag-pill';
+      pill.innerHTML = t + '<button onclick="removeTag(\'' + tagsId + '\',' + i + ')" aria-label="Remove">×</button>';
+      area.appendChild(pill);
+    });
+  }
+
+  function removeTag(tagsId, idx) {
+    tags[tagsId].splice(idx, 1);
+    renderTags(tagsId);
+  }
+
+  function buildSummary() {
+    var ratingKeys = ['s1r1','s4r1','s7r1','s7r2','s7r3'];
+    var ratingLabels = ['Team feedback quality','Individual goal support','Objection handling','Behavioural management','Communication & tonality'];
+    var total_score = 0;
+    var count = 0;
+    ratingKeys.forEach(function(k){ if(ratings[k]){ total_score += ratings[k]; count++; } });
+
+    var avgScore = count > 0 ? Math.round((total_score / (count * 5)) * 100) : null;
+    var scoreEl = document.getElementById('sum-score');
+    var interpEl = document.getElementById('sum-interpretation');
+
+    if(avgScore !== null) {
+      scoreEl.textContent = avgScore + '%';
+      if(avgScore >= 70) interpEl.textContent = 'Strong foundation. Focus on scaling and systematising what already works. Key gaps identified below.';
+      else if(avgScore >= 45) interpEl.textContent = 'Moderate readiness. Clear structural and communication gaps requiring immediate attention before scaling.';
+      else interpEl.textContent = 'Early stage. Foundational work needed across accountability, team culture, and communication before growth strategies are applied.';
+    } else {
+      scoreEl.textContent = 'N/A';
+      interpEl.textContent = 'Rate sections to generate your readiness score.';
+    }
+
+    var gapBars = document.getElementById('gap-bars');
+    gapBars.innerHTML = '';
+    var domains = [
+      {label:'Pain identification & response', key:null, filled:true},
+      {label:'Team feedback loops', key:'s1r1'},
+      {label:'Opportunity exploration', key:null, filled:true},
+      {label:'Benchmarking systems', key:null, filled:false},
+      {label:'Values & goal alignment', key:'s4r1'},
+      {label:'Development culture', key:null, filled:false},
+      {label:'Structural controls', key:null, filled:true},
+      {label:'Communication capability', key:'s7r1'}
+    ];
+
+    var checked5 = document.querySelectorAll('#sec-5 input[type=checkbox]:checked').length;
+
+    domains.forEach(function(d) {
+      var val = d.key ? (ratings[d.key] || 0) : (d.filled ? 3 : Math.round(checked5 * 5/6));
+      var pct = Math.round((val / 5) * 100);
+      var color = pct >= 60 ? '#639922' : pct >= 40 ? '#EF9F27' : '#E24B4A';
+      var dotClass = pct >= 60 ? 'dot-green' : pct >= 40 ? 'dot-amber' : 'dot-red';
+      var row = document.createElement('div');
+      row.className = 'gap-row';
+      row.innerHTML = '<div class="gap-dot ' + dotClass + '"></div>' +
+        '<div class="gap-name">' + d.label + '</div>' +
+        '<div style="flex:2;height:5px;background:var(--color-background-secondary);border-radius:100px;overflow:hidden"><div style="width:' + pct + '%;height:100%;background:' + color + ';border-radius:100px"></div></div>' +
+        '<div class="gap-score">' + pct + '%</div>';
+      gapBars.appendChild(row);
+    });
+
+    var strEl = document.getElementById('sum-strengths');
+    var gapEl = document.getElementById('sum-gaps');
+    strEl.innerHTML = '';
+    gapEl.innerHTML = '';
+
+    var strengths = [];
+    var gaps = [];
+    if(ratings['s1r1'] >= 4) strengths.push('Strong team feedback culture'); else gaps.push('Team feedback loops');
+    if(ratings['s4r1'] >= 4) strengths.push('Clear individual goal support'); else gaps.push('Individual goal alignment');
+    if(ratings['s7r1'] >= 4) strengths.push('Objection handling capability'); else gaps.push('Objection & pricing conversations');
+    if(ratings['s7r3'] >= 4) strengths.push('Communication & tonality skills'); else gaps.push('Tonality & negotiation training');
+    if(checked5 >= 4) strengths.push('Structured development culture'); else gaps.push('Training & development systems');
+
+    (strengths.length ? strengths : ['Complete ratings to identify strengths']).forEach(function(s){ strEl.innerHTML += '<div class="sum-item">' + s + '</div>'; });
+    (gaps.length ? gaps : ['Complete ratings to identify gaps']).forEach(function(g){ gapEl.innerHTML += '<div class="sum-item">' + g + '</div>'; });
+  }
+
+  updateUI();
+</script>

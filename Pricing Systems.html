@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing Systems</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --cream3:#E0D8C8;
+  --gold:#C9A84C;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+  --ink:#1A1208;
+  --mid:#5C5040;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',sans-serif;
+}
+
+html,body{
+  font-family:var(--sans);
+  background:var(--cream);
+  color:var(--ink);
+  padding:0;margin:0;
+}
+body{padding:1.75rem 1.5rem 2.5rem}
+
+/* ── INTRO ── */
+.intro-block{
+  margin-bottom:1.75rem;
+}
+.intro-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:.625rem;
+  display:flex;align-items:center;gap:10px;
+}
+.intro-eyebrow::before{content:'';width:18px;height:1px;background:var(--gold)}
+.intro-heading{
+  font-family:var(--serif);
+  font-size:clamp(22px,4vw,32px);font-weight:300;
+  color:var(--ink);line-height:1.15;margin-bottom:.625rem;
+}
+.intro-heading em{font-style:italic;color:var(--forest-light)}
+.intro-desc{
+  font-size:13px;font-weight:300;color:var(--soft);
+  line-height:1.8;max-width:580px;
+}
+
+/* ── SELECTION COUNTER ── */
+.counter-strip{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;
+}
+.counter-text{
+  font-size:12px;font-weight:300;color:var(--soft);
+}
+.counter-badge{
+  font-size:11px;font-weight:500;
+  background:var(--gold-pale);border:1px solid var(--gold-light);
+  color:var(--gold);padding:4px 14px;border-radius:100px;
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.counter-badge.has-selection{
+  background:var(--forest);border-color:var(--forest);color:var(--gold);
+}
+.clear-btn{
+  font-size:11px;font-weight:400;color:var(--soft);
+  background:none;border:none;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px;
+  transition:color 0.15s;
+  display:none;
+}
+.clear-btn.visible{display:inline}
+.clear-btn:hover{color:var(--ink)}
+
+/* ── GRID ── */
+.pricing-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:1.25rem;
+}
+@media(max-width:600px){
+  .pricing-grid{grid-template-columns:1fr}
+}
+
+/* ── OPTION ITEM ── */
+.pricing-item{
+  display:flex;align-items:center;gap:12px;
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:8px;padding:1rem 1.125rem;
+  cursor:pointer;
+  transition:border-color 0.18s,background 0.18s,box-shadow 0.18s,transform 0.12s;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  position:relative;
+}
+.pricing-item:hover{
+  border-color:var(--gold);
+  background:var(--gold-pale);
+  transform:translateY(-1px);
+  box-shadow:0 4px 14px rgba(201,168,76,0.1);
+}
+.pricing-item.selected{
+  border-color:var(--forest-light);
+  background:#EAF5F0;
+  box-shadow:0 2px 10px rgba(45,106,79,0.1);
+  transform:translateY(0);
+}
+.pricing-item.selected:hover{
+  border-color:var(--forest);
+  background:#E0F0E8;
+}
+
+/* Number */
+.pi-num{
+  font-family:var(--serif);font-size:16px;font-weight:300;
+  color:var(--cream3);line-height:1;min-width:22px;
+  flex-shrink:0;transition:color 0.2s;
+}
+.pricing-item.selected .pi-num{color:rgba(45,106,79,0.4)}
+.pricing-item:hover:not(.selected) .pi-num{color:rgba(201,168,76,0.5)}
+
+/* Label */
+.pi-label{
+  flex:1;font-size:13px;font-weight:300;
+  color:var(--mid);line-height:1.4;
+  transition:color 0.15s;
+}
+.pricing-item:hover .pi-label{color:var(--ink)}
+.pricing-item.selected .pi-label{color:var(--forest);font-weight:400}
+
+/* Radio circle */
+.pi-radio{
+  width:20px;height:20px;border-radius:50%;
+  border:1.5px solid var(--border);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.18s;background:#fff;
+}
+.pricing-item:hover .pi-radio{border-color:var(--gold)}
+.pricing-item.selected .pi-radio{
+  border-color:var(--forest-light);
+  background:var(--forest-light);
+}
+.pi-radio::after{
+  content:'';width:7px;height:7px;border-radius:50%;
+  background:#fff;opacity:0;transform:scale(0.5);
+  transition:opacity 0.15s,transform 0.15s;
+}
+.pricing-item.selected .pi-radio::after{opacity:1;transform:scale(1)}
+
+/* ── SELECTED TAGS STRIP ── */
+.selected-tags{
+  display:flex;flex-wrap:wrap;gap:6px;
+  margin-bottom:1.25rem;
+  min-height:0;
+  transition:all 0.2s;
+}
+.sel-tag{
+  font-size:11px;font-weight:400;
+  background:var(--forest);color:var(--gold);
+  border:1px solid rgba(201,168,76,0.25);
+  padding:4px 12px;border-radius:100px;
+  display:flex;align-items:center;gap:6px;
+  animation:tagIn 0.2s ease;
+  cursor:pointer;
+  transition:background 0.15s;
+}
+.sel-tag:hover{background:var(--forest-mid)}
+.sel-tag-x{
+  font-size:12px;font-weight:300;
+  color:rgba(201,168,76,0.5);
+  transition:color 0.15s;line-height:1;
+}
+.sel-tag:hover .sel-tag-x{color:var(--gold)}
+@keyframes tagIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border);margin:1.5rem 0}
+
+/* ── INSIGHT PANEL ── */
+.insight-panel{
+  border-radius:8px;padding:1.125rem 1.5rem;
+  margin-bottom:1.25rem;display:none;
+  animation:fadeIn 0.35s ease;
+}
+.insight-panel.visible{display:block}
+.insight-panel.one{background:var(--gold-pale);border:1.5px solid var(--gold-light)}
+.insight-panel.multi{background:#EAF5F0;border:1.5px solid #97C8B4}
+.ip-tag{
+  font-size:9px;font-weight:500;letter-spacing:0.16em;
+  text-transform:uppercase;margin-bottom:.5rem;display:block;
+}
+.insight-panel.one .ip-tag{color:var(--gold)}
+.insight-panel.multi .ip-tag{color:var(--forest-light)}
+.ip-text{font-size:13px;font-weight:300;color:var(--ink);line-height:1.8}
+
+/* ── REFLECTION TEXTAREA ── */
+.reflection-wrap{
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:8px;padding:1.25rem;
+  margin-bottom:1.5rem;
+  transition:border-color 0.2s;
+}
+.reflection-wrap:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.08)}
+.reflection-question{
+  font-size:14px;font-weight:500;color:var(--ink);
+  margin-bottom:.75rem;line-height:1.4;
+}
+.reflection-area{
+  width:100%;font-family:var(--sans);
+  font-size:13px;font-weight:300;line-height:1.75;
+  color:var(--ink);
+  border:1.5px solid var(--cream3);border-radius:6px;
+  padding:10px 12px;background:var(--cream);
+  resize:vertical;min-height:100px;
+  transition:border-color 0.2s,background 0.2s;
+}
+.reflection-area:focus{
+  outline:none;border-color:var(--gold);background:#fff;
+}
+.reflection-area::placeholder{color:var(--cream3);font-style:italic;font-size:12px}
+
+/* ── CTA ── */
+.cta-wrap{display:none;animation:fadeIn 0.4s ease}
+.cta-wrap.visible{display:block}
+.cta-inner{
+  background:var(--forest);border-radius:8px;
+  padding:1.625rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+}
+.cta-inner::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(201,168,76,0.07);pointer-events:none;
+}
+.cta-text{flex:1;min-width:180px}
+.cta-heading{
+  font-family:var(--serif);font-size:clamp(18px,3vw,24px);
+  font-weight:300;color:#fff;line-height:1.25;margin-bottom:.4rem;
+}
+.cta-heading em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:12px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.7;max-width:360px}
+.cta-btn{
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:12px 24px;border-radius:5px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;
+  position:relative;z-index:1;
+}
+.cta-btn:hover{background:#DFB84A;transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,168,76,0.28)}
+
+/* ── FOOTER ── */
+.form-footer{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:11px;font-weight:300;color:var(--soft);
+  text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="intro-block">
+  <div class="intro-eyebrow">Financial Tool 3</div>
+  <h1 class="intro-heading">Pricing Systems —<br><em>which ones apply to you?</em></h1>
+  <p class="intro-desc">Select every pricing system that currently applies to your business. Most businesses use more than one — and most have at least one that is limiting their margins. Identifying which you use is the first step to using them better.</p>
+</div>
+
+<!-- COUNTER -->
+<div class="counter-strip">
+  <span class="counter-text">Select all that apply to your business</span>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="clear-btn" id="clear-btn" onclick="clearAll()">Clear all</button>
+    <span class="counter-badge" id="counter-badge">0 selected</span>
+  </div>
+</div>
+
+<!-- PRICING GRID -->
+<div class="pricing-grid" id="pricing-grid"></div>
+
+<!-- SELECTED TAGS -->
+<div class="selected-tags" id="selected-tags"></div>
+
+<!-- INSIGHT PANEL -->
+<div class="insight-panel" id="insight-panel">
+  <span class="ip-tag" id="ip-tag">Insight</span>
+  <div class="ip-text" id="ip-text"></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- REFLECTION -->
+<div class="reflection-wrap">
+  <div class="reflection-question">Which pricing systems could be used to improve your margins?</div>
+  <textarea class="reflection-area" id="reflection" placeholder="e.g. We currently use cost-plus but value pricing would be a better fit for our premium service line…" oninput="onReflection()"></textarea>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <div class="cta-heading">Pricing is the fastest<br><em>lever in your business.</em></div>
+      <p class="cta-sub">Most businesses are leaving margin on the table with every invoice they send. A Boardroom session will show you exactly which pricing shift will have the most impact.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="form-footer">
+  Your responses are confidential and used only to prepare your consulting session.
+</div>
+
+<script>
+var options=[
+  {n:'01',label:'Cost plus a standard margin for wages and materials'},
+  {n:'02',label:'What the competitors charge'},
+  {n:'03',label:'Whatever it takes to get the work'},
+  {n:'04',label:'Value pricing — set amount or % of costs saved / money made'},
+  {n:'05',label:'Commission rates that cannot be set (e.g. brokers)'},
+  {n:'06',label:'Recommended prices set by suppliers (RRP)'},
+  {n:'07',label:'Loss leaders to generate traffic to store'},
+  {n:'08',label:'Commodity prices set by a buyer (e.g. scrap metal)'},
+  {n:'09',label:'Standard pricelist with % discount for wholesale / retail'},
+  {n:'10',label:'Variable prices based on demand (e.g. airlines, hotels)'},
+  {n:'11',label:'Menu pricing (e.g. restaurants, vehicle repairers)'},
+  {n:'12',label:'Negotiated prices (e.g. for contracts)'},
+  {n:'13',label:'Premium prices — because your brand has a reputation'},
+  {n:'14',label:'Special pricing — increased prices for urgent work'},
+  {n:'15',label:'Category killer pricing — cheapest so no one can touch you'}
+];
+
+var selected=new Set();
+
+// Insight map — key pricing strategies and their implications
+var insights={
+  '03':'Pricing on "whatever it takes" is the fastest route to margin erosion. Every job becomes a negotiation you\'re starting from behind.',
+  '07':'Loss leaders work — but only when the follow-on purchase is guaranteed and profitable. Without that, you\'re subsidising the customer.',
+  '15':'Category killer pricing is a moat, but only if your cost structure genuinely supports it. If not, it\'s a race to the bottom that you will eventually lose.',
+  '01+04':'You use both cost-plus and value pricing. The opportunity is to migrate more work to value pricing — the same service, priced on the outcome rather than the input.',
+  '02+13':'Charging what competitors charge while claiming a premium brand is a contradiction. Competitors\' prices are not your prices.',
+  multi:'You use multiple pricing systems — which means there\'s an opportunity to audit each one and ask: is this the right system for this type of work, or is it a habit?'
+};
+
+function buildGrid(){
+  var grid=document.getElementById('pricing-grid');
+  grid.innerHTML='';
+  options.forEach(function(opt,i){
+    var item=document.createElement('div');
+    item.className='pricing-item';
+    item.id='item-'+i;
+    item.innerHTML=
+      '<span class="pi-num">'+opt.n+'</span>'+
+      '<span class="pi-label">'+opt.label+'</span>'+
+      '<div class="pi-radio"></div>';
+    item.onclick=function(){toggle(i)};
+    grid.appendChild(item);
+  });
+}
+
+function toggle(i){
+  var item=document.getElementById('item-'+i);
+  if(selected.has(i)){
+    selected.delete(i);
+    item.classList.remove('selected');
+  } else {
+    selected.add(i);
+    item.classList.add('selected');
+  }
+  update();
+}
+
+function clearAll(){
+  selected.clear();
+  document.querySelectorAll('.pricing-item').forEach(function(el){
+    el.classList.remove('selected');
+  });
+  update();
+}
+
+function update(){
+  var count=selected.size;
+
+  // Counter badge
+  var badge=document.getElementById('counter-badge');
+  badge.textContent=count+' selected';
+  badge.classList.toggle('has-selection',count>0);
+
+  // Clear button
+  document.getElementById('clear-btn').classList.toggle('visible',count>0);
+
+  // Tags strip
+  var strip=document.getElementById('selected-tags');
+  strip.innerHTML='';
+  var arr=Array.from(selected).sort(function(a,b){return a-b});
+  arr.forEach(function(i){
+    var tag=document.createElement('div');
+    tag.className='sel-tag';
+    tag.innerHTML=options[i].n+' <span class="sel-tag-x">×</span>';
+    tag.title=options[i].label;
+    tag.onclick=function(){toggle(i)};
+    strip.appendChild(tag);
+  });
+
+  // Insight
+  var panel=document.getElementById('insight-panel');
+  var ptag=document.getElementById('ip-tag');
+  var ptext=document.getElementById('ip-text');
+  panel.className='insight-panel';
+
+  if(count===0){
+    panel.classList.remove('visible');
+  } else if(count===1){
+    var only=Array.from(selected)[0];
+    var key=options[only].n;
+    panel.classList.add('visible','one');
+    ptag.textContent='What this tells us';
+    if(insights[key]){
+      ptext.textContent=insights[key];
+    } else {
+      ptext.textContent='You\'ve identified your primary pricing system. The next question is whether it is the right system for every type of work you do — or whether some jobs would be better served by a different approach.';
+    }
+  } else if(count>=2){
+    panel.classList.add('visible','multi');
+    ptag.textContent=count+' pricing systems identified';
+    // Check for specific combos
+    var has03=selected.has(2);
+    var has04=selected.has(3);
+    var has01=selected.has(0);
+    var has02=selected.has(1);
+    var has13=selected.has(12);
+    var has07=selected.has(6);
+    var has15=selected.has(14);
+
+    if(has01&&has04){
+      ptext.textContent=insights['01+04'];
+    } else if(has02&&has13){
+      ptext.textContent=insights['02+13'];
+    } else if(has03&&count===1){
+      ptext.textContent=insights['03'];
+    } else if(has07){
+      ptext.textContent='You use loss leaders — make sure the maths works. The follow-on purchase needs to be profitable enough to justify the front-end sacrifice. If it\'s not, you\'re funding the customer\'s discount with your own margin.';
+    } else if(has15&&count>1){
+      ptext.textContent='Category killer pricing sits alongside '+( count-1)+' other systems in your business. Be careful — applying a "cheapest wins" mentality to a service that should command a premium will anchor your brand in the wrong position.';
+    } else {
+      ptext.textContent='You operate across '+count+' different pricing systems. That\'s common — and it\'s an opportunity. The audit question is: for each type of work, is the current pricing system the one that maximises margin? Or is it just the one you\'ve always used?';
+    }
+  }
+
+  // CTA
+  document.getElementById('cta-wrap').classList.toggle('visible', count>=3||document.getElementById('reflection').value.trim().length>30);
+}
+
+function onReflection(){
+  var val=document.getElementById('reflection').value.trim();
+  document.getElementById('cta-wrap').classList.toggle('visible', selected.size>=3||val.length>30);
+}
+
+buildGrid();
+</script>
+</body>
+</html>

@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accountability & Growth Gap Assessment — DuBois Business Consulting</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --gold:#C9A84C;
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --ink:#1A1208;
+  --mid:#5C5040;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --gold-pale:#FBF6E9;
+  --gold-light:#F0E3BA;
+}
+
+/* ── BASE ── */
+html,body{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;
+  background:var(--cream);
+  color:var(--ink);
+  padding:0;margin:0;
+  line-height:1.6;
+}
+body{padding:0 0 100px}
+
+h1,h2,h3,h4{
+  font-family:'EB Garamond',Georgia,serif;
+  font-weight:500;
+}
+
+/* ── HERO HEADER ── */
+.hero{
+  background:var(--forest);
+  padding:2.25rem 2.5rem 2rem;
+  position:relative;overflow:hidden;
+  border-bottom:3px solid var(--gold);
+}
+.hero::after{
+  content:'';position:absolute;
+  top:-80px;right:-80px;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,0.1),transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  font-size:11px;font-weight:400;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:.75rem;opacity:0.85;
+}
+.hero h1{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(26px,4vw,40px);
+  font-weight:500;color:#fff;
+  line-height:1.1;margin-bottom:.875rem;
+}
+.hero-desc{
+  font-size:14px;color:rgba(255,255,255,0.55);
+  line-height:1.75;max-width:560px;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar-section{
+  background:var(--forest-mid);
+  padding:.875rem 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;flex-wrap:wrap;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  position:sticky;top:0;z-index:50;
+}
+.pb-left{font-size:13px;color:rgba(255,255,255,0.5);font-weight:400}
+.pb-right{font-size:13px;color:var(--gold);font-weight:400}
+.pb-track{
+  width:100%;height:3px;background:rgba(255,255,255,0.1);
+  border-radius:100px;overflow:hidden;margin-top:6px;
+}
+.pb-fill{
+  height:100%;border-radius:100px;
+  background:linear-gradient(to right,var(--forest-light),var(--gold));
+  transition:width 0.4s ease;
+}
+
+/* ── SECTION TABS ── */
+.section-tabs{
+  padding:1.375rem 2.5rem;
+  background:var(--forest);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.tabs-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+@media(max-width:680px){.tabs-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.tabs-grid{grid-template-columns:1fr}}
+
+.tab-btn{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:13px;font-weight:400;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.5);
+  padding:8px 12px;border-radius:4px;
+  cursor:pointer;text-align:left;
+  transition:all 0.18s;line-height:1.3;
+}
+.tab-btn:hover{
+  background:rgba(255,255,255,0.1);
+  color:rgba(255,255,255,0.85);
+}
+.tab-btn.active{
+  background:var(--gold);
+  border-color:var(--gold);
+  color:var(--forest);
+  font-weight:700;
+}
+.tab-btn.done{
+  background:rgba(45,106,79,0.25);
+  border-color:rgba(45,106,79,0.5);
+  color:rgba(255,255,255,0.7);
+}
+.tab-btn.done::after{content:' ✓';color:var(--gold);font-size:11px}
+
+/* ── SECTION PANEL ── */
+.section-panel{
+  display:none;
+  padding:2.5rem;
+  max-width:860px;
+  margin:0 auto;
+}
+.section-panel.active{display:block;animation:secIn 0.28s ease}
+@keyframes secIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* Section header */
+.sec-header{
+  display:flex;gap:14px;align-items:flex-start;
+  padding-bottom:1.375rem;
+  border-bottom:1px solid var(--border);
+  margin-bottom:1.75rem;
+}
+.sec-num{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:18px;font-weight:500;color:var(--forest);
+  flex-shrink:0;margin-top:2px;
+}
+.sec-title-wrap{}
+.sec-title{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:22px;font-weight:500;color:var(--ink);
+  margin-bottom:3px;
+}
+.sec-subtitle{
+  font-size:13px;color:var(--soft);font-weight:400;
+}
+
+/* Question block */
+.q-block{margin-bottom:1.75rem}
+.q-label{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;font-weight:400;color:var(--ink);
+  margin-bottom:.375rem;display:block;
+}
+.q-hint{
+  font-size:13px;font-style:italic;color:var(--soft);
+  margin-bottom:.625rem;display:block;
+}
+.q-field{
+  width:100%;font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;line-height:1.7;color:var(--ink);
+  background:var(--cream2);
+  border:1.5px solid var(--border);border-radius:5px;
+  padding:11px 13px;
+  resize:vertical;min-height:100px;
+  transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;
+  overflow:hidden;
+}
+.q-field:focus{
+  outline:none;
+  border-color:var(--gold);
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(201,168,76,0.1);
+}
+.q-field::placeholder{
+  color:var(--border);
+  font-style:italic;
+}
+.q-field.has-content{
+  border-color:rgba(45,106,79,0.3);
+  background:#fff;
+}
+
+/* Rating row */
+.rating-row{
+  display:flex;gap:8px;flex-wrap:wrap;
+  margin-top:4px;
+}
+.rating-btn{
+  width:40px;height:40px;border-radius:4px;
+  background:var(--cream2);border:1.5px solid var(--border);
+  font-size:14px;font-weight:400;color:var(--mid);
+  cursor:pointer;transition:all 0.15s;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Arial,Helvetica,sans-serif;
+}
+.rating-btn:hover{border-color:var(--gold);color:var(--forest);background:var(--gold-pale)}
+.rating-btn.selected{background:var(--gold);border-color:var(--gold);color:var(--forest);font-weight:700}
+.rating-labels{
+  display:flex;justify-content:space-between;
+  font-size:12px;color:var(--soft);
+  margin-top:5px;font-style:italic;
+}
+
+/* Select dropdown */
+.q-select{
+  width:100%;font-family:Arial,Helvetica,sans-serif;font-size:14px;
+  color:var(--ink);background:var(--cream2);
+  border:1.5px solid var(--border);border-radius:5px;
+  padding:11px 13px;cursor:pointer;
+  transition:border-color 0.2s;
+  -webkit-appearance:none;appearance:none;
+}
+.q-select:focus{outline:none;border-color:var(--gold);background:#fff}
+.select-wrap{position:relative}
+.select-wrap::after{
+  content:'▾';position:absolute;right:13px;top:50%;
+  transform:translateY(-50%);
+  color:var(--soft);pointer-events:none;font-size:14px;
+}
+
+/* Checkbox group */
+.check-group{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.check-item{
+  display:flex;align-items:center;gap:10px;
+  background:var(--cream2);border:1.5px solid var(--border);
+  border-radius:5px;padding:9px 12px;cursor:pointer;
+  transition:border-color 0.15s,background 0.15s;font-size:14px;color:var(--mid);
+}
+.check-item:hover{border-color:var(--gold);background:var(--gold-pale)}
+.check-item.selected{border-color:var(--forest-light);background:rgba(45,106,79,0.06);color:var(--forest)}
+.check-item input[type=checkbox]{
+  width:16px;height:16px;accent-color:var(--forest-light);flex-shrink:0;cursor:pointer;
+}
+
+/* Divider */
+.q-divider{
+  height:1px;background:var(--border);
+  margin:1.75rem 0;
+}
+
+/* Section summary (right side notes) */
+.sec-note{
+  background:var(--forest);border-radius:6px;
+  padding:1.125rem 1.375rem;margin-bottom:1.75rem;
+  font-size:13px;color:rgba(255,255,255,0.55);line-height:1.75;
+  border-left:3px solid var(--gold);
+}
+.sec-note strong{color:var(--gold);font-weight:400}
+
+/* ── NAV FOOTER ── */
+.nav-footer{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(245,240,232,0.97);
+  backdrop-filter:blur(10px);
+  border-top:1px solid var(--border);
+  padding:.875rem 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;z-index:60;
+}
+.nav-btn{
+  font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:400;
+  padding:10px 22px;border-radius:4px;cursor:pointer;
+  transition:all 0.18s;border:1.5px solid var(--border);
+  background:#fff;color:var(--mid);
+}
+.nav-btn:hover{border-color:var(--gold);color:var(--forest)}
+.nav-btn.primary{
+  background:var(--forest);border-color:var(--forest);color:#fff;
+}
+.nav-btn.primary:hover{background:var(--forest-mid)}
+.nav-btn:disabled{opacity:0.35;cursor:default}
+.nav-progress{font-size:13px;color:var(--soft);text-align:center}
+
+/* ── COMPLETION SCREEN ── */
+.complete-screen{
+  display:none;padding:3rem 2.5rem;text-align:center;
+  max-width:680px;margin:0 auto;
+}
+.complete-screen.active{display:block;animation:secIn 0.4s ease}
+.cs-icon{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:60px;font-weight:400;color:var(--gold);
+  line-height:1;margin-bottom:1rem;
+}
+.cs-title{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(26px,4vw,38px);font-weight:500;
+  color:var(--ink);margin-bottom:.75rem;line-height:1.15;
+}
+.cs-title em{font-style:italic;color:var(--forest-light)}
+.cs-desc{
+  font-size:14px;color:var(--soft);line-height:1.8;
+  margin-bottom:2rem;max-width:460px;margin-left:auto;margin-right:auto;
+}
+.cs-summary{
+  background:var(--cream2);border-radius:8px;padding:1.5rem;
+  text-align:left;margin-bottom:2rem;
+}
+.css-title{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:18px;font-weight:500;color:var(--ink);
+  margin-bottom:1rem;
+}
+.css-row{
+  display:flex;align-items:center;gap:10px;
+  padding:.625rem 0;border-bottom:1px solid var(--border);
+  font-size:14px;
+}
+.css-row:last-child{border-bottom:none}
+.css-check{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.css-done{background:var(--forest-light)}
+.css-empty{background:var(--border)}
+.css-label{flex:1;color:var(--mid)}
+.css-label.done{color:var(--ink);font-weight:400}
+.cs-cta{
+  background:var(--forest);color:#fff;
+  font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:400;
+  padding:13px 30px;border-radius:4px;border:none;cursor:pointer;
+  text-decoration:none;display:inline-block;
+  transition:all 0.2s;letter-spacing:0.08em;text-transform:uppercase;
+}
+.cs-cta:hover{background:var(--forest-mid);transform:translateY(-1px);box-shadow:0 5px 16px rgba(13,43,31,0.2)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .section-panel{padding:1.5rem}
+  .hero{padding:1.75rem 1.5rem}
+  .progress-bar-section{padding:.75rem 1.5rem}
+  .section-tabs{padding:1rem 1.5rem}
+  .nav-footer{padding:.75rem 1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Initial Consultation · DuBois Business Consulting</div>
+  <h1>Accountability &amp; Growth Gap Assessment</h1>
+  <p class="hero-desc">A structured self-assessment for health &amp; wellness business owners. Work through each section honestly — your answers shape the entire consulting engagement.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar-section">
+  <span class="pb-left" id="pb-left">Section 1 of 8</span>
+  <span class="pb-right" id="pb-right">0% complete</span>
+  <div class="pb-track" style="width:100%">
+    <div class="pb-fill" id="pb-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- SECTION TABS -->
+<div class="section-tabs">
+  <div class="tabs-grid" id="tabs-grid"></div>
+</div>
+
+<!-- ════════════════════════════════
+     SECTION 1 — PAIN POINTS
+════════════════════════════════ -->
+<div class="section-panel active" id="sec-1">
+  <div class="sec-note"><strong>Establish baseline</strong> — honest answers here surface the patterns your consultant needs before session one.</div>
+  <div class="sec-header">
+    <div class="sec-num">1</div>
+    <div class="sec-title-wrap">
+      <h3 class="sec-title">Pain points &amp; what's working</h3>
+      <span class="sec-subtitle">Establish baseline — where the business is right now</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What are your business' current pain points?</span>
+    <span class="q-hint">Be specific — revenue, client retention, time, team, pricing, delivery</span>
+    <textarea class="q-field" id="q1-1" placeholder="e.g. I'm fully booked but still not profitable. Clients drop off after a few sessions..." oninput="autoResize(this);markProgress(1)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What has been working, and how is this measured?</span>
+    <span class="q-hint">Include the metric or signal that tells you it's working</span>
+    <textarea class="q-field" id="q1-2" placeholder="e.g. Referrals from existing clients are strong — 60% of new enquiries come via word of mouth..." oninput="autoResize(this);markProgress(1)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What has not been working, and how was that measured?</span>
+    <textarea class="q-field" id="q1-3" placeholder="e.g. Social media — posting weekly for 6 months, zero client conversions from it..." oninput="autoResize(this);markProgress(1)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What happens with this information once identified?</span>
+    <span class="q-hint">Do you act on it, document it, discuss it, or does it stay in your head?</span>
+    <textarea class="q-field" id="q1-4" placeholder="e.g. I usually identify the issue but there's no formal process for acting on it..." oninput="autoResize(this);markProgress(1)"></textarea>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SECTION 2 — TEAM INVOLVEMENT
+════════════════════════════════ -->
+<div class="section-panel" id="sec-2">
+  <div class="sec-note"><strong>Team insight</strong> — how your team engages with business performance and where feedback loops break down.</div>
+  <div class="sec-header">
+    <div class="sec-num">2</div>
+    <div class="sec-title-wrap">
+      <h3 class="sec-title">Team involvement &amp; feedback</h3>
+      <span class="sec-subtitle">How your team connects to business performance</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">How involved is your team in identifying business problems or opportunities?</span>
+    <span class="q-hint">Do they raise issues proactively, or wait to be asked?</span>
+    <textarea class="q-field" id="q2-1" placeholder="e.g. My team tends to wait for direction rather than raising issues themselves..." oninput="autoResize(this);markProgress(2)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">How do you currently gather feedback from your team?</span>
+    <span class="q-hint">Team meetings, 1:1s, surveys, informal conversations, nothing formal?</span>
+    <textarea class="q-field" id="q2-2" placeholder="e.g. Mostly informal — I speak with each person individually but there's no structured process..." oninput="autoResize(this);markProgress(2)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">Rate how well your team understands the business goals</span>
+    <div class="rating-row" id="rating-2-3">
+      <button class="rating-btn" onclick="selectRating('rating-2-3',this,1)">1</button>
+      <button class="rating-btn" onclick="selectRating('rating-2-3',this,2)">2</button>
+      <button class="rating-btn" onclick="selectRating('rating-2-3',this,3)">3</button>
+      <button class="rating-btn" onclick="selectRating('rating-2-3',this,4)">4</button>
+      <button class="rating-btn" onclick="selectRating('rating-2-3',this,5)">5</button>
+      <button class="rating-btn" onclick="selectRating('rating-2-3',this,6)">6</button>
+      <button class="rating-btn" onclick="selectRating('rating-2-3',this,7)">7</button>
+      <button class="rating-btn" onclick="selectRating('rating-2-3',this,8)">8</button>
+      <button class="rating-btn" onclick="selectRating('rating-2-3',this,9)">9</button>
+      <button class="rating-btn" onclick="selectRating('rating-2-3',this,10)">10</button>
+    </div>
+    <div class="rating-labels"><span>No awareness</span><span>Fully aligned</span></div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What is the biggest gap between what your team does and what the business needs?</span>
+    <textarea class="q-field" id="q2-4" placeholder="e.g. They're excellent clinically but don't think commercially — pricing and conversion aren't on their radar..." oninput="autoResize(this);markProgress(2)"></textarea>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SECTION 3 — UNEXPLORED OPPORTUNITIES
+════════════════════════════════ -->
+<div class="section-panel" id="sec-3">
+  <div class="sec-note"><strong>Hidden potential</strong> — the revenue and growth that exists in your business right now, waiting to be activated.</div>
+  <div class="sec-header">
+    <div class="sec-num">3</div>
+    <div class="sec-title-wrap">
+      <h3 class="sec-title">Unexplored opportunities</h3>
+      <span class="sec-subtitle">What's available but not yet activated</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What revenue opportunities have you identified but not yet pursued?</span>
+    <span class="q-hint">Products, services, packages, partnerships, pricing structures</span>
+    <textarea class="q-field" id="q3-1" placeholder="e.g. I've thought about corporate wellness programs, online courses, and group sessions — but haven't started any of them..." oninput="autoResize(this);markProgress(3)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What is stopping you from pursuing these opportunities?</span>
+    <span class="q-hint">Time, knowledge, confidence, resources, systems?</span>
+    <textarea class="q-field" id="q3-2" placeholder="e.g. Mostly time and not knowing how to structure and price them..." oninput="autoResize(this);markProgress(3)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">Which of these would you prioritise if you had the support to act on them?</span>
+    <textarea class="q-field" id="q3-3" placeholder="e.g. Corporate wellness feels most scalable and leverages what I already know..." oninput="autoResize(this);markProgress(3)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">Is there an area of the business that consistently underperforms despite effort?</span>
+    <textarea class="q-field" id="q3-4" placeholder="e.g. Our reception converts enquiries at about 30% — I think it could be 60-70% with the right scripts and training..." oninput="autoResize(this);markProgress(3)"></textarea>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SECTION 4 — BENCHMARKS
+════════════════════════════════ -->
+<div class="section-panel" id="sec-4">
+  <div class="sec-note"><strong>Success modelling</strong> — what you measure, how you measure it, and who you look to as a reference for what's possible.</div>
+  <div class="sec-header">
+    <div class="sec-num">4</div>
+    <div class="sec-title-wrap">
+      <h3 class="sec-title">Benchmarks &amp; success modelling</h3>
+      <span class="sec-subtitle">How you define and measure success</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What key metrics do you currently track in your business?</span>
+    <span class="q-hint">Revenue, bookings, conversion rate, retention, profit — what do you actually look at regularly?</span>
+    <textarea class="q-field" id="q4-1" placeholder="e.g. I track monthly revenue and client numbers but not much else..." oninput="autoResize(this);markProgress(4)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">How often do you review these metrics?</span>
+    <div class="select-wrap" style="margin-top:4px">
+      <select class="q-select" id="q4-2" onchange="markProgress(4)">
+        <option value="">Select frequency…</option>
+        <option>Daily</option>
+        <option>Weekly</option>
+        <option>Monthly</option>
+        <option>Quarterly</option>
+        <option>Rarely / never</option>
+        <option>Ad hoc when problems arise</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">Who do you model or benchmark yourself against?</span>
+    <span class="q-hint">Other practitioners, businesses, industry data, your own previous performance?</span>
+    <textarea class="q-field" id="q4-3" placeholder="e.g. I follow a few successful practitioners online but don't have real benchmark data for my niche..." oninput="autoResize(this);markProgress(4)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What does success look like for you in 12 months?</span>
+    <span class="q-hint">Be specific — income, hours, team size, client load, business value</span>
+    <textarea class="q-field" id="q4-4" placeholder="e.g. $200K net profit, working 4 days per week, a team that operates without me in the day-to-day..." oninput="autoResize(this);markProgress(4)"></textarea>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SECTION 5 — VALUES & MOTIVATORS
+════════════════════════════════ -->
+<div class="section-panel" id="sec-5">
+  <div class="sec-note"><strong>Alignment check</strong> — understanding what drives you ensures the consulting engagement is built around outcomes that actually matter to you.</div>
+  <div class="sec-header">
+    <div class="sec-num">5</div>
+    <div class="sec-title-wrap">
+      <h3 class="sec-title">Values, beliefs &amp; motivators</h3>
+      <span class="sec-subtitle">What drives your decisions and your business identity</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">Why did you start this business?</span>
+    <span class="q-hint">The original motivation — not the polished version, the real one</span>
+    <textarea class="q-field" id="q5-1" placeholder="e.g. I wanted freedom from being employed, and to build something that helped people on my own terms..." oninput="autoResize(this);markProgress(5)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What beliefs do you hold about money, pricing, and charging for your services?</span>
+    <span class="q-hint">Are there beliefs that might be limiting your income?</span>
+    <textarea class="q-field" id="q5-2" placeholder="e.g. I sometimes feel uncomfortable charging high rates because I'm in a caring profession..." oninput="autoResize(this);markProgress(5)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What do you value most in how the business operates?</span>
+    <div class="check-group" id="cg-5-3">
+      <label class="check-item"><input type="checkbox" onchange="toggleCheck(this);markProgress(5)"> Flexibility and autonomy over my schedule</label>
+      <label class="check-item"><input type="checkbox" onchange="toggleCheck(this);markProgress(5)"> Delivering high-quality outcomes for clients</label>
+      <label class="check-item"><input type="checkbox" onchange="toggleCheck(this);markProgress(5)"> Building a team I'm proud of</label>
+      <label class="check-item"><input type="checkbox" onchange="toggleCheck(this);markProgress(5)"> Financial security and predictable income</label>
+      <label class="check-item"><input type="checkbox" onchange="toggleCheck(this);markProgress(5)"> Scaling to create more impact</label>
+      <label class="check-item"><input type="checkbox" onchange="toggleCheck(this);markProgress(5)"> Building a business with real asset value</label>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What would you do differently if you were starting over today?</span>
+    <textarea class="q-field" id="q5-4" placeholder="e.g. I'd set proper pricing and systems from day one rather than building on top of bad habits..." oninput="autoResize(this);markProgress(5)"></textarea>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SECTION 6 — TRAINING & DEVELOPMENT
+════════════════════════════════ -->
+<div class="section-panel" id="sec-6">
+  <div class="sec-note"><strong>Capability gaps</strong> — where the business needs knowledge, skill, or confidence to operate at the next level.</div>
+  <div class="sec-header">
+    <div class="sec-num">6</div>
+    <div class="sec-title-wrap">
+      <h3 class="sec-title">Training &amp; development</h3>
+      <span class="sec-subtitle">Skills, knowledge gaps, and capability requirements</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What skills do you personally need to develop to grow the business?</span>
+    <span class="q-hint">Sales, finance, leadership, systems, marketing, delegation?</span>
+    <textarea class="q-field" id="q6-1" placeholder="e.g. Sales conversations and pricing confidence — I avoid the money discussion with clients..." oninput="autoResize(this);markProgress(6)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What training or development has the business invested in recently?</span>
+    <span class="q-hint">Courses, coaching, mentoring, conferences — and what was the result?</span>
+    <textarea class="q-field" id="q6-2" placeholder="e.g. I did a marketing course last year. Good content but I haven't implemented most of it..." oninput="autoResize(this);markProgress(6)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">Rate your team's overall capability to execute on business growth</span>
+    <div class="rating-row" id="rating-6-3">
+      <button class="rating-btn" onclick="selectRating('rating-6-3',this,1)">1</button>
+      <button class="rating-btn" onclick="selectRating('rating-6-3',this,2)">2</button>
+      <button class="rating-btn" onclick="selectRating('rating-6-3',this,3)">3</button>
+      <button class="rating-btn" onclick="selectRating('rating-6-3',this,4)">4</button>
+      <button class="rating-btn" onclick="selectRating('rating-6-3',this,5)">5</button>
+      <button class="rating-btn" onclick="selectRating('rating-6-3',this,6)">6</button>
+      <button class="rating-btn" onclick="selectRating('rating-6-3',this,7)">7</button>
+      <button class="rating-btn" onclick="selectRating('rating-6-3',this,8)">8</button>
+      <button class="rating-btn" onclick="selectRating('rating-6-3',this,9)">9</button>
+      <button class="rating-btn" onclick="selectRating('rating-6-3',this,10)">10</button>
+    </div>
+    <div class="rating-labels"><span>Not capable</span><span>Highly capable</span></div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What is the single biggest knowledge gap holding the business back?</span>
+    <textarea class="q-field" id="q6-4" placeholder="e.g. I don't understand our financial position well enough to make confident decisions..." oninput="autoResize(this);markProgress(6)"></textarea>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SECTION 7 — GOALS & AUTONOMY
+════════════════════════════════ -->
+<div class="section-panel" id="sec-7">
+  <div class="sec-note"><strong>Structure and control</strong> — how the business is governed, how decisions are made, and what freedom looks like for you.</div>
+  <div class="sec-header">
+    <div class="sec-num">7</div>
+    <div class="sec-title-wrap">
+      <h3 class="sec-title">Goals, controls &amp; autonomy</h3>
+      <span class="sec-subtitle">How the business is directed and governed</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">Do you have written business goals for the next 12 months?</span>
+    <div class="select-wrap" style="margin-top:4px">
+      <select class="q-select" id="q7-1" onchange="markProgress(7)">
+        <option value="">Select…</option>
+        <option>Yes — written, reviewed regularly, and the team knows them</option>
+        <option>Yes — written but rarely reviewed</option>
+        <option>Informal goals in my head</option>
+        <option>No clear goals set</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What decisions do you currently make that could or should be delegated?</span>
+    <span class="q-hint">Day-to-day operational decisions that don't require you</span>
+    <textarea class="q-field" id="q7-2" placeholder="e.g. Scheduling, supplier orders, client intake paperwork, social media — I still touch all of these..." oninput="autoResize(this);markProgress(7)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">How do you currently hold yourself accountable to business targets?</span>
+    <textarea class="q-field" id="q7-3" placeholder="e.g. Honestly — I don't have a formal accountability structure. It's mostly reactive..." oninput="autoResize(this);markProgress(7)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What would the business need to look like for you to take a 4-week break without it suffering?</span>
+    <textarea class="q-field" id="q7-4" placeholder="e.g. I'd need a practice manager, documented systems, and at least one other practitioner capable of managing client relationships..." oninput="autoResize(this);markProgress(7)"></textarea>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SECTION 8 — COMMUNICATION & SKILLS
+════════════════════════════════ -->
+<div class="section-panel" id="sec-8">
+  <div class="sec-note"><strong>Communication and skills</strong> — how you connect with clients, present value, and convert conversations into revenue.</div>
+  <div class="sec-header">
+    <div class="sec-num">8</div>
+    <div class="sec-title-wrap">
+      <h3 class="sec-title">Communication &amp; skills</h3>
+      <span class="sec-subtitle">How you present, persuade, and convert</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">How would you describe your ability to sell your services?</span>
+    <span class="q-hint">Not marketing — the face-to-face or phone conversion conversation</span>
+    <textarea class="q-field" id="q8-1" placeholder="e.g. I'm good at explaining what I do but I struggle to ask for the commitment and close the conversation..." oninput="autoResize(this);markProgress(8)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">How do you currently communicate your value to prospective clients?</span>
+    <textarea class="q-field" id="q8-2" placeholder="e.g. Mostly word of mouth and an outdated website. No consistent pitch or follow-up process..." oninput="autoResize(this);markProgress(8)"></textarea>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">Rate your confidence in pricing conversations</span>
+    <div class="rating-row" id="rating-8-3">
+      <button class="rating-btn" onclick="selectRating('rating-8-3',this,1)">1</button>
+      <button class="rating-btn" onclick="selectRating('rating-8-3',this,2)">2</button>
+      <button class="rating-btn" onclick="selectRating('rating-8-3',this,3)">3</button>
+      <button class="rating-btn" onclick="selectRating('rating-8-3',this,4)">4</button>
+      <button class="rating-btn" onclick="selectRating('rating-8-3',this,5)">5</button>
+      <button class="rating-btn" onclick="selectRating('rating-8-3',this,6)">6</button>
+      <button class="rating-btn" onclick="selectRating('rating-8-3',this,7)">7</button>
+      <button class="rating-btn" onclick="selectRating('rating-8-3',this,8)">8</button>
+      <button class="rating-btn" onclick="selectRating('rating-8-3',this,9)">9</button>
+      <button class="rating-btn" onclick="selectRating('rating-8-3',this,10)">10</button>
+    </div>
+    <div class="rating-labels"><span>Avoid it</span><span>Completely confident</span></div>
+  </div>
+
+  <div class="q-block">
+    <span class="q-label">What one communication or skill improvement would make the biggest difference to your revenue?</span>
+    <textarea class="q-field" id="q8-4" placeholder="e.g. Learning how to present subscription packages confidently at point of sale..." oninput="autoResize(this);markProgress(8)"></textarea>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     COMPLETION SCREEN
+════════════════════════════════ -->
+<div class="complete-screen" id="complete-screen">
+  <div class="cs-icon">✦</div>
+  <h2 class="cs-title">Assessment <em>complete.</em></h2>
+  <p class="cs-desc">Your answers have been saved. Your consultant will review everything before your first Boardroom session — no need to explain it again from scratch.</p>
+
+  <div class="cs-summary" id="cs-summary"></div>
+
+  <a class="cs-cta" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my Boardroom session →</a>
+</div>
+
+<!-- NAV FOOTER -->
+<div class="nav-footer" id="nav-footer">
+  <button class="nav-btn" id="btn-prev" onclick="prevSection()" disabled>← Previous</button>
+  <div class="nav-progress" id="nav-mid">Section 1 of 8</div>
+  <button class="nav-btn primary" id="btn-next" onclick="nextSection()">Next section →</button>
+</div>
+
+<script>
+var TOTAL=8;
+var current=1;
+var sectionDone=new Array(TOTAL+1).fill(false);
+var sectionData={};
+
+var sectionMeta=[
+  null,
+  {title:'Pain points & what\'s working'},
+  {title:'Team involvement & feedback'},
+  {title:'Unexplored opportunities'},
+  {title:'Benchmarks & success modelling'},
+  {title:'Values, beliefs & motivators'},
+  {title:'Training & development'},
+  {title:'Goals, controls & autonomy'},
+  {title:'Communication & skills'}
+];
+
+/* ── BUILD TABS ── */
+function buildTabs(){
+  var grid=document.getElementById('tabs-grid');
+  grid.innerHTML='';
+  for(var i=1;i<=TOTAL;i++){
+    var btn=document.createElement('button');
+    btn.className='tab-btn'+(i===current?' active':'')+(sectionDone[i]?' done':'');
+    btn.textContent=i+'. '+sectionMeta[i].title;
+    btn.setAttribute('data-sec',i);
+    btn.onclick=(function(n){return function(){goToSection(n)}})(i);
+    grid.appendChild(btn);
+  }
+}
+
+/* ── NAVIGATE ── */
+function goToSection(n){
+  document.getElementById('sec-'+current).classList.remove('active');
+  document.getElementById('complete-screen').classList.remove('active');
+  document.getElementById('nav-footer').style.display='flex';
+  current=n;
+  document.getElementById('sec-'+current).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  updateUI();
+}
+
+function nextSection(){
+  sectionDone[current]=true;
+  if(current<TOTAL){
+    goToSection(current+1);
+  } else {
+    // Show completion
+    document.getElementById('sec-'+current).classList.remove('active');
+    document.getElementById('complete-screen').classList.add('active');
+    document.getElementById('nav-footer').style.display='none';
+    buildSummary();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  updateProgress();
+}
+
+function prevSection(){
+  if(current>1)goToSection(current-1);
+}
+
+function updateUI(){
+  var pbLeft=document.getElementById('pb-left');
+  var pbRight=document.getElementById('pb-right');
+  var navMid=document.getElementById('nav-mid');
+  var btnPrev=document.getElementById('btn-prev');
+  var btnNext=document.getElementById('btn-next');
+
+  pbLeft.textContent='Section '+current+' of '+TOTAL;
+  navMid.textContent='Section '+current+' of '+TOTAL;
+  btnPrev.disabled=current===1;
+  btnNext.textContent=current===TOTAL?'Complete assessment ✓':'Next section →';
+
+  updateProgress();
+  buildTabs();
+}
+
+function updateProgress(){
+  var done=sectionDone.filter(Boolean).length;
+  var pct=Math.round(done/TOTAL*100);
+  document.getElementById('pb-fill').style.width=pct+'%';
+  document.getElementById('pb-right').textContent=pct+'% complete';
+}
+
+function markProgress(sec){
+  sectionDone[sec]=true;
+  updateProgress();
+  buildTabs();
+}
+
+/* ── FIELD HELPERS ── */
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.max(100,el.scrollHeight)+'px';
+  el.classList.toggle('has-content',el.value.trim().length>0);
+}
+
+function selectRating(groupId,btn,val){
+  var group=document.getElementById(groupId);
+  group.querySelectorAll('.rating-btn').forEach(function(b){b.classList.remove('selected')});
+  btn.classList.add('selected');
+  markProgress(parseInt(groupId.split('-')[1]));
+}
+
+function toggleCheck(cb){
+  cb.closest('.check-item').classList.toggle('selected',cb.checked);
+}
+
+/* ── COMPLETION SUMMARY ── */
+function buildSummary(){
+  var sum=document.getElementById('cs-summary');
+  sum.innerHTML='<h3 class="css-title" style="font-family:\'EB Garamond\',Georgia,serif;font-size:18px;font-weight:500;color:var(--ink);margin-bottom:1rem">Sections completed</h3>';
+  for(var i=1;i<=TOTAL;i++){
+    var row=document.createElement('div');
+    row.className='css-row';
+    var isDone=sectionDone[i];
+    row.innerHTML=
+      '<div class="css-check '+(isDone?'css-done':'css-empty')+'">'+(isDone?'✓':'')+'</div>'+
+      '<span class="css-label'+(isDone?' done':'')+'">'+i+'. '+sectionMeta[i].title+'</span>';
+    sum.appendChild(row);
+  }
+}
+
+/* ── INIT ── */
+buildTabs();
+updateUI();
+</script>
+</body>
+</html>

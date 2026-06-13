@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Price Optimisation — DuBois Business Consulting</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --gold:#C9A84C;
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --ink:#1A1208;
+  --border:#D4C9B0;
+  --soft:#8C7E6A;
+  --cream3:#E0D8C8;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+}
+
+html,body{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;
+  background:var(--cream);
+  color:var(--ink);
+  line-height:1.6;
+  padding:0;margin:0;
+}
+body{padding:2rem 2rem 3rem}
+
+/* ── INTRO HERO ── */
+.intro-hero{
+  background:var(--forest);
+  border-radius:8px;
+  padding:2rem 2.25rem;
+  margin-bottom:2rem;
+  position:relative;overflow:hidden;
+}
+.intro-hero::after{
+  content:'';position:absolute;
+  bottom:-60px;right:-60px;
+  width:200px;height:200px;border-radius:50%;
+  background:rgba(201,168,76,0.08);pointer-events:none;
+}
+.ih-eyebrow{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.2em;
+  text-transform:uppercase;color:rgba(201,168,76,0.7);
+  margin-bottom:.625rem;
+}
+.ih-title{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(26px,4.5vw,40px);
+  font-weight:500;color:#fff;
+  line-height:1.1;margin-bottom:.875rem;
+}
+.ih-title em{font-style:italic;color:var(--gold)}
+.ih-lead{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;color:rgba(255,255,255,0.5);
+  line-height:1.75;max-width:620px;
+}
+
+/* ── SECTION INTRO ── */
+.section-intro{
+  display:flex;align-items:flex-start;gap:16px;
+  background:var(--gold-pale);border:1.5px solid var(--gold-light);
+  border-left:4px solid var(--gold);
+  border-radius:0 6px 6px 0;
+  padding:1.125rem 1.375rem;
+  margin-bottom:1.75rem;
+}
+.si-icon{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:28px;font-weight:500;color:var(--gold);
+  line-height:1;flex-shrink:0;margin-top:2px;
+}
+.si-body{}
+.si-title{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:20px;font-weight:500;color:var(--ink);
+  margin-bottom:4px;
+}
+.si-text{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;color:var(--soft);line-height:1.75;
+}
+.si-text strong{font-weight:700;color:var(--ink)}
+
+/* ── PROGRESS ── */
+.progress-row{
+  display:flex;align-items:center;gap:.875rem;
+  margin-bottom:1.25rem;flex-wrap:wrap;
+}
+.pr-label{font-size:12px;color:var(--soft);white-space:nowrap}
+.pr-track{flex:1;min-width:80px;height:4px;background:var(--cream3);border-radius:100px;overflow:hidden}
+.pr-fill{height:100%;border-radius:100px;background:linear-gradient(to right,var(--forest-light),var(--gold));transition:width 0.4s ease}
+.pr-badge{
+  font-size:12px;font-weight:700;
+  background:var(--gold-pale);border:1px solid var(--gold-light);
+  color:var(--gold);padding:3px 12px;border-radius:100px;
+  white-space:nowrap;transition:all 0.2s;
+}
+.pr-badge.active{background:var(--forest);border-color:var(--forest);color:var(--gold)}
+
+/* ── TABLE ── */
+.strategy-table{
+  width:100%;border-collapse:collapse;
+  border:1px solid var(--border);border-radius:6px;overflow:hidden;
+  margin-bottom:1.5rem;
+}
+.st-head{background:var(--forest)}
+.th-n{
+  width:48px;padding:.875rem .875rem;
+  font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);
+  border-right:1px solid rgba(255,255,255,0.07);
+  vertical-align:middle;text-align:center;
+}
+.th-strat{
+  padding:.875rem 1.25rem;
+  font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(201,168,76,0.75);
+  border-right:1px solid rgba(255,255,255,0.07);
+  vertical-align:middle;
+}
+.th-notes{
+  width:36%;padding:.875rem 1.125rem;
+  font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);
+  vertical-align:middle;
+}
+@media(max-width:640px){.th-notes{width:43%}}
+
+/* Row */
+.st-row{
+  border-bottom:1px solid var(--border);
+  transition:background 0.13s;
+}
+.st-row:last-child{border-bottom:none}
+.st-row:hover{background:rgba(201,168,76,0.035)}
+.st-row.filled{background:rgba(45,106,79,0.03)}
+.st-row.filled:hover{background:rgba(45,106,79,0.06)}
+
+.td-n{
+  width:48px;
+  padding:.875rem .75rem;
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:19px;font-weight:400;
+  color:var(--border);text-align:center;
+  vertical-align:top;padding-top:1.125rem;
+  border-right:1px solid var(--border);
+  transition:color 0.2s;
+}
+.st-row.filled .td-n{color:rgba(45,106,79,0.35)}
+
+.td-strat{
+  padding:1rem 1.25rem;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;color:var(--soft);
+  line-height:1.6;vertical-align:middle;
+  border-right:1px solid var(--border);
+}
+
+.td-notes{
+  width:36%;padding:.75rem 1rem;
+  vertical-align:top;
+}
+@media(max-width:640px){.td-notes{width:43%}}
+
+.note-ta{
+  width:100%;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:13px;line-height:1.6;color:var(--ink);
+  padding:8px 10px;
+  border:1.5px solid var(--cream3);border-radius:4px;
+  background:var(--cream2);
+  resize:none;min-height:64px;overflow:hidden;
+  transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;
+}
+.note-ta:focus{
+  outline:none;border-color:var(--gold);background:#fff;
+  box-shadow:0 0 0 3px rgba(201,168,76,0.1);min-height:80px;
+}
+.note-ta::placeholder{font-style:italic;font-size:12px;color:var(--border)}
+.note-ta.has-content{border-color:rgba(45,106,79,0.25);background:#fff}
+
+.applied-badge{
+  display:none;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  background:rgba(45,106,79,0.1);color:var(--forest-light);
+  border:1px solid rgba(45,106,79,0.2);
+  padding:2px 8px;border-radius:100px;margin-top:5px;
+  opacity:0;transform:scale(0.85);transition:opacity 0.2s,transform 0.2s;
+}
+.applied-badge.visible{display:inline-block;opacity:1;transform:scale(1)}
+
+/* ── IMPACT STRIP ── */
+.impact-strip{
+  background:var(--forest);border-radius:6px;
+  padding:1.125rem 1.5rem;margin-bottom:1.5rem;
+  display:none;animation:fadeIn 0.35s ease;
+}
+.impact-strip.visible{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+@media(max-width:520px){.impact-strip.visible{grid-template-columns:1fr 1fr}}
+.imp-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(201,168,76,0.55);margin-bottom:3px}
+.imp-val{font-family:'EB Garamond',Georgia,serif;font-size:clamp(18px,3vw,26px);font-weight:400;color:var(--gold);line-height:1}
+.imp-sub{font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px}
+
+/* ── SUMMARY ── */
+.summary-section{display:none;margin-bottom:1.5rem;animation:fadeIn 0.35s ease}
+.summary-section.visible{display:block}
+.sum-heading{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(18px,3vw,26px);font-weight:400;color:var(--ink);margin-bottom:.875rem;
+}
+.sum-heading em{font-style:italic;color:var(--forest-light)}
+.sum-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.sum-card{
+  background:#fff;border:1px solid var(--border);border-radius:5px;
+  padding:.875rem 1rem;border-left:3px solid var(--gold);
+}
+.sum-n{font-family:'EB Garamond',Georgia,serif;font-size:13px;font-weight:400;color:var(--gold);margin-bottom:3px}
+.sum-strat{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:.375rem;line-height:1.3}
+.sum-note{font-size:12px;color:var(--soft);line-height:1.5}
+
+/* ── INSIGHT ── */
+.insight-strip{border-radius:5px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:none;animation:fadeIn 0.35s ease}
+.insight-strip.visible{display:flex;gap:11px;align-items:flex-start}
+.insight-strip.partial{background:var(--gold-pale);border:1.5px solid var(--gold-light)}
+.insight-strip.complete{background:rgba(45,106,79,0.07);border:1.5px solid rgba(45,106,79,0.25)}
+.i-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.insight-strip.partial .i-dot{background:var(--gold)}
+.insight-strip.complete .i-dot{background:var(--forest-light)}
+.i-tag{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;display:block}
+.insight-strip.partial .i-tag{color:var(--gold)}
+.insight-strip.complete .i-tag{color:var(--forest-light)}
+.i-text{font-size:14px;color:var(--ink);line-height:1.75}
+
+/* ── CTA ── */
+.cta-wrap{display:none;animation:fadeIn 0.4s ease}
+.cta-wrap.visible{display:block}
+.cta-inner{
+  background:var(--forest);border-radius:6px;
+  padding:1.5rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;position:relative;overflow:hidden;
+}
+.cta-inner::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:rgba(201,168,76,0.07);pointer-events:none}
+.cta-text{flex:1;min-width:200px}
+.cta-h{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(18px,3vw,24px);font-weight:400;color:#fff;line-height:1.2;margin-bottom:.375rem;
+}
+.cta-h em{font-style:italic;color:var(--gold)}
+.cta-p{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:380px}
+.cta-btn{
+  font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:12px 24px;border-radius:4px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;position:relative;z-index:1;
+}
+.cta-btn:hover{background:#DFB84A;transform:translateY(-2px);box-shadow:0 5px 16px rgba(201,168,76,0.3)}
+
+/* ── FOOTER ── */
+.page-footer{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:12px;color:var(--soft);text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@media(max-width:480px){body{padding:1.25rem 1rem 2.5rem}}
+</style>
+</head>
+<body>
+
+<!-- INTRO HERO -->
+<div class="intro-hero">
+  <div class="ih-eyebrow">DuBois Business Consulting · Margin Framework</div>
+  <h1 class="ih-title">Pricing, costs &amp; <em>margin levers</em></h1>
+  <p class="ih-lead">Pricing, cost control, discount policy, and understanding your best (and worst) clients. These are the levers that determine whether the same volume of work makes you rich — or keeps you stuck.</p>
+</div>
+
+<!-- SECTION INTRO -->
+<div class="section-intro">
+  <span class="si-icon">↑</span>
+  <div class="si-body">
+    <div class="si-title">Price Optimisation</div>
+    <p class="si-text">A price is simply what a customer is willing to pay for what you sell. <strong>If you don't receive price complaints, you're probably too cheap.</strong> Select the strategies below that will allow you to improve your margins — and note how each one applies to your business.</p>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-row">
+  <span class="pr-label">Strategies addressed</span>
+  <div class="pr-track"><div class="pr-fill" id="pr-fill" style="width:0%"></div></div>
+  <span class="pr-badge" id="pr-badge">0 of 8</span>
+</div>
+
+<!-- STRATEGY TABLE -->
+<table class="strategy-table">
+  <thead>
+    <tr class="st-head">
+      <th class="th-n">#</th>
+      <th class="th-strat">Pricing strategy</th>
+      <th class="th-notes">Your application / notes</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<!-- IMPACT STRIP -->
+<div class="impact-strip" id="impact-strip">
+  <div>
+    <div class="imp-label">Strategies applied</div>
+    <div class="imp-val" id="imp-count">0</div>
+    <div class="imp-sub">of 8 available</div>
+  </div>
+  <div>
+    <div class="imp-label">Review complete</div>
+    <div class="imp-val" id="imp-pct">0%</div>
+    <div class="imp-sub">of pricing audit</div>
+  </div>
+  <div>
+    <div class="imp-label">Key principle</div>
+    <div class="imp-val" style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.3">No complaints = too cheap</div>
+    <div class="imp-sub">pricing is the fastest lever</div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-section" id="summary-section">
+  <h3 class="sum-heading">Your pricing actions — <em>strategies applied</em></h3>
+  <div class="sum-grid" id="sum-grid"></div>
+</div>
+
+<!-- INSIGHT -->
+<div class="insight-strip" id="insight-strip">
+  <div class="i-dot"></div>
+  <div>
+    <span class="i-tag" id="i-tag">Insight</span>
+    <div class="i-text" id="i-text"></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h3 class="cta-h">Your prices are probably<br><em>the easiest lever to pull.</em></h3>
+      <p class="cta-p">A 5% price increase on $500K revenue is $25,000 — with no extra work, no extra clients, no extra hours. A Boardroom session will show you which strategy to implement first.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  Your responses are confidential and used only to prepare your consulting session. &nbsp;·&nbsp; DuBois Business Consulting
+</div>
+
+<script>
+var rows=[
+  {n:1, text:"Across-the-board increase — you haven't changed them in years and costs have gone up"},
+  {n:2, text:"Use or improve a variations system if you do quotes — include situations that trigger a variation in your terms of trade"},
+  {n:3, text:"Increase prices on specific products/services/jobs to allow for variables that are often beyond your control"},
+  {n:4, text:"Have a policy for customers who ask for special services (e.g. urgent work)"},
+  {n:5, text:"Calculate how many jobs/transactions it takes to make 80% of your total profit contribution"},
+  {n:6, text:"Change your pricing system (see Pricing Systems below)"},
+  {n:7, text:'If you have "chargeable hours" consider rounding up to allow for wastage, rework or unrecoverable hours'},
+  {n:8, text:"Invoice add-ons (e.g. consumables, disposal fees, call-out fees)"}
+];
+
+function build(){
+  var tb=document.getElementById('tbody');
+  rows.forEach(function(r){
+    var tr=document.createElement('tr');
+    tr.className='st-row';tr.id='row-'+r.n;
+    tr.innerHTML=
+      '<td class="td-n">'+r.n+'</td>'+
+      '<td class="td-strat">'+esc(r.text)+'</td>'+
+      '<td class="td-notes">'+
+        '<textarea class="note-ta" id="ta-'+r.n+'" placeholder="Apply to your business…" oninput="onNote(this,'+r.n+')" rows="2"></textarea>'+
+        '<span class="applied-badge" id="ab-'+r.n+'">Applied ✓</span>'+
+      '</td>';
+    tb.appendChild(tr);
+  });
+}
+
+function resize(el){el.style.height='auto';el.style.height=Math.max(64,el.scrollHeight)+'px'}
+
+function onNote(el,n){
+  resize(el);
+  var f=el.value.trim().length>0;
+  el.classList.toggle('has-content',f);
+  document.getElementById('row-'+n).classList.toggle('filled',f);
+  document.getElementById('ab-'+n).classList.toggle('visible',f);
+  update();
+}
+
+function update(){
+  var filled=rows.filter(function(r){var e=document.getElementById('ta-'+r.n);return e&&e.value.trim().length>0});
+  var c=filled.length,pct=Math.round(c/rows.length*100);
+
+  document.getElementById('pr-fill').style.width=pct+'%';
+  var b=document.getElementById('pr-badge');
+  b.textContent=c+' of '+rows.length;
+  b.classList.toggle('active',c>0);
+
+  var imp=document.getElementById('impact-strip');
+  if(c>0){imp.classList.add('visible');document.getElementById('imp-count').textContent=c;document.getElementById('imp-pct').textContent=pct+'%'}
+  else imp.classList.remove('visible');
+
+  var ss=document.getElementById('summary-section');
+  var sg=document.getElementById('sum-grid');
+  if(c>0){
+    ss.classList.add('visible');sg.innerHTML='';
+    filled.forEach(function(r){
+      var note=document.getElementById('ta-'+r.n).value.trim();
+      var d=document.createElement('div');d.className='sum-card';
+      d.innerHTML='<div class="sum-n">'+r.n+'.</div><div class="sum-strat">'+esc(r.text)+'</div><div class="sum-note">'+esc(note).replace(/\n/g,'<br>')+'</div>';
+      sg.appendChild(d);
+    });
+  }
+
+  var is=document.getElementById('insight-strip');
+  var it=document.getElementById('i-tag');
+  var ix=document.getElementById('i-text');
+  if(c>0){
+    is.classList.remove('partial','complete');is.classList.add('visible');
+    if(c===rows.length){
+      is.classList.add('complete');it.textContent='Pricing audit complete — 8 strategies addressed';
+      ix.textContent='You\'ve mapped all 8 pricing strategies against your business. Pricing is the highest-leverage action available — a 5% price increase has a greater impact on profit than a 5% increase in revenue, because the entire uplift goes to the bottom line. A Boardroom session will help you sequence these and calculate the exact dollar impact.';
+    } else if(c>=4){
+      is.classList.add('partial');it.textContent=c+' of 8 strategies addressed';
+      ix.textContent='Strong progress. Strategy 1 (across-the-board increase) tends to be the most immediately impactful for businesses whose prices haven\'t moved in years. If your costs have risen and your prices haven\'t, that gap is margin that has been silently eroding. Complete all 8 to finish the audit.';
+    } else {
+      is.classList.add('partial');it.textContent=c+' of 8 strategies addressed';
+      ix.textContent='Every pricing strategy you apply here adds directly to margin — without additional clients, additional hours, or additional cost. Keep going and note specifically how each one applies to your business.';
+    }
+  } else is.className='insight-strip';
+
+  document.getElementById('cta-wrap').classList.toggle('visible',c>=2);
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+build();
+</script>
+</body>
+</html>

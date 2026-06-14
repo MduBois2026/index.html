@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Sitting Uncaptured — DuBois Business Consulting</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --gold:#C9A84C;
+  --gold-dim:rgba(201,168,76,0.55);
+  --gold-faint:rgba(201,168,76,0.12);
+  --cream:#F5F0E8;
+  --ink:#1A1208;
+  --border-dark:rgba(255,255,255,0.08);
+  --text-muted:rgba(255,255,255,0.45);
+  --text-soft:rgba(255,255,255,0.28);
+}
+
+html,body{
+  font-family:'Outfit',sans-serif;
+  background:var(--forest);
+  color:#fff;
+  padding:0;margin:0;
+}
+
+/* ── SECTION ── */
+.section{
+  background:var(--forest);
+  padding:5.5rem 4rem;
+  position:relative;overflow:hidden;
+  min-height:420px;
+  display:flex;align-items:center;
+}
+
+/* background mesh */
+.section::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 55% 80% at 65% 50%,rgba(45,106,79,0.32),transparent),
+    radial-gradient(ellipse 30% 40% at 5% 20%,rgba(26,67,50,0.5),transparent);
+}
+
+/* ── TWO-COL LAYOUT ── */
+.two-col{
+  position:relative;z-index:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6rem;
+  width:100%;
+  align-items:center;
+}
+@media(max-width:860px){
+  .two-col{grid-template-columns:1fr;gap:3.5rem}
+  .section{padding:4rem 2rem}
+  .stats-col{order:2}
+  .intro-col{order:1}
+}
+
+/* ── INTRO COL ── */
+.intro-col{}
+.intro-eyebrow{
+  font-family:'Outfit',sans-serif;
+  font-size:10px;font-weight:500;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--gold-dim);
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:1.5rem;
+}
+.intro-eyebrow::before{content:'';width:32px;height:1px;background:rgba(201,168,76,0.35)}
+.intro-title{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(36px,4.5vw,64px);
+  font-weight:400;color:#fff;
+  line-height:1.05;letter-spacing:-0.02em;
+}
+.intro-title .italic{
+  font-style:italic;color:var(--gold);display:block;
+}
+.intro-body{
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(13px,1.3vw,15px);font-weight:300;
+  color:var(--text-muted);line-height:1.75;
+  margin-top:1.75rem;margin-bottom:2.25rem;
+  max-width:400px;
+}
+.btn-primary{
+  font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  background:transparent;
+  color:var(--gold);
+  border:1px solid var(--gold);
+  padding:14px 24px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.22s;white-space:nowrap;
+}
+.btn-primary:hover{
+  background:var(--gold);color:var(--forest);
+}
+
+/* ── STATS COL ── */
+.stats-col{
+  border:1px solid var(--border-dark);
+  border-radius:4px;
+  overflow:hidden;
+}
+.stat-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;
+  padding:1.5rem 2rem;
+  border-bottom:1px solid var(--border-dark);
+  cursor:pointer;
+  transition:background 0.2s;
+  position:relative;
+}
+.stat-row:last-child{border-bottom:none}
+.stat-row:hover{background:rgba(45,106,79,0.2)}
+.stat-row.active{background:rgba(45,106,79,0.25)}
+
+/* hover indicator */
+.stat-row::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:2px;background:var(--gold);
+  transform:scaleY(0);transform-origin:bottom;
+  transition:transform 0.25s ease;
+}
+.stat-row:hover::before,.stat-row.active::before{transform:scaleY(1)}
+
+.stat-label{
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(12px,1.1vw,14px);font-weight:300;
+  color:var(--text-muted);line-height:1.55;
+  max-width:220px;
+}
+.stat-value-wrap{text-align:right;flex-shrink:0}
+.stat-value{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(22px,2.8vw,36px);
+  font-weight:400;color:var(--gold);
+  line-height:1;letter-spacing:-0.01em;
+  white-space:nowrap;
+}
+.stat-sublabel{
+  font-family:'Outfit',sans-serif;
+  font-size:9px;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text-soft);margin-top:4px;
+}
+
+/* ── EXPAND DETAIL ── */
+.stat-detail{
+  background:rgba(13,43,31,0.6);
+  overflow:hidden;max-height:0;
+  transition:max-height 0.4s ease,opacity 0.3s;
+  opacity:0;
+}
+.stat-row.active + .stat-detail{max-height:220px;opacity:1}
+.stat-detail-inner{
+  padding:1.25rem 2rem 1.5rem;
+  border-bottom:1px solid var(--border-dark);
+}
+.sd-text{
+  font-family:'Outfit',sans-serif;
+  font-size:13px;font-weight:300;
+  color:rgba(255,255,255,0.55);line-height:1.75;
+  margin-bottom:.875rem;
+}
+.sd-calc{
+  display:flex;gap:1.5rem;flex-wrap:wrap;
+}
+.sd-num{
+  display:flex;flex-direction:column;gap:3px;
+}
+.sd-num-val{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:22px;font-weight:400;color:var(--gold);line-height:1;
+}
+.sd-num-label{
+  font-size:10px;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--text-soft);
+}
+
+/* ── CALCULATOR MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(13,43,31,0.85);
+  backdrop-filter:blur(8px);
+  z-index:1000;
+  align-items:center;justify-content:center;
+  padding:1.5rem;
+}
+.modal-overlay.open{display:flex;animation:fadeIn 0.25s ease}
+.modal{
+  background:var(--forest-mid);
+  border:1px solid rgba(201,168,76,0.2);
+  border-radius:6px;
+  padding:2.5rem;
+  max-width:520px;width:100%;
+  position:relative;
+  animation:slideUp 0.3s ease;
+}
+.modal-close{
+  position:absolute;top:1.25rem;right:1.25rem;
+  background:none;border:none;color:rgba(255,255,255,0.4);
+  font-size:20px;cursor:pointer;padding:4px 8px;
+  transition:color 0.15s;line-height:1;
+}
+.modal-close:hover{color:var(--gold)}
+.modal-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--gold-dim);margin-bottom:.75rem;
+}
+.modal-title{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(22px,3vw,32px);font-weight:400;
+  color:#fff;line-height:1.15;margin-bottom:1.5rem;
+}
+.modal-title em{font-style:italic;color:var(--gold)}
+.calc-fields{display:flex;flex-direction:column;gap:.875rem;margin-bottom:1.5rem}
+.calc-field{display:flex;flex-direction:column;gap:5px}
+.calc-label{
+  font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(255,255,255,0.4);
+}
+.calc-input{
+  font-family:'Outfit',sans-serif;font-size:14px;font-weight:300;
+  color:#fff;background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.12);border-radius:3px;
+  padding:11px 14px;transition:border-color 0.2s,background 0.2s;
+  -webkit-appearance:none;appearance:none;
+}
+.calc-input:focus{
+  outline:none;border-color:rgba(201,168,76,0.5);
+  background:rgba(255,255,255,0.1);
+}
+.calc-input::placeholder{color:rgba(255,255,255,0.18)}
+.calc-input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+.calc-results{
+  background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);
+  border-radius:4px;padding:1.25rem 1.5rem;
+  display:none;margin-bottom:1.5rem;
+  animation:fadeIn 0.3s ease;
+}
+.calc-results.visible{display:block}
+.cr-label{font-size:10px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.625rem}
+.cr-value{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(26px,4vw,40px);font-weight:400;color:var(--gold);
+  line-height:1;margin-bottom:.375rem;
+}
+.cr-sub{font-size:12px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.6}
+.calc-btn{
+  width:100%;font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:14px;cursor:pointer;
+  transition:all 0.2s;
+}
+.calc-btn:hover{background:#DFC060}
+.modal-cta-sub{
+  text-align:center;margin-top:1rem;
+  font-size:12px;font-weight:300;color:rgba(255,255,255,0.35);
+}
+.modal-cta-sub a{color:var(--gold);text-decoration:none}
+.modal-cta-sub a:hover{text-decoration:underline}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+.intro-eyebrow{opacity:0;animation:fadeUp 0.7s 0.1s ease forwards}
+.intro-title{opacity:0;animation:fadeUp 0.8s 0.2s ease forwards}
+.intro-body{opacity:0;animation:fadeUp 0.7s 0.45s ease forwards}
+.btn-primary{opacity:0;animation:fadeUp 0.7s 0.6s ease forwards}
+.stats-col{opacity:0;animation:fadeUp 0.8s 0.35s ease forwards}
+</style>
+</head>
+<body>
+
+<section class="section">
+
+  <div class="two-col">
+
+    <!-- INTRO -->
+    <div class="intro-col">
+      <div class="intro-eyebrow">The numbers</div>
+      <h2 class="intro-title">
+        What's sitting
+        <span class="italic">uncaptured</span>
+        right now.
+      </h2>
+      <p class="intro-body">The revenue impact of addressing even one of these areas is significant. The combination is transformational.</p>
+      <a class="btn-primary" href="#" onclick="openModal(event)">See your numbers →</a>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-col">
+
+      <div class="stat-row" id="sr-1" onclick="toggleStat(1)">
+        <div class="stat-label">Hourly rate gap between owner income and team cost</div>
+        <div class="stat-value-wrap">
+          <div class="stat-value">$40–$80</div>
+          <div class="stat-sublabel">Per hour, typically</div>
+        </div>
+      </div>
+      <div class="stat-detail" id="sd-1">
+        <div class="stat-detail-inner">
+          <p class="sd-text">Most health and wellness practice owners earn $28–$45 per effective hour when total hours — including admin, management, and non-billable time — are factored in. Their senior clinicians earn $38–$55 per hour. The owner is often the lowest-paid person in the building.</p>
+          <div class="sd-calc">
+            <div class="sd-num"><div class="sd-num-val">$35</div><div class="sd-num-label">Typical owner effective rate</div></div>
+            <div class="sd-num"><div class="sd-num-val">$50</div><div class="sd-num-label">Typical senior team rate</div></div>
+            <div class="sd-num"><div class="sd-num-val">$15+</div><div class="sd-num-label">Gap per hour worked</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-row" id="sr-2" onclick="toggleStat(2)">
+        <div class="stat-label">Annual revenue lost per 1 team member at 60% recovery</div>
+        <div class="stat-value-wrap">
+          <div class="stat-value">$100K</div>
+          <div class="stat-sublabel">At $50/hr charge-out</div>
+        </div>
+      </div>
+      <div class="stat-detail" id="sd-2">
+        <div class="stat-detail-inner">
+          <p class="sd-text">A team member working 40 hours per week generates 200 payroll hours per month. At 60% recovery (120 chargeable hours) versus 80% (160 hours), the gap is 40 hours per month at $50/hr. That's $2,000 per month per person — or $24,000 per year per team member, silently walking out the door.</p>
+          <div class="sd-calc">
+            <div class="sd-num"><div class="sd-num-val">40 hrs</div><div class="sd-num-label">Lost per month</div></div>
+            <div class="sd-num"><div class="sd-num-val">$2K</div><div class="sd-num-label">Per month per person</div></div>
+            <div class="sd-num"><div class="sd-num-val">$24K+</div><div class="sd-num-label">Per year per person</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-row" id="sr-3" onclick="toggleStat(3)">
+        <div class="stat-label">Average client value increase after subscription migration</div>
+        <div class="stat-value-wrap">
+          <div class="stat-value">3.2×</div>
+          <div class="stat-sublabel">Versus session billing</div>
+        </div>
+      </div>
+      <div class="stat-detail" id="sd-3">
+        <div class="stat-detail-inner">
+          <p class="sd-text">A client paying $150 per session and attending fortnightly generates $3,600 per year. The same client on a $450/month subscription generates $5,400 per year — without seeing you more often. Stack six clients doing this and you've added $10,800 in recurring revenue before anything else changes.</p>
+          <div class="sd-calc">
+            <div class="sd-num"><div class="sd-num-val">$3,600</div><div class="sd-num-label">Session billing / yr</div></div>
+            <div class="sd-num"><div class="sd-num-val">$5,400</div><div class="sd-num-label">Subscription / yr</div></div>
+            <div class="sd-num"><div class="sd-num-val">+$1,800</div><div class="sd-num-label">Per client uplift</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-row" id="sr-4" onclick="toggleStat(4)">
+        <div class="stat-label">Typical MRR increase within the first 90 days</div>
+        <div class="stat-value-wrap">
+          <div class="stat-value">$6–14K</div>
+          <div class="stat-sublabel">Per month added</div>
+        </div>
+      </div>
+      <div class="stat-detail" id="sd-4">
+        <div class="stat-detail-inner">
+          <p class="sd-text">Across a portfolio of health and wellness engagements, the first 90-day milestone typically produces $6K–$14K in additional monthly recurring revenue. This comes from a combination of fee increases, subscription conversion, and recovery rate improvements — not from acquiring new clients.</p>
+          <div class="sd-calc">
+            <div class="sd-num"><div class="sd-num-val">$6K</div><div class="sd-num-label">Conservative case</div></div>
+            <div class="sd-num"><div class="sd-num-val">$14K</div><div class="sd-num-label">Strong case</div></div>
+            <div class="sd-num"><div class="sd-num-val">90 days</div><div class="sd-num-label">To first milestone</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- CALCULATOR MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-eyebrow">Your revenue calculator</div>
+    <h3 class="modal-title">See what's <em>sitting uncaptured</em> in your practice</h3>
+
+    <div class="calc-fields">
+      <div class="calc-field">
+        <label class="calc-label" for="c-income">Your current annual income ($)</label>
+        <input class="calc-input" type="number" id="c-income" placeholder="e.g. 95000" oninput="runCalc()">
+      </div>
+      <div class="calc-field">
+        <label class="calc-label" for="c-hours">Hours worked per week (including evenings)</label>
+        <input class="calc-input" type="number" id="c-hours" placeholder="e.g. 50" oninput="runCalc()">
+      </div>
+      <div class="calc-field">
+        <label class="calc-label" for="c-team">Number of direct team members</label>
+        <input class="calc-input" type="number" id="c-team" placeholder="e.g. 3" oninput="runCalc()">
+      </div>
+      <div class="calc-field">
+        <label class="calc-label" for="c-rate">Team charge-out rate ($/hr)</label>
+        <input class="calc-input" type="number" id="c-rate" placeholder="e.g. 50" oninput="runCalc()">
+      </div>
+    </div>
+
+    <div class="calc-results" id="calc-results">
+      <div class="cr-label">Your estimated uncaptured revenue</div>
+      <div class="cr-value" id="cr-value">$0</div>
+      <div class="cr-sub" id="cr-sub">per year — from recovery improvements, pricing, and subscription conversion</div>
+    </div>
+
+    <button class="calc-btn" onclick="window.open('https://www.duboisbusinessconsulting.com.au/book','_blank')">Book a session to capture this revenue →</button>
+    <p class="modal-cta-sub">Takes 20 minutes. No obligation. <a href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book now →</a></p>
+  </div>
+</div>
+
+<script>
+/* ── STAT ROW TOGGLE ── */
+function toggleStat(n){
+  var row=document.getElementById('sr-'+n);
+  var wasActive=row.classList.contains('active');
+  /* close all */
+  for(var i=1;i<=4;i++){
+    document.getElementById('sr-'+i).classList.remove('active');
+  }
+  if(!wasActive)row.classList.add('active');
+}
+
+/* ── MODAL ── */
+function openModal(e){
+  if(e)e.preventDefault();
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function closeModalOutside(e){
+  if(e.target===document.getElementById('modal-overlay'))closeModal();
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
+
+/* ── CALCULATOR ── */
+function runCalc(){
+  var income=parseFloat(document.getElementById('c-income').value)||0;
+  var hours=parseFloat(document.getElementById('c-hours').value)||0;
+  var team=parseFloat(document.getElementById('c-team').value)||0;
+  var rate=parseFloat(document.getElementById('c-rate').value)||0;
+
+  if(!income||!hours)return;
+
+  /* 1. hourly gap uplift — if owner rate < $65, assume 40% income increase */
+  var weeksWorked=48;
+  var ownerHourly=income/(hours*weeksWorked);
+  var ownerUplift=ownerHourly<65?(income*0.35):income*0.15;
+
+  /* 2. recovery rate uplift per team member (60%→80% = 16hrs/mo at charge-out) */
+  var recoveryUplift=team>0&&rate>0?(team*16*rate*11):0;
+
+  /* 3. subscription migration uplift (30% of client base, 1.5x avg value) */
+  var subUplift=income*0.22;
+
+  var total=ownerUplift+recoveryUplift+subUplift;
+
+  var res=document.getElementById('calc-results');
+  var val=document.getElementById('cr-value');
+  var sub=document.getElementById('cr-sub');
+  res.classList.add('visible');
+
+  /* animate counter */
+  var start=0;var end=Math.round(total/100)*100;
+  var duration=800;var startTime=null;
+  function step(ts){
+    if(!startTime)startTime=ts;
+    var p=Math.min((ts-startTime)/duration,1);
+    var ease=1-Math.pow(1-p,3);
+    var current=Math.round(ease*end/100)*100;
+    val.textContent='$'+current.toLocaleString('en-AU');
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+
+  sub.textContent='per year estimated — from a '+Math.round(ownerHourly)+'/hr effective rate. Breaking this down: ~$'+Math.round(ownerUplift/1000)+'K from pricing/fee increases, ~$'+Math.round(recoveryUplift/1000)+'K from recovery rate improvement, ~$'+Math.round(subUplift/1000)+'K from subscription migration.';
+}
+</script>
+</body>
+</html>

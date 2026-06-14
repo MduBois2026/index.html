@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuBois Business Consulting</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --gold:#C9A84C;
+  --cream:#F5F0E8;
+  --ink:#1A1208;
+}
+
+html,body{
+  font-family:'Outfit',sans-serif;
+  background:var(--forest);
+  color:#fff;
+  padding:0;margin:0;
+  min-height:100vh;
+}
+
+/* ── HERO SECTION ── */
+.hero{
+  min-height:100vh;
+  background:var(--forest);
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:2.25rem 3.5rem 2rem;
+}
+
+/* Background texture mesh */
+.hero-mesh{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 55% 70% at 65% 40%, rgba(45,106,79,0.45), transparent),
+    radial-gradient(ellipse 35% 50% at 80% 20%, rgba(26,67,50,0.6), transparent),
+    radial-gradient(ellipse 40% 40% at 90% 80%, rgba(13,43,31,0.8), transparent);
+}
+
+/* Watermark D */
+.hero-watermark{
+  position:absolute;
+  right:-4%;
+  top:50%;
+  transform:translateY(-50%);
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(300px,35vw,520px);
+  font-weight:600;
+  color:rgba(45,106,79,0.18);
+  line-height:1;
+  user-select:none;pointer-events:none;
+  z-index:0;
+  letter-spacing:-0.05em;
+}
+
+/* ── EYEBROW ── */
+.hero-eyebrow{
+  position:relative;z-index:1;
+  font-family:'Outfit',sans-serif;
+  font-size:11px;font-weight:500;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(201,168,76,0.7);
+  display:flex;align-items:center;gap:14px;
+}
+.hero-eyebrow::before{
+  content:'';width:32px;height:1px;background:rgba(201,168,76,0.4);
+}
+
+/* ── MAIN CONTENT ── */
+.hero-body{
+  position:relative;z-index:1;
+  flex:1;display:flex;flex-direction:column;
+  justify-content:center;
+  max-width:580px;
+  padding:3rem 0 2rem;
+}
+
+.hero-title{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(44px,6.5vw,88px);
+  font-weight:400;
+  color:#fff;
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  margin-bottom:0;
+}
+.hero-title-italic{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(44px,6.5vw,88px);
+  font-weight:400;
+  font-style:italic;
+  color:var(--gold);
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  display:block;
+  margin-bottom:2rem;
+}
+
+.hero-desc{
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(13px,1.4vw,16px);
+  font-weight:300;
+  color:rgba(255,255,255,0.55);
+  line-height:1.75;
+  max-width:440px;
+  margin-bottom:2.5rem;
+}
+
+/* ── BUTTONS ── */
+.hero-buttons{
+  display:flex;gap:14px;flex-wrap:wrap;
+  align-items:center;
+}
+.btn-primary{
+  font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:15px 28px;
+  cursor:pointer;text-decoration:none;
+  display:inline-block;
+  transition:all 0.22s;
+  white-space:nowrap;
+}
+.btn-primary:hover{
+  background:#DFC060;
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(201,168,76,0.3);
+}
+.btn-secondary{
+  font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  background:transparent;
+  color:rgba(255,255,255,0.8);
+  border:1px solid rgba(255,255,255,0.35);
+  padding:15px 28px;
+  cursor:pointer;text-decoration:none;
+  display:inline-block;
+  transition:all 0.22s;
+  white-space:nowrap;
+}
+.btn-secondary:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+  transform:translateY(-2px);
+}
+
+/* ── STATS ROW ── */
+.hero-stats{
+  position:relative;z-index:1;
+  display:flex;align-items:flex-end;justify-content:flex-end;
+  gap:4rem;
+  padding-bottom:.5rem;
+}
+.stat-item{
+  display:flex;flex-direction:column;gap:5px;
+  cursor:pointer;
+  transition:opacity 0.2s;
+}
+.stat-item:hover{opacity:0.8}
+.stat-value{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(28px,4vw,48px);
+  font-weight:400;
+  color:var(--gold);
+  line-height:1;
+  letter-spacing:-0.02em;
+}
+.stat-sup{
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(12px,1.2vw,16px);
+  font-weight:300;
+  color:var(--gold);
+  vertical-align:super;
+  line-height:1;
+}
+.stat-label{
+  font-family:'Outfit',sans-serif;
+  font-size:10px;font-weight:500;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);
+}
+
+/* ── SCROLL INDICATOR ── */
+.scroll-indicator{
+  position:absolute;
+  bottom:2rem;left:3.5rem;
+  z-index:1;
+  display:flex;align-items:center;gap:14px;
+  font-family:'Outfit',sans-serif;
+  font-size:10px;font-weight:500;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(255,255,255,0.25);
+  cursor:pointer;
+}
+.scroll-indicator::before{
+  content:'';width:40px;height:1px;
+  background:rgba(255,255,255,0.2);
+  display:block;
+}
+.scroll-indicator:hover{color:rgba(201,168,76,0.6)}
+.scroll-indicator:hover::before{background:rgba(201,168,76,0.4)}
+
+/* ── ENTRANCE ANIMATIONS ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0}to{opacity:1}
+}
+
+.hero-eyebrow{animation:fadeIn 0.8s 0.1s ease both}
+.hero-title{animation:fadeUp 0.9s 0.25s ease both}
+.hero-title-italic{animation:fadeUp 0.9s 0.4s ease both}
+.hero-desc{animation:fadeUp 0.8s 0.55s ease both}
+.hero-buttons{animation:fadeUp 0.8s 0.7s ease both}
+.hero-stats{animation:fadeIn 1s 0.9s ease both}
+.scroll-indicator{animation:fadeIn 1.2s 1.2s ease both}
+.hero-watermark{animation:fadeIn 1.5s 0.5s ease both}
+
+/* ── STAT COUNTER ANIMATION ── */
+.stat-value{
+  transition:color 0.3s;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .hero{padding:1.75rem 1.5rem 1.5rem;min-height:100svh}
+  .hero-body{max-width:100%;padding:2rem 0 1.5rem}
+  .hero-stats{justify-content:flex-start;gap:2rem;padding-bottom:0;margin-top:1rem}
+  .scroll-indicator{display:none}
+  .hero-watermark{right:-15%;font-size:clamp(180px,60vw,300px)}
+  .hero-buttons{flex-direction:column;align-items:flex-start}
+  .btn-primary,.btn-secondary{width:100%;text-align:center}
+}
+
+@media(max-width:480px){
+  .hero-stats{flex-wrap:wrap;gap:1.5rem}
+  .stat-value{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+
+  <!-- Background -->
+  <div class="hero-mesh"></div>
+  <div class="hero-watermark" aria-hidden="true">D</div>
+
+  <!-- Eyebrow -->
+  <div class="hero-eyebrow">Health &amp; Wellness Business Consulting</div>
+
+  <!-- Main content -->
+  <div class="hero-body">
+    <h1 class="hero-title">The revenue is<br>already there.</h1>
+    <span class="hero-title-italic">Let's find it.</span>
+    <p class="hero-desc">DuBois Consulting helps health and wellness practitioners uncover the hidden value in their practice, raise their fees with confidence, and build a business that pays them what they're worth.</p>
+    <div class="hero-buttons">
+      <a class="btn-primary" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book a Boardroom Session</a>
+      <a class="btn-secondary" href="#approach">Explore Our Approach</a>
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-value"><span class="stat-num" data-target="3">0</span><span class="stat-sup">×</span></div>
+      <div class="stat-label">Avg. Client Value Uplift</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value"><span class="stat-num" data-target="90">0</span></div>
+      <div class="stat-label">Days to First Milestone</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value"><span class="stat-num" data-target="6">0</span></div>
+      <div class="stat-label">Phase Methodology</div>
+    </div>
+  </div>
+
+  <!-- Scroll -->
+  <div class="scroll-indicator" onclick="document.querySelector('#approach,section+section,main>*:nth-child(2)')?.scrollIntoView({behavior:'smooth'})">
+    Scroll to explore
+  </div>
+
+</section>
+
+<script>
+/* ── COUNTER ANIMATION ── */
+function animateCounters(){
+  var els=document.querySelectorAll('.stat-num');
+  els.forEach(function(el){
+    var target=parseInt(el.getAttribute('data-target'));
+    var duration=1400;
+    var start=null;
+    function step(ts){
+      if(!start)start=ts;
+      var progress=Math.min((ts-start)/duration,1);
+      var ease=1-Math.pow(1-progress,3);/* ease-out-cubic */
+      el.textContent=Math.round(ease*target);
+      if(progress<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+/* Trigger when hero is in view */
+var observed=false;
+var observer=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting&&!observed){
+      observed=true;
+      setTimeout(animateCounters,900);/* delay to match stat fade-in */
+    }
+  });
+},{threshold:0.3});
+observer.observe(document.querySelector('.hero'));
+</script>
+</body>
+</html>

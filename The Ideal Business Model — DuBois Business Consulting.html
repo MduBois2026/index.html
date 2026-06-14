@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ideal Business Model — DuBois Business Consulting</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --gold:#C9A84C;
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --ink:#1A1208;
+  --border:#D4C9B0;
+  --soft:#8C7E6A;
+  --cream3:#E0D8C8;
+  --gold-light:#F0E3BA;
+  --gold-pale:#FBF6E9;
+  /* Row accent colours */
+  --promote:#2D6A4F;
+  --margins:#C9A84C;
+  --people:#1A4332;
+}
+
+html,body{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;background:var(--cream);color:var(--ink);
+  padding:0;margin:0;line-height:1.6;
+}
+body{padding:1.75rem 1.75rem 3rem}
+
+/* ── HERO ── */
+.hero{
+  background:var(--forest);border-radius:8px;
+  padding:1.875rem 2.25rem;margin-bottom:2rem;
+  position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;bottom:-60px;right:-60px;
+  width:220px;height:220px;border-radius:50%;
+  background:rgba(201,168,76,0.07);pointer-events:none;
+}
+.hero-eye{
+  font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(201,168,76,0.65);margin-bottom:.625rem;
+}
+.hero-title{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(24px,4.5vw,38px);font-weight:500;
+  color:#fff;line-height:1.1;margin-bottom:.875rem;
+}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.75;max-width:600px}
+
+/* ── ROW LABELS ── */
+.grid-outer{display:flex;gap:0;align-items:stretch}
+.row-labels{
+  display:flex;flex-direction:column;gap:10px;
+  padding-right:10px;
+  flex-shrink:0;width:52px;
+  justify-content:space-around;
+}
+.row-label{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;flex:1;
+}
+.rl-verb{
+  font-size:10px;font-weight:400;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--soft);
+  writing-mode:vertical-rl;transform:rotate(180deg);
+}
+.rl-noun{
+  font-size:11px;font-weight:700;letter-spacing:0.1em;
+  text-transform:uppercase;
+  writing-mode:vertical-rl;transform:rotate(180deg);
+}
+.rl-noun.promote{color:var(--promote)}
+.rl-noun.margins{color:var(--margins)}
+.rl-noun.people{color:var(--people)}
+
+/* ── 3×3 GRID ── */
+.grid-wrap{flex:1}
+.biz-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+}
+
+/* ── CELL ── */
+.cell{
+  background:#fff;
+  border:1.5px solid var(--border);
+  border-radius:7px;
+  padding:1rem 1.125rem;
+  cursor:pointer;
+  position:relative;overflow:hidden;
+  transition:border-color 0.2s,box-shadow 0.2s,transform 0.15s;
+  min-height:130px;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.cell:hover{
+  border-color:var(--gold);
+  box-shadow:0 4px 16px rgba(201,168,76,0.12);
+  transform:translateY(-2px);
+}
+.cell.active{
+  border-color:var(--forest);
+  box-shadow:0 6px 20px rgba(13,43,31,0.12);
+  transform:translateY(-2px);
+}
+.cell.rated{
+  border-color:var(--forest-light);
+}
+
+/* Diagonal tint */
+.cell::before{
+  content:'';position:absolute;
+  top:0;right:0;
+  width:70%;height:70%;
+  background:linear-gradient(225deg,rgba(237,230,214,0.5) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+/* Top label */
+.cell-top{
+  font-size:10px;font-weight:400;color:var(--soft);
+  letter-spacing:0.06em;text-align:right;
+  position:relative;z-index:1;
+}
+/* Main text */
+.cell-main{
+  text-align:center;position:relative;z-index:1;
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:.375rem 0;
+}
+.cell-verb{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(15px,2.2vw,20px);font-weight:400;
+  color:var(--soft);line-height:1;
+}
+.cell-noun{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:clamp(13px,2vw,17px);font-weight:700;
+  letter-spacing:0.04em;text-transform:uppercase;
+  color:var(--forest);line-height:1.1;
+}
+/* Bottom label */
+.cell-bottom{
+  font-size:10px;font-weight:400;color:var(--soft);
+  letter-spacing:0.06em;text-align:left;
+  position:relative;z-index:1;
+}
+/* Score dot */
+.score-dot{
+  position:absolute;top:8px;left:8px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--gold);border:2px solid #fff;
+  display:none;
+}
+.cell.rated .score-dot{display:block}
+
+/* ── DETAIL PANEL ── */
+.detail-panel{
+  background:#fff;border:1.5px solid var(--border);border-radius:8px;
+  padding:1.625rem 1.75rem;margin-top:1.25rem;
+  display:none;animation:slideDown 0.25s ease;
+}
+.detail-panel.open{display:block}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+.dp-header{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;
+  margin-bottom:1.25rem;padding-bottom:1rem;
+  border-bottom:1px solid var(--border);
+}
+.dp-titles{flex:1}
+.dp-verb{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(20px,3.5vw,30px);font-weight:400;color:var(--soft);
+  line-height:1;
+}
+.dp-noun{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:clamp(20px,3.5vw,28px);font-weight:700;
+  letter-spacing:0.04em;text-transform:uppercase;color:var(--forest);
+  line-height:1.1;
+}
+.dp-close{
+  background:none;border:1.5px solid var(--border);color:var(--soft);
+  font-size:18px;line-height:1;padding:5px 10px;border-radius:4px;cursor:pointer;
+  flex-shrink:0;transition:all 0.15s;font-family:Arial;
+}
+.dp-close:hover{border-color:var(--gold);color:var(--forest)}
+
+/* Scale bar inside panel */
+.dp-scale{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:1.375rem;
+  background:var(--cream2);border-radius:6px;padding:.875rem 1rem;
+}
+.ds-left{font-size:11px;color:var(--soft);min-width:80px;text-align:right}
+.ds-track{
+  flex:1;height:6px;background:var(--cream3);border-radius:100px;
+  position:relative;cursor:pointer;
+}
+.ds-fill{
+  height:100%;border-radius:100px;
+  background:linear-gradient(to right,var(--gold),var(--forest-light));
+  transition:width 0.3s ease;pointer-events:none;
+}
+.ds-thumb{
+  position:absolute;top:50%;transform:translate(-50%,-50%);
+  width:18px;height:18px;border-radius:50%;
+  background:var(--gold);border:2.5px solid #fff;
+  box-shadow:0 2px 7px rgba(0,0,0,0.18);
+  transition:left 0.3s ease;pointer-events:none;
+}
+.ds-right{font-size:11px;color:var(--soft);min-width:80px}
+.ds-score{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:26px;font-weight:400;color:var(--forest);
+  min-width:32px;text-align:center;
+}
+
+/* Questions */
+.dp-questions{display:flex;flex-direction:column;gap:1rem}
+.dq-label{
+  font-size:13px;font-weight:700;color:var(--ink);margin-bottom:.375rem;
+}
+.dq-hint{font-size:12px;font-style:italic;color:var(--soft);margin-bottom:.5rem}
+.dq-ta{
+  width:100%;font-family:Arial,Helvetica,sans-serif;
+  font-size:13px;line-height:1.65;color:var(--ink);
+  padding:9px 11px;border:1.5px solid var(--cream3);border-radius:4px;
+  background:var(--cream);resize:vertical;min-height:76px;overflow:hidden;
+  transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;
+}
+.dq-ta:focus{outline:none;border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px rgba(201,168,76,0.08)}
+.dq-ta::placeholder{font-style:italic;font-size:12px;color:var(--border)}
+.dq-ta.has-content{border-color:rgba(45,106,79,0.25);background:#fff}
+
+/* ── OVERALL SCORE ── */
+.score-section{
+  background:var(--forest);border-radius:8px;
+  padding:1.375rem 1.75rem;margin-top:1.25rem;
+  display:none;animation:fadeIn 0.4s ease;
+}
+.score-section.visible{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.ss-label{
+  font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(201,168,76,0.6);margin-bottom:5px;
+}
+.ss-val{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(28px,5vw,44px);font-weight:400;color:var(--gold);line-height:1;
+}
+.ss-divider{width:1px;height:50px;background:rgba(255,255,255,0.1);flex-shrink:0}
+.ss-text{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.7;flex:1;min-width:160px}
+.ss-bars{flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px}
+.ss-bar-row{display:flex;align-items:center;gap:8px;font-size:12px}
+.ss-bar-label{color:rgba(255,255,255,0.45);min-width:65px;font-size:11px}
+.ss-bar-track{flex:1;height:4px;background:rgba(255,255,255,0.1);border-radius:100px;overflow:hidden}
+.ss-bar-fill{height:100%;border-radius:100px;transition:width 0.4s ease}
+.ss-bar-val{color:#fff;font-weight:700;min-width:30px;text-align:right;font-size:11px}
+.promote-fill{background:var(--forest-light)}
+.margins-fill{background:var(--gold)}
+.people-fill{background:rgba(255,255,255,0.55)}
+
+/* ── CTA ── */
+.cta-wrap{display:none;animation:fadeIn 0.4s ease;margin-top:1.25rem}
+.cta-wrap.visible{display:block}
+.cta-inner{
+  background:var(--forest);border-radius:6px;
+  padding:1.5rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;position:relative;overflow:hidden;
+}
+.cta-inner::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(201,168,76,0.07);pointer-events:none}
+.cta-text{flex:1;min-width:200px}
+.cta-h{font-family:'EB Garamond',Georgia,serif;font-size:clamp(18px,3vw,24px);font-weight:400;color:#fff;line-height:1.2;margin-bottom:.375rem}
+.cta-h em{font-style:italic;color:var(--gold)}
+.cta-p{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:380px}
+.cta-btn{
+  font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);border:none;padding:12px 24px;border-radius:4px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;position:relative;z-index:1;
+}
+.cta-btn:hover{background:#DFB84A;transform:translateY(-2px);box-shadow:0 5px 16px rgba(201,168,76,0.3)}
+
+/* ── FOOTER ── */
+.page-footer{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+  font-size:12px;color:var(--soft);text-align:center;line-height:1.6;
+}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:560px){
+  body{padding:1.25rem 1rem 2.5rem}
+  .row-labels{display:none}
+  .grid-outer{display:block}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eye">DuBois Business Consulting · Business Framework</div>
+  <h1 class="hero-title">The Ideal <em>Business Model</em></h1>
+  <p class="hero-sub">Nine levers — three rows, three columns. Every business can be assessed across Promote, Margins, and People. Click any cell to rate where you are right now and capture what needs to change.</p>
+</div>
+
+<!-- GRID + ROW LABELS -->
+<div class="grid-outer">
+  <div class="row-labels">
+    <div class="row-label">
+      <span class="rl-verb">Upgrade</span>
+      <span class="rl-noun promote">Promote</span>
+    </div>
+    <div class="row-label">
+      <span class="rl-verb">Optimise</span>
+      <span class="rl-noun margins">Margins</span>
+    </div>
+    <div class="row-label">
+      <span class="rl-verb">Engage</span>
+      <span class="rl-noun people">People</span>
+    </div>
+  </div>
+
+  <div class="grid-wrap">
+    <div class="biz-grid" id="biz-grid"></div>
+  </div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="detail-panel">
+  <div class="dp-header">
+    <div class="dp-titles">
+      <div class="dp-verb" id="dp-verb"></div>
+      <div class="dp-noun" id="dp-noun"></div>
+    </div>
+    <button class="dp-close" onclick="closePanel()">✕</button>
+  </div>
+
+  <!-- Score slider -->
+  <div class="dp-scale">
+    <span class="ds-left" id="ds-left-label">—</span>
+    <div class="ds-track" id="ds-track">
+      <div class="ds-fill" id="ds-fill" style="width:0%"></div>
+      <div class="ds-thumb" id="ds-thumb" style="left:0%"></div>
+    </div>
+    <span class="ds-right" id="ds-right-label">—</span>
+    <span class="ds-score" id="ds-score">—</span>
+  </div>
+
+  <!-- Questions -->
+  <div class="dp-questions">
+    <div>
+      <div class="dq-label" id="dq1-label"></div>
+      <div class="dq-hint" id="dq1-hint"></div>
+      <textarea class="dq-ta" id="dq1-ta" placeholder="" oninput="autoResize(this);checkComplete()"></textarea>
+    </div>
+    <div>
+      <div class="dq-label" id="dq2-label"></div>
+      <div class="dq-hint" id="dq2-hint"></div>
+      <textarea class="dq-ta" id="dq2-ta" placeholder="" oninput="autoResize(this);checkComplete()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- OVERALL SCORE -->
+<div class="score-section" id="score-section">
+  <div>
+    <div class="ss-label">Overall score</div>
+    <div class="ss-val" id="ss-overall">—</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:3px" id="ss-cells-done">0 of 9 rated</div>
+  </div>
+  <div class="ss-divider"></div>
+  <div class="ss-bars">
+    <div class="ss-bar-row">
+      <span class="ss-bar-label" style="color:rgba(90,200,140,0.8)">Promote</span>
+      <div class="ss-bar-track"><div class="ss-bar-fill promote-fill" id="bar-promote" style="width:0%"></div></div>
+      <span class="ss-bar-val" id="bv-promote">—</span>
+    </div>
+    <div class="ss-bar-row">
+      <span class="ss-bar-label" style="color:rgba(201,168,76,0.8)">Margins</span>
+      <div class="ss-bar-track"><div class="ss-bar-fill margins-fill" id="bar-margins" style="width:0%"></div></div>
+      <span class="ss-bar-val" id="bv-margins">—</span>
+    </div>
+    <div class="ss-bar-row">
+      <span class="ss-bar-label" style="color:rgba(255,255,255,0.6)">People</span>
+      <div class="ss-bar-track"><div class="ss-bar-fill people-fill" id="bar-people" style="width:0%"></div></div>
+      <span class="ss-bar-val" id="bv-people">—</span>
+    </div>
+  </div>
+  <div class="ss-text" id="ss-text">Rate all 9 cells to see your complete business model score.</div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="cta-wrap">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h3 class="cta-h">Now let's build<br><em>the path forward.</em></h3>
+      <p class="cta-p">Your scores show exactly where the leverage is. A Boardroom session will turn your weakest cells into the first 90 days of your growth plan.</p>
+    </div>
+    <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book my free session →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  Your responses are confidential and used only to prepare your consulting session. &nbsp;·&nbsp; DuBois Business Consulting
+</div>
+
+<script>
+var cells=[
+  /* row 0 — PROMOTE */
+  {id:'audience', row:0, rowName:'Promote', verb:'Target', noun:'Audience',
+   topLabel:'A Grade', bottomLabel:'Any Grade',
+   q1:'Who is your A-grade target audience right now?',
+   h1:'Be specific — industry, role, location, size, values',
+   p1:'e.g. Female allied health practice owners, 35–55, Gold Coast, $500K–$2M revenue…',
+   q2:'What one action would most improve your audience targeting?',
+   h2:'Where are you wasting attention on the wrong people?',
+   p2:'e.g. Stop accepting any enquiry — qualify before the first call…'},
+  {id:'leads', row:0, rowName:'Promote', verb:'Boost', noun:'Leads',
+   topLabel:'Flood', bottomLabel:'Trickle',
+   q1:'What are your current lead sources and which performs best?',
+   h1:'Referrals, content, ads, partnerships, outreach, events?',
+   p1:'e.g. 70% referrals, 20% LinkedIn content, 10% cold…',
+   q2:'What would you do to move from trickle to flood?',
+   h2:'One lead source you\'ve been ignoring',
+   p2:'e.g. Build a referral partner program with 5 aligned businesses…'},
+  {id:'conversion', row:0, rowName:'Promote', verb:'Master', noun:'Conversion',
+   topLabel:'Buyers', bottomLabel:'Browsers',
+   q1:'What is your current enquiry-to-client conversion rate?',
+   h1:'How many enquiries does it take to sign one client?',
+   p1:'e.g. About 1 in 3 — but I rarely follow up past day 2…',
+   q2:'What is the biggest gap in your conversion process?',
+   h2:'Discovery call, proposal, follow-up, price confidence?',
+   p2:'e.g. I send a proposal and wait — no follow-up system at all…'},
+  /* row 1 — MARGINS */
+  {id:'costs', row:1, rowName:'Margins', verb:'Tune', noun:'Costs',
+   topLabel:'You Paid 1st', bottomLabel:'You Paid Last',
+   q1:'What are your 3 highest cost lines right now?',
+   h1:'Which costs have crept up without review?',
+   p1:'e.g. Contractor fees, software subscriptions, lease…',
+   q2:'What one cost reduction would make the biggest margin impact?',
+   h2:'Don\'t confuse cutting experience from cutting waste',
+   p2:'e.g. Renegotiate our top supplier — haven\'t done it in 3 years…'},
+  {id:'prices', row:1, rowName:'Margins', verb:'Align', noun:'Prices',
+   topLabel:'Proactive', bottomLabel:'Reactive',
+   q1:'When did you last review your pricing? What changed?',
+   h1:'Are your prices ahead of your costs — or behind them?',
+   p1:'e.g. Last increased fees 2 years ago — costs up 20% since then…',
+   q2:'Which pricing strategy would have the most immediate margin impact?',
+   h2:'Across-the-board increase, add-ons, variation clauses?',
+   p2:'e.g. Adding a call-out fee — currently absorbing all travel costs…'},
+  {id:'cashflow', row:1, rowName:'Margins', verb:'Tame', noun:'Cashflow',
+   topLabel:'Reliable', bottomLabel:'Erratic',
+   q1:'How predictable is your monthly revenue right now?',
+   h1:'Do you know what\'s coming in next month — or do you find out on the 30th?',
+   p1:'e.g. Very erratic — project-based, 60-day payment terms, chasing invoices…',
+   q2:'What one change would make your cashflow most predictable?',
+   h2:'Subscriptions, deposits, terms, debtor management?',
+   p2:'e.g. Move 30% of clients to monthly retainers — would stabilise $12K/month…'},
+  /* row 2 — PEOPLE */
+  {id:'systems', row:2, rowName:'People', verb:'Install', noun:'Systems',
+   topLabel:'Flow', bottomLabel:'Friction',
+   q1:'Where does your business create the most friction or rework?',
+   h1:'Where are things falling through the cracks regularly?',
+   p1:'e.g. Onboarding — every new client is a different process…',
+   q2:'What system, if installed, would free up the most of your time?',
+   h2:'CRM, scheduling, onboarding, invoicing, reporting?',
+   p2:'e.g. An automated onboarding sequence — currently done manually…'},
+  {id:'score_cell', row:2, rowName:'People', verb:'Keep', noun:'Score',
+   topLabel:'Clockwork', bottomLabel:'Guesswork',
+   q1:'What business metrics do you currently track regularly?',
+   h1:'Revenue, margins, conversion, retention, team output?',
+   p1:'e.g. Monthly revenue only — nothing else is measured consistently…',
+   q2:'What would you start measuring if you had a simple dashboard?',
+   h2:'The number that, if you tracked it weekly, would change your decisions',
+   p2:'e.g. Client retention rate — I suspect it\'s lower than I think…'},
+  {id:'culture', row:2, rowName:'People', verb:'Build', noun:'Culture',
+   topLabel:'Stepping Up', bottomLabel:'Showing Up',
+   q1:'How would your team describe the culture of your business right now?',
+   h1:'What do they say about it when you\'re not in the room?',
+   p1:'e.g. Probably "inconsistent" — depends on Matt\'s mood that week…',
+   q2:'What one culture change would have the biggest impact on team performance?',
+   h2:'Recognition, clarity, autonomy, communication, values?',
+   p2:'e.g. A weekly team check-in with a clear agenda and recognition moment…'}
+];
+
+/* score labels */
+var scaleLabels={
+  audience:['Any Grade','A Grade'],
+  leads:['Trickle','Flood'],
+  conversion:['Browsers','Buyers'],
+  costs:['You Paid Last','You Paid 1st'],
+  prices:['Reactive','Proactive'],
+  cashflow:['Erratic','Reliable'],
+  systems:['Friction','Flow'],
+  score_cell:['Guesswork','Clockwork'],
+  culture:['Showing Up','Stepping Up']
+};
+
+var state={};/* cellId -> {score, q1, q2} */
+var activeCell=null;
+var dragging=false;
+
+/* ── BUILD GRID ── */
+function buildGrid(){
+  var g=document.getElementById('biz-grid');
+  cells.forEach(function(c){
+    var div=document.createElement('div');
+    div.className='cell';div.id='cell-'+c.id;
+    div.innerHTML=
+      '<div class="score-dot"></div>'+
+      '<div class="cell-top">'+c.topLabel+'</div>'+
+      '<div class="cell-main">'+
+        '<div class="cell-verb">'+c.verb+'</div>'+
+        '<div class="cell-noun">'+c.noun+'</div>'+
+      '</div>'+
+      '<div class="cell-bottom">'+c.bottomLabel+'</div>';
+    div.onclick=function(){openCell(c.id)};
+    g.appendChild(div);
+  });
+}
+
+/* ── OPEN CELL ── */
+function openCell(id){
+  if(activeCell)document.getElementById('cell-'+activeCell).classList.remove('active');
+  activeCell=id;
+  document.getElementById('cell-'+id).classList.add('active');
+
+  var c=cells.find(function(x){return x.id===id});
+  document.getElementById('dp-verb').textContent=c.verb;
+  document.getElementById('dp-noun').textContent=c.noun;
+
+  var sl=scaleLabels[id];
+  document.getElementById('ds-left-label').textContent=sl[0];
+  document.getElementById('ds-right-label').textContent=sl[1];
+
+  document.getElementById('dq1-label').textContent=c.q1;
+  document.getElementById('dq1-hint').textContent=c.h1;
+  document.getElementById('dq2-label').textContent=c.q2;
+  document.getElementById('dq2-hint').textContent=c.h2;
+
+  var ta1=document.getElementById('dq1-ta');
+  var ta2=document.getElementById('dq2-ta');
+  ta1.placeholder=c.p1;ta2.placeholder=c.p2;
+
+  var s=state[id]||{score:null,q1:'',q2:''};
+  ta1.value=s.q1||'';ta2.value=s.q2||'';
+  ta1.classList.toggle('has-content',ta1.value.length>0);
+  ta2.classList.toggle('has-content',ta2.value.length>0);
+  autoResize(ta1);autoResize(ta2);
+
+  if(s.score!==null){setSlider(s.score)}else{resetSlider()}
+
+  var p=document.getElementById('detail-panel');
+  p.classList.add('open');
+  setTimeout(function(){p.scrollIntoView({behavior:'smooth',block:'nearest'})},50);
+  setupDrag();
+}
+
+function closePanel(){
+  if(activeCell){document.getElementById('cell-'+activeCell).classList.remove('active');activeCell=null}
+  document.getElementById('detail-panel').classList.remove('open');
+}
+
+/* ── SLIDER ── */
+function setSlider(pct){
+  document.getElementById('ds-fill').style.width=pct+'%';
+  document.getElementById('ds-thumb').style.left=pct+'%';
+  document.getElementById('ds-score').textContent=Math.round(pct/10)+'/10';
+  if(activeCell){
+    if(!state[activeCell])state[activeCell]={score:null,q1:'',q2:''};
+    state[activeCell].score=pct;
+    document.getElementById('cell-'+activeCell).classList.add('rated');
+  }
+  updateOverall();
+}
+function resetSlider(){
+  document.getElementById('ds-fill').style.width='0%';
+  document.getElementById('ds-thumb').style.left='0%';
+  document.getElementById('ds-score').textContent='—';
+}
+function setupDrag(){
+  var track=document.getElementById('ds-track');
+  function getP(e){
+    var r=track.getBoundingClientRect();
+    var x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+    return Math.max(0,Math.min(100,x/r.width*100));
+  }
+  track.onmousedown=track.ontouchstart=function(e){
+    dragging=true;setSlider(getP(e));e.preventDefault();
+  };
+  document.onmousemove=document.ontouchmove=function(e){
+    if(dragging)setSlider(getP(e));
+  };
+  document.onmouseup=document.ontouchend=function(){dragging=false};
+}
+
+/* ── SAVE ANSWERS ── */
+function checkComplete(){
+  if(!activeCell)return;
+  if(!state[activeCell])state[activeCell]={score:null,q1:'',q2:''};
+  var ta1=document.getElementById('dq1-ta');
+  var ta2=document.getElementById('dq2-ta');
+  state[activeCell].q1=ta1.value;
+  state[activeCell].q2=ta2.value;
+  ta1.classList.toggle('has-content',ta1.value.trim().length>0);
+  ta2.classList.toggle('has-content',ta2.value.trim().length>0);
+  updateOverall();
+}
+
+/* ── OVERALL SCORE ── */
+function updateOverall(){
+  var rated=cells.filter(function(c){return state[c.id]&&state[c.id].score!==null});
+  if(rated.length===0){document.getElementById('score-section').classList.remove('visible');return}
+  document.getElementById('score-section').classList.add('visible');
+
+  var total=rated.reduce(function(a,c){return a+state[c.id].score},0);
+  var avg=total/rated.length;
+  document.getElementById('ss-overall').textContent=Math.round(avg/10)+'/10';
+  document.getElementById('ss-cells-done').textContent=rated.length+' of 9 rated';
+
+  var rows=[
+    {key:'promote',ids:['audience','leads','conversion'],barId:'bar-promote',valId:'bv-promote'},
+    {key:'margins',ids:['costs','prices','cashflow'],barId:'bar-margins',valId:'bv-margins'},
+    {key:'people', ids:['systems','score_cell','culture'],barId:'bar-people',valId:'bv-people'}
+  ];
+  rows.forEach(function(row){
+    var rRated=row.ids.filter(function(id){return state[id]&&state[id].score!==null});
+    if(rRated.length===0){document.getElementById(row.valId).textContent='—';document.getElementById(row.barId).style.width='0%';return}
+    var rAvg=rRated.reduce(function(a,id){return a+state[id].score},0)/rRated.length;
+    document.getElementById(row.barId).style.width=rAvg+'%';
+    document.getElementById(row.valId).textContent=Math.round(rAvg/10)+'/10';
+  });
+
+  /* Score text */
+  var score=avg/10;
+  var txt='';
+  if(rated.length<9)txt='Rate all 9 cells to see your complete business model assessment.';
+  else if(score<4)txt='Your scores indicate significant opportunity across multiple levers. A Boardroom session will help you identify where to start — sequencing is everything.';
+  else if(score<6)txt='There are clear gaps and clear strengths. The gaps are where the revenue is hiding. A structured engagement will close them systematically.';
+  else if(score<8)txt='Strong foundations with room to optimise. The question now is which lever, in what order, produces the most compounding effect.';
+  else txt='You\'re operating at a high level. The focus shifts to protecting what\'s working and building the systems that make it scalable without you.';
+  document.getElementById('ss-text').textContent=txt;
+
+  document.getElementById('cta-wrap').classList.toggle('visible',rated.length>=3);
+}
+
+function autoResize(el){el.style.height='auto';el.style.height=Math.max(76,el.scrollHeight)+'px'}
+
+buildGrid();
+</script>
+</body>
+</html>

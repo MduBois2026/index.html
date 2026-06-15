@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 12-Month Boardroom Program — DuBois Business Consulting</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0D2B1F;
+  --forest-mid:#1A4332;
+  --forest-light:#2D6A4F;
+  --gold:#C9A84C;
+  --cream:#F5F0E8;
+  --cream2:#EDE6D6;
+  --cream3:#E0D8C8;
+  --ink:#1A1208;
+  --soft:#8C7E6A;
+  --border:#D4C9B0;
+  --gold-pale:#FBF6E9;
+  --gold-light:#F0E3BA;
+}
+
+html,body{
+  font-family:'Outfit',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  padding:0;margin:0;
+}
+body{padding:2.5rem 2.5rem 4rem}
+
+/* ── PAGE HEADER ── */
+.page-header{margin-bottom:2.75rem}
+.ph-eye{
+  font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--gold);display:flex;align-items:center;gap:12px;margin-bottom:.875rem;
+}
+.ph-eye::before{content:'';width:24px;height:1px;background:var(--gold)}
+.ph-title{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(28px,4.5vw,52px);font-weight:400;
+  color:var(--ink);line-height:1.05;letter-spacing:-0.02em;margin-bottom:.5rem;
+}
+.ph-title em{font-style:italic;color:var(--forest-light)}
+.ph-desc{font-size:14px;font-weight:300;color:var(--soft);line-height:1.8;max-width:680px;margin-bottom:1.5rem}
+
+/* ── PROGRESS STRIP ── */
+.progress-strip{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  margin-bottom:2.75rem;
+}
+.prog-item{
+  background:#fff;border:1px solid var(--border);border-radius:6px;
+  padding:.875rem 1rem;cursor:pointer;transition:all 0.18s;
+  border-left:3px solid var(--border);
+}
+.prog-item:hover{border-color:var(--gold);background:var(--gold-pale)}
+.prog-item.active{border-left-color:var(--forest);background:var(--cream2)}
+.prog-item.done{border-left-color:var(--forest-light);background:rgba(45,106,79,0.05)}
+.prog-q{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--soft);margin-bottom:3px}
+.prog-theme{font-family:'EB Garamond',Georgia,serif;font-size:16px;font-weight:400;color:var(--ink)}
+.prog-dot-row{display:flex;gap:4px;margin-top:6px}
+.prog-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:background 0.2s}
+.prog-dot.done{background:var(--forest-light)}
+.prog-dot.active{background:var(--gold)}
+
+/* ── QUARTER GRID ── */
+.quarter-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:1.25rem}
+@media(max-width:720px){.quarter-wrap{grid-template-columns:1fr}}
+
+/* ── MODULE CARD ── */
+.module-card{
+  background:#fff;border:1.5px solid var(--border);border-radius:8px;
+  overflow:hidden;transition:border-color 0.18s,transform 0.15s,box-shadow 0.15s;
+  cursor:pointer;
+}
+.module-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 5px 18px rgba(201,168,76,0.1)}
+.module-card.expanded{border-color:var(--forest);transform:none}
+.module-card.completed{border-left:3px solid var(--forest-light)}
+
+/* Card header */
+.mc-head{
+  display:flex;align-items:center;gap:12px;
+  padding:.875rem 1.125rem;
+  border-bottom:1px solid var(--border);
+  background:var(--cream);
+  position:relative;
+}
+.mc-icon-wrap{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--forest);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.mc-label-wrap{flex:1}
+.mc-label{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--soft);margin-bottom:2px}
+.mc-title{font-family:'EB Garamond',Georgia,serif;font-size:18px;font-weight:500;color:var(--ink)}
+.mc-toggle{font-size:13px;color:var(--soft);flex-shrink:0;transition:transform 0.2s}
+.module-card.expanded .mc-toggle{transform:rotate(180deg)}
+
+/* Card body */
+.mc-body{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.4s ease,opacity 0.3s;opacity:0;
+}
+.module-card.expanded .mc-body{max-height:500px;opacity:1}
+.mc-body-inner{padding:1rem 1.25rem}
+
+/* Task list */
+.task-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.task-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:.625rem 0;border-bottom:1px dashed var(--cream3);
+  cursor:pointer;font-size:13px;color:var(--soft);line-height:1.5;
+  transition:color 0.15s;
+}
+.task-item:last-child{border-bottom:none}
+.task-item:hover{color:var(--ink)}
+.task-item.done{color:var(--forest-light);text-decoration:none}
+.task-item.done .task-check{background:var(--forest-light);border-color:var(--forest-light)}
+.task-check{
+  width:18px;height:18px;border-radius:50%;
+  border:1.5px solid var(--border);
+  flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:#fff;
+  transition:all 0.2s;background:#fff;
+}
+.task-item:hover .task-check{border-color:var(--gold)}
+.task-type{font-size:10px;color:var(--cream3);margin-left:auto;flex-shrink:0;text-align:right;padding-top:2px}
+
+/* Module context */
+.mc-context{
+  margin-top:.875rem;padding-top:.875rem;border-top:1px solid var(--cream3);
+  font-size:12px;font-weight:300;color:var(--soft);line-height:1.7;font-style:italic;
+}
+
+/* ── QUARTER NAV ── */
+.quarter-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1.75rem;flex-wrap:wrap;gap:.75rem;
+}
+.qn-label{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(20px,3vw,30px);font-weight:400;color:var(--ink);
+}
+.qn-label em{font-style:italic;color:var(--forest-light)}
+.qn-btns{display:flex;gap:8px}
+.qn-btn{
+  font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  background:none;border:1px solid var(--border);color:var(--soft);
+  padding:8px 16px;border-radius:3px;cursor:pointer;transition:all 0.18s;
+}
+.qn-btn:hover{border-color:var(--forest);color:var(--forest)}
+.qn-btn.primary{background:var(--forest);border-color:var(--forest);color:#fff}
+.qn-btn.primary:hover{background:var(--forest-mid)}
+.qn-btn:disabled{opacity:0.3;cursor:default}
+
+/* ── COMPLETION STATS ── */
+.comp-bar-wrap{
+  background:#fff;border:1px solid var(--border);border-radius:6px;
+  padding:1rem 1.375rem;margin-bottom:2rem;
+  display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;
+}
+.cb-label{font-size:12px;color:var(--soft);white-space:nowrap}
+.cb-track{flex:1;min-width:80px;height:4px;background:var(--cream3);border-radius:100px;overflow:hidden}
+.cb-fill{height:100%;border-radius:100px;background:linear-gradient(to right,var(--forest-light),var(--gold));transition:width 0.4s ease}
+.cb-count{font-size:12px;font-weight:500;color:var(--forest);white-space:nowrap}
+
+/* ── CTA ── */
+.cta-row{
+  background:var(--forest);border-radius:8px;
+  padding:1.5rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;
+}
+.cta-text-block{flex:1}
+.cta-heading{
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:clamp(18px,3vw,24px);font-weight:400;
+  color:#fff;line-height:1.2;margin-bottom:.375rem;
+}
+.cta-heading em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:13px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.6;max-width:380px}
+.cta-btn{
+  font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--gold);color:var(--forest);
+  border:none;padding:13px 24px;border-radius:3px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.2s;white-space:nowrap;
+}
+.cta-btn:hover{background:#DFC060;transform:translateY(-1px)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.page-header{animation:fadeUp 0.7s ease}
+.progress-strip{animation:fadeUp 0.7s 0.15s ease both}
+
+@media(max-width:600px){body{padding:1.5rem 1rem 3rem}}
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="ph-eye">12-Month Boardroom Program</div>
+  <h1 class="ph-title">A year of structured<br><em>transformation.</em></h1>
+  <p class="ph-desc">Four quarters, four themes, twelve modules. Every session, every action, and every milestone is mapped from day one — so you always know where you are, what comes next, and why. This is the full DuBois Boardroom methodology delivered across a 12-month engagement.</p>
+</div>
+
+<!-- PROGRESS STRIP -->
+<div class="progress-strip" id="progress-strip"></div>
+
+<!-- COMPLETION BAR -->
+<div class="comp-bar-wrap">
+  <span class="cb-label">Program completion</span>
+  <div class="cb-track"><div class="cb-fill" id="cb-fill" style="width:0%"></div></div>
+  <span class="cb-count" id="cb-count">0 of 48 tasks</span>
+</div>
+
+<!-- QUARTER NAV -->
+<div class="quarter-nav">
+  <div class="qn-label" id="qn-label">Quarter 1 — <em>Optimise Margins</em></div>
+  <div class="qn-btns">
+    <button class="qn-btn" id="btn-prev" onclick="changeQ(-1)" disabled>← Prev</button>
+    <button class="qn-btn primary" id="btn-next" onclick="changeQ(1)">Next quarter →</button>
+  </div>
+</div>
+
+<!-- QUARTER GRID -->
+<div class="quarter-wrap" id="quarter-wrap"></div>
+
+<!-- CTA -->
+<div class="cta-row">
+  <div class="cta-text-block">
+    <div class="cta-heading">Ready to start<br><em>your 12-month program?</em></div>
+    <p class="cta-sub">Book your Boardroom Discovery Session — a complimentary 20-minute conversation to see if the program is the right fit for where your business is right now.</p>
+  </div>
+  <a class="cta-btn" href="https://www.duboisbusinessconsulting.com.au/book" target="_blank">Book a discovery session →</a>
+</div>
+
+<script>
+var program=[
+  {
+    q:1,theme:'Optimise Margins',
+    modules:[
+      {
+        id:'launch',icon:'🚀',label:'Module 1',title:'Launch',
+        context:'The foundation session — establishing your baseline and mapping exactly where you are before we build where you\'re going.',
+        tasks:[
+          {t:'Alignment session',type:'Session'},
+          {t:'Create vision',type:'Document'},
+          {t:'Financial analysis',type:'Tool'},
+          {t:'Plan builder',type:'Tool'},
+          {t:'Quarter 1 task map',type:'Planning'}
+        ]
+      },
+      {
+        id:'roi',icon:'📊',label:'Module 2',title:'ROI',
+        context:'Surface the hidden margin sitting in your current cost structure, pricing, and debtor management — before acquiring a single new client.',
+        tasks:[
+          {t:'Price review',type:'Document'},
+          {t:'Debtors recovery audit',type:'Document'},
+          {t:'Inventory analysis',type:'Tool'},
+          {t:'Supplier review',type:'Document'},
+          {t:'Chargeable hours audit',type:'Tool'}
+        ]
+      },
+      {
+        id:'review-q1',icon:'🔄',label:'Module 3',title:'Review',
+        context:'Close the quarter with a structured review — what moved, what the data says, and what the Q2 plan needs to reflect.',
+        tasks:[
+          {t:'Task completion audit',type:'Review'},
+          {t:'DISC profile',type:'Assessment'},
+          {t:'Select KPIs',type:'Planning'},
+          {t:'Quantify value',type:'Tool'},
+          {t:'Quarter 2 plan',type:'Planning'}
+        ]
+      }
+    ]
+  },
+  {
+    q:2,theme:'Engage People',
+    modules:[
+      {
+        id:'team',icon:'👥',label:'Module 4',title:'Team',
+        context:'Build the team structure that lets you step back from the day-to-day — roles, goals, and the communication rhythm that keeps everyone aligned.',
+        tasks:[
+          {t:'Team talk session',type:'Session'},
+          {t:'Set team goals',type:'Document'},
+          {t:'Rules of the game',type:'Document'},
+          {t:'Regular meetings cadence',type:'Session'},
+          {t:'Select team reward',type:'Planning'}
+        ]
+      },
+      {
+        id:'monitor',icon:'📈',label:'Module 5',title:'Monitor',
+        context:'Install the scoreboard and the 90-day challenge rhythm — so your team operates from numbers, not gut feel.',
+        tasks:[
+          {t:'Activity inventory',type:'Document'},
+          {t:'Magic number (daily target)',type:'Tool'},
+          {t:'Build scoreboard',type:'Tool'},
+          {t:'90-day challenge launch',type:'Planning'},
+          {t:'Collate baseline data',type:'Document'}
+        ]
+      },
+      {
+        id:'review-q2',icon:'🔄',label:'Module 6',title:'Review',
+        context:'Personnel review, personal development priorities, and a Q3 plan built on what the data from the first half actually shows.',
+        tasks:[
+          {t:'Personnel review',type:'Review'},
+          {t:'Personal development plan',type:'Document'},
+          {t:'Select team KPI',type:'Planning'},
+          {t:'Quantify value',type:'Tool'},
+          {t:'Quarter 3 plan',type:'Planning'}
+        ]
+      }
+    ]
+  },
+  {
+    q:3,theme:'Upgrade Promote',
+    modules:[
+      {
+        id:'sales',icon:'🎯',label:'Module 7',title:'Sales',
+        context:'Map the buyer process, develop the pitch, and install the follow-up system — so enquiries convert at a consistent rate without relying on you personally.',
+        tasks:[
+          {t:'Map buyer process',type:'Document'},
+          {t:'Analyse sales data',type:'Tool'},
+          {t:'Develop pitch script',type:'Document'},
+          {t:'Follow-up process',type:'Document'},
+          {t:'Train sales conversation',type:'Session'}
+        ]
+      },
+      {
+        id:'marketing',icon:'📢',label:'Module 8',title:'Marketing',
+        context:'Define the A-grade client avatar, build the lead magnet strategy, and select the media mix that reaches more of the right people.',
+        tasks:[
+          {t:'Select A-grade avatar',type:'Document'},
+          {t:'Meet/beat market analysis',type:'Tool'},
+          {t:'Build lead magnets',type:'Document'},
+          {t:'Select media mix',type:'Planning'},
+          {t:'Online ads strategy',type:'Planning'}
+        ]
+      },
+      {
+        id:'review-q3',icon:'🔄',label:'Module 9',title:'Review',
+        context:'Sales and marketing review together — what\'s converting, what the KPIs are showing, and what Q4 needs to lock in.',
+        tasks:[
+          {t:'Sales/marketing review',type:'Review'},
+          {t:'Personal development update',type:'Document'},
+          {t:'Sales & marketing KPI',type:'Planning'},
+          {t:'Quantify value',type:'Tool'},
+          {t:'Quarter 4 plan',type:'Planning'}
+        ]
+      }
+    ]
+  },
+  {
+    q:4,theme:'Ideal Scale',
+    modules:[
+      {
+        id:'people',icon:'🏆',label:'Module 10',title:'People',
+        context:'Build the team infrastructure for the next stage — onboarding, recruitment, and the company vision that attracts the right people.',
+        tasks:[
+          {t:'Onboarding pack',type:'Document'},
+          {t:'Team reviews process',type:'Document'},
+          {t:'Advert placement strategy',type:'Planning'},
+          {t:'Company vision statement',type:'Document'},
+          {t:'Mission statement',type:'Document'}
+        ]
+      },
+      {
+        id:'systems',icon:'⚙️',label:'Module 11',title:'Systems',
+        context:'Install the five core systems that let the business run without the owner needing to be present for every decision.',
+        tasks:[
+          {t:'Finance systems',type:'Tool'},
+          {t:'Team systems',type:'Document'},
+          {t:'Marketing systems',type:'Tool'},
+          {t:'Sales systems',type:'Tool'},
+          {t:'Business operations systems',type:'Document'}
+        ]
+      },
+      {
+        id:'review-q4',icon:'🔄',label:'Module 12',title:'Review',
+        context:'The annual close — what the full year delivered, what the business is worth now, and what the next chapter looks like.',
+        tasks:[
+          {t:'Systems review',type:'Review'},
+          {t:'Personal development review',type:'Document'},
+          {t:'System KPI assessment',type:'Tool'},
+          {t:'Quantify total value created',type:'Tool'},
+          {t:'Annual plan for year 2',type:'Planning'}
+        ]
+      }
+    ]
+  }
+];
+
+var currentQ=0;
+var taskState={};/* key = q-modId-taskIdx */
+var expandedCard=null;
+
+/* ── INIT ── */
+function init(){
+  renderProgressStrip();
+  renderQuarter();
+}
+
+/* ── PROGRESS STRIP ── */
+function renderProgressStrip(){
+  var strip=document.getElementById('progress-strip');
+  strip.innerHTML='';
+  program.forEach(function(q,qi){
+    var done=countDone(qi);
+    var total=q.modules.reduce(function(a,m){return a+m.tasks.length},0);
+    var div=document.createElement('div');
+    div.className='prog-item'+(qi===currentQ?' active':'')+(done===total&&total>0?' done':'');
+    div.onclick=function(){currentQ=qi;renderProgressStrip();renderQuarter()};
+    div.innerHTML=
+      '<div class="prog-q">Q'+q.q+'</div>'+
+      '<div class="prog-theme">'+q.theme+'</div>'+
+      '<div class="prog-dot-row">'+q.modules.map(function(m,mi){
+        var mDone=m.tasks.filter(function(_,ti){return taskState[qi+'-'+m.id+'-'+ti]}).length;
+        var status=mDone===m.tasks.length?'done':mDone>0?'active':'';
+        return'<div class="prog-dot '+status+'"></div>';
+      }).join('')+'</div>';
+    strip.appendChild(div);
+  });
+}
+
+/* ── QUARTER ── */
+function renderQuarter(){
+  var q=program[currentQ];
+  var labels=['Optimise Margins','Engage People','Upgrade Promote','Ideal Scale'];
+  var italics=['Optimise Margins','Engage People','Upgrade Promote','Ideal Scale'];
+  document.getElementById('qn-label').innerHTML='Quarter '+q.q+' — <em>'+q.theme+'</em>';
+  document.getElementById('btn-prev').disabled=currentQ===0;
+  document.getElementById('btn-next').disabled=currentQ===program.length-1;
+  document.getElementById('btn-next').textContent=currentQ===program.length-1?'Complete':'Next quarter →';
+
+  var wrap=document.getElementById('quarter-wrap');
+  wrap.innerHTML='';
+  q.modules.forEach(function(m,mi){
+    var allDone=m.tasks.every(function(_,ti){return taskState[currentQ+'-'+m.id+'-'+ti]});
+    var card=document.createElement('div');
+    card.className='module-card'+(allDone?' completed':'');
+    card.id='mcard-'+m.id;
+    card.innerHTML=
+      '<div class="mc-head" onclick="toggleCard(\''+m.id+'\','+mi+')">'+
+        '<div class="mc-icon-wrap" style="font-size:20px;line-height:1">'+m.icon+'</div>'+
+        '<div class="mc-label-wrap">'+
+          '<div class="mc-label">'+m.label+'</div>'+
+          '<div class="mc-title">'+m.title+'</div>'+
+        '</div>'+
+        '<span class="mc-toggle">▾</span>'+
+      '</div>'+
+      '<div class="mc-body" id="mbody-'+m.id+'">'+
+        '<div class="mc-body-inner">'+
+          '<ul class="task-list">'+
+          m.tasks.map(function(task,ti){
+            var key=currentQ+'-'+m.id+'-'+ti;
+            var done=taskState[key];
+            return'<li class="task-item'+(done?' done':'')+'" onclick="toggleTask(\''+key+'\',\''+m.id+'\','+mi+','+ti+')">'+
+              '<div class="task-check">'+(done?'✓':'')+'</div>'+
+              '<span>'+task.t+'</span>'+
+              '<span class="task-type">'+task.type+'</span>'+
+            '</li>';
+          }).join('')+
+          '</ul>'+
+          '<div class="mc-context">'+m.context+'</div>'+
+        '</div>'+
+      '</div>';
+    wrap.appendChild(card);
+  });
+
+  updateCompletionBar();
+}
+
+function toggleCard(id,mi){
+  var card=document.getElementById('mcard-'+id);
+  var wasExpanded=card.classList.contains('expanded');
+  document.querySelectorAll('.module-card').forEach(function(c){c.classList.remove('expanded')});
+  if(!wasExpanded)card.classList.add('expanded');
+}
+
+function toggleTask(key,modId,mi,ti){
+  taskState[key]=!taskState[key];
+  renderProgressStrip();
+  renderQuarter();
+}
+
+function changeQ(dir){
+  currentQ=Math.max(0,Math.min(program.length-1,currentQ+dir));
+  expandedCard=null;
+  renderProgressStrip();
+  renderQuarter();
+}
+
+function countDone(qi){
+  var total=0;
+  program[qi].modules.forEach(function(m,mi){
+    m.tasks.forEach(function(_,ti){
+      if(taskState[qi+'-'+m.id+'-'+ti])total++;
+    });
+  });
+  return total;
+}
+
+function updateCompletionBar(){
+  var total=program.reduce(function(a,q){return a+q.modules.reduce(function(b,m){return b+m.tasks.length},0)},0);
+  var done=0;
+  program.forEach(function(q,qi){
+    q.modules.forEach(function(m){
+      m.tasks.forEach(function(_,ti){
+        if(taskState[qi+'-'+m.id+'-'+ti])done++;
+      });
+    });
+  });
+  var pct=Math.round(done/total*100);
+  document.getElementById('cb-fill').style.width=pct+'%';
+  document.getElementById('cb-count').textContent=done+' of '+total+' tasks';
+}
+
+init();
+</script>
+</body>
+</html>

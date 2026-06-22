@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 7 Habits Boardroom Program | DuBois Business Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Arial&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest:#1B3A2B;
+    --forest-light:#E8EFE9;
+    --forest-deep:#122620;
+    --gold:#B8923C;
+    --gold-light:#E9DDC0;
+    --cream:#F7F3EA;
+    --ink:#1A1A1A;
+    --ink-soft:#4A4A44;
+    --border:#D8D2C2;
+    --white:#FFFFFF;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'EB Garamond', Georgia, serif;
+    color:var(--forest);
+    margin:0;
+    font-weight:600;
+  }
+  p{margin:0 0 1em 0;}
+  a{color:var(--gold);}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  img{max-width:100%;display:block;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:linear-gradient(160deg, var(--forest-deep) 0%, var(--forest) 65%);
+    color:var(--white);
+    padding:88px 0 76px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    right:-120px;top:-120px;
+    width:420px;height:420px;
+    border:1px solid rgba(184,146,60,0.18);
+    border-radius:50%;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    right:-40px;top:-40px;
+    width:280px;height:280px;
+    border:1px solid rgba(184,146,60,0.28);
+    border-radius:50%;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-family:Arial, sans-serif;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--gold);
+    border:1px solid rgba(184,146,60,0.5);
+    border-radius:999px;
+    padding:7px 16px;
+    margin-bottom:26px;
+  }
+  .hero h1{
+    color:var(--white);
+    font-size:clamp(36px, 5.2vw, 58px);
+    line-height:1.06;
+    letter-spacing:-0.01em;
+  }
+  .hero h1 em{
+    display:block;
+    font-style:normal;
+    color:var(--gold);
+    font-size:0.62em;
+    margin-top:6px;
+    letter-spacing:.02em;
+  }
+  .hero-sub{
+    max-width:560px;
+    font-size:18px;
+    color:#D9E3DB;
+    margin-top:22px;
+  }
+  .hero-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:28px;
+    margin-top:40px;
+    padding-top:28px;
+    border-top:1px solid rgba(255,255,255,0.14);
+  }
+  .hero-meta div{min-width:140px;}
+  .hero-meta .num{
+    font-family:'EB Garamond', serif;
+    font-size:30px;
+    color:var(--gold);
+    font-weight:600;
+    line-height:1;
+  }
+  .hero-meta .lab{
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#B9C7BD;
+    margin-top:6px;
+  }
+
+  /* ---------- SECTION GENERIC ---------- */
+  section{padding:72px 0;}
+  .section-tight{padding:56px 0;}
+  .kicker{
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--gold);
+    margin-bottom:10px;
+  }
+  h2.section-title{
+    font-size:clamp(26px,3.4vw,36px);
+    margin-bottom:18px;
+  }
+  .lead{
+    font-size:17px;
+    color:var(--ink-soft);
+    max-width:760px;
+  }
+  .rule{
+    height:1px;
+    background:linear-gradient(90deg, var(--gold), transparent);
+    width:120px;
+    margin:22px 0 0;
+  }
+
+  /* ---------- PRINCIPLE BAND ---------- */
+  .principle{
+    background:var(--forest-light);
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+  }
+  .principle-grid{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:48px;
+    align-items:center;
+  }
+  .pc-card{
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:30px 32px;
+    position:relative;
+  }
+  .pc-card::before{
+    content:"";
+    position:absolute;
+    left:0;top:0;bottom:0;
+    width:4px;
+    background:var(--gold);
+  }
+  .pc-row{display:flex;gap:18px;margin-bottom:18px;}
+  .pc-row:last-child{margin-bottom:0;}
+  .pc-letter{
+    font-family:'EB Garamond', serif;
+    font-weight:700;
+    font-size:26px;
+    color:var(--forest);
+    background:var(--gold-light);
+    width:48px;height:48px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .pc-row h4{font-size:17px;margin-bottom:4px;}
+  .pc-row p{font-size:14.5px;color:var(--ink-soft);margin:0;}
+  blockquote{
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    font-size:21px;
+    color:var(--forest);
+    border-left:3px solid var(--gold);
+    padding-left:22px;
+    margin:0;
+    line-height:1.5;
+  }
+  blockquote cite{
+    display:block;
+    font-style:normal;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-top:12px;
+    font-family:Arial, sans-serif;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+
+  /* ---------- ARCHITECTURE TABLE ---------- */
+  .arch-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:8px;
+    font-size:15px;
+  }
+  .arch-table tr{border-bottom:1px solid var(--border);}
+  .arch-table tr:last-child{border-bottom:none;}
+  .arch-table td{padding:16px 18px;vertical-align:top;}
+  .arch-table td:first-child{
+    width:190px;
+    font-weight:700;
+    color:var(--forest);
+    font-size:13px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .arch-table td:last-child{color:var(--ink-soft);}
+
+  /* ---------- QUARTER BLOCKS ---------- */
+  .quarter{margin-bottom:64px;}
+  .quarter:last-child{margin-bottom:0;}
+  .q-head{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    background:var(--forest);
+    color:var(--white);
+    padding:20px 28px;
+    border-radius:6px 6px 0 0;
+    flex-wrap:wrap;
+  }
+  .q-badge{
+    font-family:'EB Garamond', serif;
+    font-weight:700;
+    font-size:22px;
+    color:var(--forest-deep);
+    background:var(--gold);
+    border-radius:4px;
+    padding:6px 16px;
+    flex-shrink:0;
+  }
+  .q-head h3{color:var(--white);font-size:21px;}
+  .q-head .q-months{
+    color:var(--gold-light);
+    font-size:13.5px;
+    letter-spacing:.04em;
+    margin-left:auto;
+    font-family:Arial, sans-serif;
+  }
+  .q-intro{
+    background:var(--white);
+    border:1px solid var(--border);
+    border-top:none;
+    padding:24px 28px 4px;
+  }
+  .q-intro p{color:var(--ink-soft);font-size:15.5px;}
+
+  .habit{
+    background:var(--white);
+    border:1px solid var(--border);
+    border-top:none;
+    padding:28px 28px 30px;
+  }
+  .habit + .habit{border-top:1px dashed var(--border);}
+  .habit-tag{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:4px;
+  }
+  .habit-num{
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.1em;
+    color:var(--gold);
+    text-transform:uppercase;
+  }
+  .habit h4{font-size:19px;}
+  .habit-program{
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    font-weight:500;
+    color:var(--ink);
+    font-size:16.5px;
+    margin:2px 0 14px;
+  }
+  .habit p.challenge{color:var(--ink-soft);font-size:15px;margin-bottom:16px;}
+  .habit-cols{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    margin-bottom:16px;
+  }
+  .habit-label{
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--forest);
+    margin-bottom:8px;
+  }
+  .habit ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--ink-soft);}
+  .habit ul li{margin-bottom:7px;}
+  .habit ul li:last-child{margin-bottom:0;}
+  .deliverable-box{
+    background:var(--cream);
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:14px 16px;
+    font-size:14.5px;
+    color:var(--ink-soft);
+  }
+  .kpi-line{
+    font-size:13.5px;
+    color:var(--forest);
+    border-top:1px solid var(--border);
+    padding-top:14px;
+    margin-top:16px;
+  }
+  .kpi-line strong{color:var(--forest);}
+
+  .q3-box{
+    background:var(--white);
+    border:1px solid var(--border);
+    border-top:none;
+    padding:28px 28px 30px;
+  }
+  .q3-box ul{padding-left:18px;color:var(--ink-soft);font-size:15px;}
+  .q3-box ul li{margin-bottom:10px;}
+  .q3-deliverable{
+    background:var(--forest-light);
+    border-left:3px solid var(--gold);
+    padding:16px 20px;
+    font-size:14.5px;
+    color:var(--ink);
+    margin-top:18px;
+  }
+
+  /* ---------- SUMMARY TABLE ---------- */
+  .summary-wrap{overflow-x:auto;}
+  table.summary{
+    width:100%;
+    border-collapse:collapse;
+    font-size:14px;
+    min-width:680px;
+  }
+  table.summary th{
+    background:var(--forest);
+    color:var(--white);
+    text-align:left;
+    padding:13px 16px;
+    font-size:12.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  table.summary td{
+    padding:13px 16px;
+    border-bottom:1px solid var(--border);
+    color:var(--ink-soft);
+  }
+  table.summary tr:nth-child(even) td{background:var(--forest-light);}
+  table.summary td:first-child{font-weight:700;color:var(--forest);}
+  table.summary td:nth-child(2){color:var(--ink);}
+
+  /* ---------- CTA ---------- */
+  .cta{
+    background:var(--forest-deep);
+    color:var(--white);
+    text-align:center;
+    padding:80px 0;
+  }
+  .cta h2{color:var(--white);font-size:clamp(26px,3.6vw,36px);margin-bottom:14px;}
+  .cta p{color:#C9D4CC;max-width:520px;margin:0 auto 30px;font-size:16px;}
+  .btn{
+    display:inline-block;
+    background:var(--gold);
+    color:var(--forest-deep);
+    font-weight:700;
+    font-size:15px;
+    padding:15px 36px;
+    border-radius:4px;
+    text-decoration:none;
+    letter-spacing:.02em;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(184,146,60,0.35);}
+
+  footer{
+    background:var(--forest-deep);
+    color:#9FB0A4;
+    text-align:center;
+    font-size:13px;
+    padding:26px 0 34px;
+    letter-spacing:.02em;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:760px){
+    .principle-grid{grid-template-columns:1fr;}
+    .habit-cols{grid-template-columns:1fr;}
+    .arch-table td:first-child{width:130px;}
+    .q-head{padding:18px 20px;}
+    .habit, .q-intro, .q3-box{padding:22px 20px;}
+    .hero{padding:64px 0 56px;}
+    section{padding:52px 0;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .btn{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">DuBois Business Consulting &amp; Flick the Switch</span>
+    <h1>The 7 Habits Boardroom Program<em>A 12-Month Effectiveness &amp; Growth Framework for SME Owners</em></h1>
+    <p class="hero-sub">Built on Stephen Covey's <em>The 7 Habits of Highly Effective People</em> — translated into a structured consulting and coaching engagement with quarterly deliverables and a tracked Boardroom dashboard.</p>
+    <div class="hero-meta">
+      <div><div class="num">12</div><div class="lab">Months</div></div>
+      <div><div class="num">4</div><div class="lab">Quarters</div></div>
+      <div><div class="num">7</div><div class="lab">Habits Applied</div></div>
+      <div><div class="num">8</div><div class="lab">Tracked Deliverables</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- OVERVIEW -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Program Overview</div>
+    <h2 class="section-title">A consulting engagement built on a proven operating system</h2>
+    <p class="lead">The 7 Habits Boardroom Program translates Stephen Covey's framework — for forty years the standard reference on personal and organisational effectiveness — into a structured, 12-month engagement purpose-built for SME owners. Each habit becomes one program quarter or module: a diagnostic, a set of working sessions, a concrete deliverable, and a KPI tracked on the client's Boardroom dashboard.</p>
+    <p class="lead">The program sits across both arms of the practice. DuBois Business Consulting leads the commercial and operational deliverables — revenue, margin, succession, exit-readiness. Flick the Switch leads the personal-effectiveness coaching underneath them — the habits, mindset, and discipline that make the commercial work stick. Most SME owners already know what to do. What's missing is the operating system that makes doing it sustainable.</p>
+
+    <div style="margin-top:36px;">
+      <h3 style="font-size:21px;margin-bottom:14px;">Program Architecture</h3>
+      <table class="arch-table">
+        <tr><td>Duration</td><td>12 months, structured in 4 quarters of 3 months each.</td></tr>
+        <tr><td>Format</td><td>Fortnightly 1:1 sessions (60–90 min) + monthly Boardroom review + quarterly deliverable sign-off.</td></tr>
+        <tr><td>Sequence</td><td>Habits 1–3 (Q1–Q2): Private Victory — self-leadership and foundations. Habits 4–6 (Q2–Q3): Public Victory — team, customers, partners. Habit 7 (Q4): Renewal — sustaining the system beyond the engagement.</td></tr>
+        <tr><td>Client outcome</td><td>A documented, owner-led operating rhythm: clear priorities, a functioning team, win-win commercial relationships, and a renewal discipline that outlasts the consulting engagement.</td></tr>
+        <tr><td>Tracking</td><td>DuBois Boardroom Program dashboard — same infrastructure as the existing 12-Month Boardroom Program tracker.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPLE -->
+<section class="principle">
+  <div class="wrap">
+    <div class="principle-grid">
+      <div>
+        <div class="kicker">Foundational Principle</div>
+        <h2 class="section-title" style="margin-bottom:16px;">The P/PC Balance</h2>
+        <p class="lead" style="margin-bottom:20px;">Covey's central idea — and the one most SME owners violate without realising it — is the balance between Production (P) and Production Capability (PC). P is the result: revenue, the sale, the deliverable. PC is the capacity that produces results: the team, the systems, the owner's own capacity, the client relationships.</p>
+        <blockquote>Effectiveness lies in the balance — what I call the P/PC Balance.<cite>Stephen Covey</cite></blockquote>
+      </div>
+      <div class="pc-card">
+        <div class="pc-row">
+          <div class="pc-letter">P</div>
+          <div><h4>Production</h4><p>The result. Revenue, the sale, the deliverable, this quarter's number.</p></div>
+        </div>
+        <div class="pc-row">
+          <div class="pc-letter">PC</div>
+          <div><h4>Production Capability</h4><p>The capacity that produces results. The team, the systems, the owner's capacity, the relationships.</p></div>
+        </div>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:32px;">Every module in this program develops a PC asset — a system, a habit, a capability — that produces a measurable P result. This is the throughline that ties the personal-effectiveness coaching to the commercial consulting deliverables: not two workstreams, but one workstream viewed from two levels.</p>
+  </div>
+</section>
+
+<!-- QUARTER 1 -->
+<section id="q1">
+  <div class="wrap">
+    <div class="kicker">Program Roadmap</div>
+    <h2 class="section-title">Quarter 1 — Private Victory: Foundations</h2>
+    <p class="lead">Most SME owners enter this program reactive — running the business day to day with no documented strategic centre. Quarter 1 builds that centre before any commercial work begins. Skipping this is the single most common reason consulting engagements fail to stick.</p>
+
+    <div class="quarter" style="margin-top:32px;">
+      <div class="q-head">
+        <div class="q-badge">Q1</div>
+        <h3>Self-Leadership &amp; Strategic Clarity</h3>
+        <div class="q-months">Months 1–3</div>
+      </div>
+
+      <div class="habit">
+        <div class="habit-tag"><span class="habit-num">Habit 1</span></div>
+        <h4>Be Proactive</h4>
+        <p class="habit-program">The Ownership Audit</p>
+        <p class="challenge">SME owners frequently default to blaming market conditions, staff, or clients for results that are within their own control. This module separates what is genuinely outside the owner's control from what they have simply stopped exercising control over.</p>
+        <div class="habit-cols">
+          <div>
+            <div class="habit-label">Working Sessions</div>
+            <ul>
+              <li>Circle of Control mapping — list every recurring frustration, sort into Control / Influence / No Control</li>
+              <li>Language audit — identify reactive language patterns over a one-week tracking period</li>
+              <li>Reframe each "No Control" item the owner is currently treating as an excuse</li>
+            </ul>
+          </div>
+          <div>
+            <div class="habit-label">Client Deliverable</div>
+            <div class="deliverable-box">A one-page Ownership Map — the items the owner commits to acting on this quarter, signed off and dated.</div>
+          </div>
+        </div>
+        <div class="kpi-line"><strong>KPI tracked on Boardroom dashboard:</strong> % reduction in reactive language and number of "No Control" items successfully reframed.</div>
+      </div>
+
+      <div class="habit">
+        <div class="habit-tag"><span class="habit-num">Habit 2</span></div>
+        <h4>Begin with the End in Mind</h4>
+        <p class="habit-program">The Exit-Back Strategy Session</p>
+        <p class="challenge">Directly maps to DuBois's exit-planning specialty. Most owners cannot articulate what "done" looks like for the business — without that, every decision is made without reference to an end state.</p>
+        <div class="habit-cols">
+          <div>
+            <div class="habit-label">Working Sessions</div>
+            <ul>
+              <li>Personal mission statement session — values, non-negotiables, what success looks like personally</li>
+              <li>Exit-Back Planning — define the target exit and work backwards to today's decisions</li>
+              <li>Translate the mission statement into 3–5 commercial non-negotiables for the business</li>
+            </ul>
+          </div>
+          <div>
+            <div class="habit-label">Client Deliverable</div>
+            <div class="deliverable-box">A one-page Business Mission Statement plus an Exit-Back Roadmap (3–5 year view) — the reference document every later quarter's decisions get tested against.</div>
+          </div>
+        </div>
+        <div class="kpi-line"><strong>KPI tracked on Boardroom dashboard:</strong> Roadmap completed and signed off; owner can articulate target exit value/structure unprompted in review session.</div>
+      </div>
+
+      <div class="habit">
+        <div class="habit-tag"><span class="habit-num">Habit 3</span></div>
+        <h4>Put First Things First</h4>
+        <p class="habit-program">The Owner's Time Audit &amp; Quadrant II System</p>
+        <p class="challenge">Almost universally, SME owners are buried in Quadrant III (urgent, not important) and Quadrant I (urgent and important) firefighting, with zero time in Quadrant II — the quadrant where strategy, systems, and revenue growth actually get built.</p>
+        <div class="habit-cols">
+          <div>
+            <div class="habit-label">Working Sessions</div>
+            <ul>
+              <li>7-day time audit — owner logs every hour against Covey's four quadrants</li>
+              <li>Delegation session — identify every Quadrant III/IV task that should sit with someone else</li>
+              <li>Build a weekly Quadrant II block — protected time for strategic work identified in Habits 1–2</li>
+            </ul>
+          </div>
+          <div>
+            <div class="habit-label">Client Deliverable</div>
+            <div class="deliverable-box">A Weekly Operating Rhythm — calendar template with Quadrant II time protected, plus a Delegation Register listing what moves off the owner's desk, to whom, and by what date.</div>
+          </div>
+        </div>
+        <div class="kpi-line"><strong>KPI tracked on Boardroom dashboard:</strong> % of owner's week in Quadrant II (target: from baseline to 20%+ by end of quarter).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUARTER 2 -->
+<section id="q2" style="background:var(--cream);border-top:1px solid var(--border);">
+  <div class="wrap">
+    <div class="kicker">Program Roadmap</div>
+    <h2 class="section-title">Quarter 2 — The Bridge: Team &amp; Trust</h2>
+    <p class="lead">With personal foundations in place, Quarter 2 turns outward to the people who execute the strategy: the team. This is where DuBois's franchise-network and retention experience translates directly into client deliverables.</p>
+
+    <div class="quarter" style="margin-top:32px;">
+      <div class="q-head">
+        <div class="q-badge">Q2</div>
+        <h3>Public Victory — Building the Team</h3>
+        <div class="q-months">Months 4–6</div>
+      </div>
+
+      <div class="habit">
+        <div class="habit-tag"><span class="habit-num">Habit 4</span></div>
+        <h4>Think Win-Win</h4>
+        <p class="habit-program">The Stakeholder Agreement Framework</p>
+        <p class="challenge">SME owners frequently run win-lose dynamics with staff and suppliers without realising it — and wonder why retention and partner loyalty underperform.</p>
+        <div class="habit-cols">
+          <div>
+            <div class="habit-label">Working Sessions</div>
+            <ul>
+              <li>Map all key stakeholder relationships against a Win-Win / Win-Lose / Lose-Win grid</li>
+              <li>Identify the 2–3 relationships causing the most friction or churn</li>
+              <li>Draft Win-Win Agreements for each key role or partnership</li>
+            </ul>
+          </div>
+          <div>
+            <div class="habit-label">Client Deliverable</div>
+            <div class="deliverable-box">Win-Win Agreement templates for at least 2 key roles and 1 key supplier/partner relationship, ready to implement.</div>
+          </div>
+        </div>
+        <div class="kpi-line"><strong>KPI tracked on Boardroom dashboard:</strong> Staff/partner retention rate vs. baseline, tracked against DuBois's existing retention benchmarks.</div>
+      </div>
+
+      <div class="habit">
+        <div class="habit-tag"><span class="habit-num">Habit 5</span></div>
+        <h4>Seek First to Understand, Then to Be Understood</h4>
+        <p class="habit-program">The Client &amp; Team Listening Audit</p>
+        <p class="challenge">Commercial proposals and pitches frequently lead with the business's agenda rather than the client's actual problem — reducing conversion and buy-in.</p>
+        <div class="habit-cols">
+          <div>
+            <div class="habit-label">Working Sessions</div>
+            <ul>
+              <li>Empathic listening session practised on a real current client negotiation or team conflict</li>
+              <li>Audit the owner's last 3 pitches or proposals for "tell" vs. "ask" ratio</li>
+              <li>Rebuild one live pitch using a diagnose-before-prescribe structure</li>
+            </ul>
+          </div>
+          <div>
+            <div class="habit-label">Client Deliverable</div>
+            <div class="deliverable-box">A revised version of one live client proposal, rebuilt understanding-first, plus a reusable Discovery Question Bank for future pitches.</div>
+          </div>
+        </div>
+        <div class="kpi-line"><strong>KPI tracked on Boardroom dashboard:</strong> Conversion rate on revised pitch structure vs. historical baseline.</div>
+      </div>
+
+      <div class="habit">
+        <div class="habit-tag"><span class="habit-num">Habit 6</span></div>
+        <h4>Synergize</h4>
+        <p class="habit-program">The Cross-Functional Solution Workshop</p>
+        <p class="challenge">SME teams are usually too small to have built formal mechanisms for combining perspectives — decisions default to the owner alone, leaving expertise on the table.</p>
+        <div class="habit-cols">
+          <div>
+            <div class="habit-label">Working Sessions</div>
+            <ul>
+              <li>Facilitated workshop bringing together 2+ perspectives on a live business problem</li>
+              <li>Teach the 3rd Alternative method — a better way neither party started with</li>
+              <li>Document the workshop outcome as a reusable model</li>
+            </ul>
+          </div>
+          <div>
+            <div class="habit-label">Client Deliverable</div>
+            <div class="deliverable-box">A Synergy Workshop Playbook the owner can reuse independently, plus the solution generated from the live workshop.</div>
+          </div>
+        </div>
+        <div class="kpi-line"><strong>KPI tracked on Boardroom dashboard:</strong> Workshop solution implemented; quality of solution vs. either original position.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUARTER 3 -->
+<section id="q3">
+  <div class="wrap">
+    <div class="kicker">Program Roadmap</div>
+    <h2 class="section-title">Quarter 3 — Commercial Application</h2>
+    <p class="lead">Quarter 3 has no new habit — it is the commercial proving ground for Habits 4–6, run as a live DuBois consulting sprint. This is where the coaching converts into the measurable revenue and margin outcomes DuBois is engaged to deliver.</p>
+
+    <div class="quarter" style="margin-top:32px;">
+      <div class="q-head">
+        <div class="q-badge">Q3</div>
+        <h3>Habits 4–6 Applied to Revenue &amp; Growth</h3>
+        <div class="q-months">Months 7–9</div>
+      </div>
+      <div class="q3-box">
+        <div class="habit-label" style="margin-top:6px;">Sprint Focus Areas</div>
+        <ul>
+          <li>Pricing &amp; margin review applying Win-Win principles (Habit 4) to current pricing and discount policy</li>
+          <li>Key account / partner renegotiation using the Seek-First-to-Understand discovery structure (Habit 5)</li>
+          <li>One growth initiative — new channel, account segment, or partnership — built using the Synergize cross-functional model (Habit 6)</li>
+        </ul>
+        <div class="q3-deliverable"><strong>Quarter 3 deliverable:</strong> A Commercial Application Report — before/after pricing or margin position, at least one renegotiated key relationship, and a documented business case for the growth initiative, ready for board or owner sign-off.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUARTER 4 -->
+<section id="q4" style="background:var(--cream);border-top:1px solid var(--border);">
+  <div class="wrap">
+    <div class="kicker">Program Roadmap</div>
+    <h2 class="section-title">Quarter 4 — Renewal &amp; Independence</h2>
+    <p class="lead">The single highest-risk point in any consulting engagement is month 13 — when the consultant leaves and old patterns silently return. Quarter 4 is built explicitly to prevent that regression.</p>
+
+    <div class="quarter" style="margin-top:32px;">
+      <div class="q-head">
+        <div class="q-badge">Q4</div>
+        <h3>Sustaining the System Beyond the Engagement</h3>
+        <div class="q-months">Months 10–12</div>
+      </div>
+
+      <div class="habit">
+        <div class="habit-tag"><span class="habit-num">Habit 7</span></div>
+        <h4>Sharpen the Saw</h4>
+        <p class="habit-program">The Renewal &amp; Sustainability Plan</p>
+        <div class="habit-cols">
+          <div>
+            <div class="habit-label">Working Sessions</div>
+            <ul>
+              <li>Audit renewal across 4 dimensions: physical, mental, social/emotional, spiritual</li>
+              <li>Build a self-managed quarterly review rhythm — the owner's own version of the Boardroom review</li>
+              <li>Stress-test the full 12-month system: confirm Q1–Q3 deliverables are embedded as habits, not one-off projects</li>
+            </ul>
+          </div>
+          <div>
+            <div class="habit-label">Client Deliverable</div>
+            <div class="deliverable-box">A Sustainability Plan — the owner's self-managed quarterly review template, plus a 90-day post-program check-in scheduled with DuBois.</div>
+          </div>
+        </div>
+        <div class="kpi-line"><strong>KPI tracked on Boardroom dashboard:</strong> Self-review rhythm conducted independently at least once before program close; all Q1–Q3 deliverables confirmed still in active use.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section>
+  <div class="wrap">
+    <div class="kicker">At a Glance</div>
+    <h2 class="section-title">Program Summary</h2>
+    <div class="summary-wrap">
+      <table class="summary">
+        <tr><th>Quarter</th><th>Habit(s)</th><th>Deliverable</th><th>Tracked KPI</th></tr>
+        <tr><td>Q1</td><td>1. Be Proactive</td><td>Ownership Map</td><td>Reactive-language reduction</td></tr>
+        <tr><td>Q1</td><td>2. Begin with the End in Mind</td><td>Mission Statement + Exit-Back Roadmap</td><td>Roadmap sign-off</td></tr>
+        <tr><td>Q1</td><td>3. Put First Things First</td><td>Weekly Operating Rhythm + Delegation Register</td><td>% time in Quadrant II</td></tr>
+        <tr><td>Q2</td><td>4. Think Win-Win</td><td>Win-Win Agreement templates</td><td>Retention rate</td></tr>
+        <tr><td>Q2</td><td>5. Seek First to Understand</td><td>Revised pitch/communication + Question Bank</td><td>Conversion rate</td></tr>
+        <tr><td>Q2</td><td>6. Synergize</td><td>Synergy Workshop Playbook</td><td>Solution quality/implementation</td></tr>
+        <tr><td>Q3</td><td>4–6 Applied</td><td>Commercial Application Report</td><td>Margin/revenue movement</td></tr>
+        <tr><td>Q4</td><td>7. Sharpen the Saw</td><td>Sustainability Plan</td><td>Independent review completed</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <h2>Ready to build the operating system behind your numbers?</h2>
+    <p>Book a session to walk through the Boardroom Program and see where your business sits against the four quarters.</p>
+    <a href="#book" class="btn">Book a Session</a>
+  </div>
+</section>
+
+<footer>
+  DuBois Business Consulting&nbsp;&nbsp;|&nbsp;&nbsp;Flick the Switch&nbsp;&nbsp;|&nbsp;&nbsp;Gold Coast, Australia
+</footer>
+
+</body>
+</html>
